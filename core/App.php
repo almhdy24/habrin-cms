@@ -4,20 +4,6 @@ declare(strict_types=1);
 
 namespace Core;
 
-/**
- * ------------------------------------------------------------------
- * Pico JSON CMS — Application Core
- * ------------------------------------------------------------------
- *
- * CORE VERSION: 1.0.0
- * MINIMUM PHP:  8.1
- *
- * ⚠️ CORE FREEZE FILE
- * This file defines the runtime behavior of the CMS.
- * Breaking changes are NOT allowed after v1.0.0.
- * ------------------------------------------------------------------
- */
-
 defined('BASE_PATH') || define(
     'BASE_PATH',
     realpath(__DIR__ . '/..')
@@ -25,43 +11,13 @@ defined('BASE_PATH') || define(
 
 final class App
 {
-    /* =====================================================
-     * Core Metadata
-     * ===================================================== */
+    public const CORE_VERSION = "0.9.0";
+    public const MIN_PHP_VERSION = '8.1.0';
 
-    public const CORE_VERSION     = '1.0.0';
-    public const MIN_PHP_VERSION  = '8.1.0';
-
-    /* =====================================================
-     * Runtime State
-     * ===================================================== */
-
-    public static array $config  = [];
+    public static array $config = [];
     public static array $plugins = [];
-
-    /* =====================================================
-     * Event System (Middleware Layer)
-     * ===================================================== */
-
-    private static array $events = [];
-
-    public static function on(string $event, callable $listener): void
-    {
-        self::$events[$event][] = $listener;
-    }
-
-    public static function trigger(string $event, array $payload = []): void
-    {
-        if (!empty(self::$events[$event])) {
-            foreach (self::$events[$event] as $listener) {
-                $listener($payload);
-            }
-        }
-    }
-
-    /* =====================================================
-     * Path Helper
-     * ===================================================== */
+    public static array $pluginStatus = [];
+    private static array $configCache = [];
 
     public static function path(string ...$segments): string
     {
@@ -72,40 +28,33 @@ final class App
         );
     }
 
-    /* =====================================================
-     * Application Lifecycle
-     * ===================================================== */
-
     public static function run(): void
     {
-        self::trigger('beforeRun');
-
+        Hooks::do_action('beforeRun');
         self::sendSecurityHeaders();
         Session::start();
-
+        Hooks::do_action('afterSessionStart');
         self::bootstrap();
+        Hooks::do_action('afterBootstrap');
         self::loadConfig();
+        Hooks::do_action('afterConfigLoaded');
+        self::loadPluginStatus();
         self::loadPlugins();
+        Hooks::do_action('afterPluginsLoaded');
         self::guardInstaller();
-
-        self::trigger('beforeDispatch');
-
+        self::loadSettings();
+        self::loadMenu();
+        Hooks::do_action('beforeDispatch');
         self::dispatch();
+        Hooks::do_action('afterDispatch');
     }
-
-    /* =====================================================
-     * Bootstrap
-     * ===================================================== */
 
     private static function bootstrap(): void
     {
         self::ensureDirectories();
         self::ensureFiles();
+        \Core\PluginSettings::init();
     }
-
-    /* =====================================================
-     * Filesystem
-     * ===================================================== */
 
     private static function ensureDirectories(): void
     {
@@ -117,6 +66,9 @@ final class App
     {
         self::ensureFile('content/posts.json', '[]');
         self::ensureFile('content/settings.json', '{}');
+        self::ensureFile('content/pages.json', '{}');
+        self::ensureFile('content/menu.json', '[]');
+        self::ensureFile('content/plugins.json', '{}');
     }
 
     private static function ensureDir(string $path): void
@@ -131,56 +83,146 @@ final class App
     private static function ensureFile(string $relativePath, string $default): void
     {
         $path = self::path($relativePath);
-
         if (!file_exists($path)) {
             file_put_contents($path, $default, LOCK_EX);
         }
     }
 
-    /* =====================================================
-     * Configuration
-     * ===================================================== */
-
     private static function loadConfig(): void
     {
         $configPath = self::path('config.php');
-
         if (!file_exists($configPath)) {
             throw new \RuntimeException("Config file missing: {$configPath}");
         }
-
         self::$config = require $configPath;
-
         if (!is_array(self::$config)) {
             throw new \RuntimeException("Invalid config format");
         }
-
         self::$config['base_url'] ??= '';
         self::$config['theme']    ??= 'default';
+        self::$configCache = self::$config;
     }
 
-    /* =====================================================
-     * Plugin System (Manifest ONLY)
-     * ===================================================== */
+    /**
+     * Safely update a configuration value
+     */
+    public static function setConfig(string $key, mixed $value): bool
+    {
+        $configPath = self::path('config.php');
+        $config = self::$config;
+        $config[$key] = $value;
+
+        // Write with proper formatting (preserve PHP syntax)
+        $content = '<?php' . "\n\n";
+        $content .= '/**' . "\n";
+        $content .= ' * Pico JSON CMS - Main Configuration' . "\n";
+        $content .= ' *' . "\n";
+        $content .= ' * Author: Elmahdi' . "\n";
+        $content .= ' * GitHub: https://github.com/almhdy24/pico-json-cms' . "\n";
+        $content .= ' *' . "\n";
+        $content .= ' * License: MIT' . "\n";
+        $content .= ' */' . "\n\n";
+        $content .= 'return ' . self::varExportPretty($config) . ";\n";
+
+        if (file_put_contents($configPath, $content, LOCK_EX) === false) {
+            return false;
+        }
+
+        self::$config = $config;
+        return true;
+    }
+
+    /**
+     * Pretty var_export with proper indentation
+     */
+    private static function varExportPretty(array $array, int $indent = 0): string
+    {
+        $indentStr = str_repeat('  ', $indent);
+        $nextIndent = str_repeat('  ', $indent + 1);
+
+        $parts = [];
+        foreach ($array as $key => $value) {
+            $keyStr = var_export($key, true);
+            if (is_array($value)) {
+                $valueStr = self::varExportPretty($value, $indent + 1);
+                $parts[] = $indentStr . '  ' . $keyStr . ' => ' . $valueStr;
+            } else {
+                $valueStr = var_export($value, true);
+                $parts[] = $indentStr . '  ' . $keyStr . ' => ' . $valueStr;
+            }
+        }
+
+        if (empty($parts)) {
+            return "[]";
+        }
+
+        return "[\n" . implode(",\n", $parts) . "\n" . $indentStr . "]";
+    }
+
+    private static function loadPluginStatus(): void
+    {
+        $path = self::path('content', 'plugins.json');
+        if (file_exists($path)) {
+            $data = json_decode(file_get_contents($path), true);
+            if (is_array($data)) {
+                self::$pluginStatus = $data;
+                return;
+            }
+        }
+        self::$pluginStatus = [];
+    }
 
     private static function loadPlugins(): void
     {
         $loader = new PluginLoader(self::path('plugins'));
-        self::$plugins = $loader->load();
+        $allPlugins = $loader->discover();
+
+        foreach ($allPlugins as $pluginName => $info) {
+            if (!isset($info['file']) || !is_string($info['file']) || !file_exists($info['file'])) {
+                self::log("Plugin '{$pluginName}' entry missing", 'error');
+                continue;
+            }
+
+            $enabled = !isset(self::$pluginStatus[$pluginName]) || self::$pluginStatus[$pluginName] !== false;
+            if ($enabled) {
+                require_once $info['file'];
+                self::$plugins[$pluginName] = $info['manifest'] ?? ['name' => $pluginName];
+                self::log("Plugin '{$pluginName}' loaded", 'info');
+            } else {
+                self::log("Plugin '{$pluginName}' disabled", 'info');
+            }
+        }
     }
 
-    /* =====================================================
-     * Routing
-     * ===================================================== */
+    private static function loadSettings(): void
+    {
+        try {
+            $settingsModel = new \Models\SettingsModel();
+            $settings = $settingsModel->all();
+            View::share(['settings' => $settings]);
+        } catch (\Throwable $e) {
+            View::share(['settings' => []]);
+            self::log('Failed to load settings: ' . $e->getMessage(), 'warning');
+        }
+    }
+
+    private static function loadMenu(): void
+    {
+        try {
+            $menuModel = new \Models\MenuModel();
+            $menuItems = $menuModel->getItems();
+            View::share(['menuItems' => $menuItems]);
+        } catch (\Throwable $e) {
+            View::share(['menuItems' => []]);
+            self::log('Failed to load menu: ' . $e->getMessage(), 'warning');
+        }
+    }
 
     private static function dispatch(): void
     {
-        (new Router())->dispatch();
+        $router = new Router();
+        $router->dispatch();
     }
-
-    /* =====================================================
-     * Installer Guard
-     * ===================================================== */
 
     private static function guardInstaller(): void
     {
@@ -205,10 +247,6 @@ final class App
         }
     }
 
-    /* =====================================================
-     * Logging
-     * ===================================================== */
-
     public static function log(string $message, string $level = 'info'): void
     {
         file_put_contents(
@@ -218,14 +256,9 @@ final class App
         );
     }
 
-    /* =====================================================
-     * Security
-     * ===================================================== */
-
     private static function sendSecurityHeaders(): void
     {
         if (headers_sent()) return;
-
         header('X-Frame-Options: DENY');
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: strict-origin-when-cross-origin');

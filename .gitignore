@@ -1,5 +1,48 @@
+# ============================================================
+# Pico JSON CMS - Runtime Data
+# ============================================================
+
+# Ignore all generated CMS content
+/content/*
+
+# Keep the content directory
+!/content/.gitkeep
+
+# Runtime post shards
+/content/posts/
+/content/posts/*.json
+
+# Runtime indexes
+/content/indexes/
+/content/indexes/*.json
+
+# Runtime settings and metadata
 /content/*.json
+
+# Plugin runtime settings
+/content/plugin-settings/
+
+# Installation marker
+/content/.installed
+
+# ============================================================
+# Dependencies
+# ============================================================
+
 /vendor/
-/node_modules/
-/.env
+
+# ============================================================
+# Environment / Secrets
+# ============================================================
+
+.env
+.env.*
+
+# ============================================================
+# OS / Editor
+# ============================================================
+
 .DS_Store
+Thumbs.db
+*.swp
+*.swo

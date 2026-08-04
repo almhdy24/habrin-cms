@@ -2,16 +2,11 @@
 /**
  * Pico JSON CMS — Admin Controller
  *
- * CORE STATUS: SEMI-FROZEN (v1.0)
- * Public methods & routes should remain stable.
- *
- * Responsibilities:
- * - Authentication
- * - Dashboard & metrics
- * - Posts CRUD + trash
- * - Settings management
- *
- * License: MIT
+ * Fully compatible with sharded JSON storage.
+ * - No all() calls – uses metadata counts and paginated indexes.
+ * - Uses PostsModel::nextId() for atomic ID generation.
+ * - Uses PostsModel::generateSlug() for unique slugs.
+ * - Trash cleanup is infrequent and uses trashed() scanning.
  */
 
 declare(strict_types=1);
@@ -40,13 +35,13 @@ final class AdminController extends Controller
         parent::__construct();
         $this->guard();
 
-        $this->posts    = $this->model(PostsModel::class);
+        $this->posts = $this->model(PostsModel::class);
         $this->settings = $this->model(SettingsModel::class);
 
-        $this->autoCleanTrash();
+        $this->posts->clearCache();
 
         View::share([
-            'trashCount' => count($this->posts->trashed()),
+            'trashCount' => $this->posts->trashedCount(),
         ]);
     }
 
@@ -71,6 +66,7 @@ final class AdminController extends Controller
                     'type'    => 'error',
                     'message' => 'Too many attempts. Please wait.',
                 ]],
+                'csrf_token' => Session::csrfToken(),
             ]);
             return;
         }
@@ -80,7 +76,10 @@ final class AdminController extends Controller
             return;
         }
 
-        $this->view('admin/login', ['flash' => $this->getFlash()]);
+        $this->view('admin/login', [
+            'flash' => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
+        ]);
     }
 
     private function processLogin(array $throttle): void
@@ -91,8 +90,8 @@ final class AdminController extends Controller
         $config = require App::path('content', '.admin.php');
 
         $valid =
-            hash_equals($config['admin_user'], $username) &&
-            password_verify($password, $config['admin_pass']);
+            hash_equals($config['user'], $username) &&
+            password_verify($password, $config['pass']);
 
         if ($valid) {
             Session::remove('login_throttle');
@@ -110,6 +109,7 @@ final class AdminController extends Controller
         Session::set('login_throttle', $throttle);
         sleep(1);
 
+        Session::set('_old', ['username' => $username]);
         $this->flash('error', 'Invalid credentials.');
         $this->redirect('/admin/login');
     }
@@ -128,14 +128,14 @@ final class AdminController extends Controller
 
     public function dashboard(): void
     {
-        $published = $this->posts->published();
-        $trashed   = $this->posts->trashed();
+        $this->posts->clearCache();
 
         $this->view('admin/dashboard', [
-            'postsCount' => count($published),
-            'trashCount' => count($trashed),
+            'postsCount' => $this->posts->publishedCount(),
+            'trashCount' => $this->posts->trashedCount(),
             'settings'   => $this->settings->all(),
             'flash'      => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
         ]);
     }
 
@@ -145,23 +145,27 @@ final class AdminController extends Controller
 
     public function index(): void
     {
-        $page    = max(1, (int) ($_GET['page'] ?? 1));
+        $this->posts->clearCache();
+
+        $page = max(1, (int) ($_GET['page'] ?? 1));
         $perPage = 5;
 
-        $posts = $this->posts->published();
-        $total = count($posts);
+        $result = $this->posts->publishedPaginated($page, $perPage);
 
-        $totalPages = max(1, (int) ceil($total / $perPage));
-        $page       = min($page, $totalPages);
-
-        $offset = (int) (($page - 1) * $perPage);
+        $publishedCount = $this->posts->publishedCount();
+        $trashedCount = $this->posts->trashedCount();
+        $totalCount = $publishedCount + $trashedCount;
 
         $this->view('admin/posts', [
-            'posts'       => array_slice($posts, $offset, $perPage, true),
-            'currentPage' => $page,
-            'totalPages'  => $totalPages,
+            'posts'       => $result['items'],
+            'currentPage' => $result['currentPage'],
+            'totalPages'  => $result['totalPages'],
             'basePath'    => '/admin',
             'flash'       => $this->getFlash(),
+            'csrf_token'  => Session::csrfToken(),
+            // Debug info (compatible with view)
+            'debugAllCount' => $totalCount,
+            'debugPublishedCount' => $publishedCount,
         ]);
     }
 
@@ -170,17 +174,22 @@ final class AdminController extends Controller
         if (!$this->isPost()) {
             $this->view('admin/post-add', [
                 'flash' => $this->getFlash(),
+                'csrf_token' => Session::csrfToken(),
+                'old' => Session::get('_old', []),
             ]);
             return;
         }
 
+        $this->validateCsrf();
+
         [$title, $content] = $this->validatePost();
 
-        $id = time();
+        $id = $this->posts->nextId();
+        $slug = $this->posts->generateSlug($title);
 
         $this->posts->savePost($id, [
             'title'      => $title,
-            'slug'       => $this->generateSlug($title),
+            'slug'       => $slug,
             'content'    => $content,
             'created_at' => time(),
             'updated_at' => time(),
@@ -199,11 +208,13 @@ final class AdminController extends Controller
         }
 
         if ($this->isPost()) {
+            $this->validateCsrf();
+
             [$title, $content] = $this->validatePost();
 
             $post['title']      = $title;
             $post['content']    = $content;
-            $post['slug']       = $this->generateSlug($title, $id);
+            $post['slug']       = $this->posts->generateSlug($title, $id);
             $post['updated_at'] = time();
 
             $this->posts->savePost($id, $post);
@@ -216,11 +227,17 @@ final class AdminController extends Controller
             'id'    => $id,
             'post'  => $post,
             'flash' => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
+            'old' => Session::get('_old', []),
         ]);
     }
 
     public function delete(?int $id): void
     {
+        if ($this->isPost()) {
+            $this->validateCsrf();
+        }
+
         if ($post = $this->posts->find($id)) {
             $post['deleted_at'] = time();
             $this->posts->savePost($id, $post);
@@ -237,6 +254,7 @@ final class AdminController extends Controller
         $this->view('admin/trash', [
             'posts' => $this->posts->trashed(),
             'flash' => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
         ]);
     }
 
@@ -255,6 +273,10 @@ final class AdminController extends Controller
 
     public function destroy(?int $id): void
     {
+        if ($this->isPost()) {
+            $this->validateCsrf();
+        }
+
         $this->posts->deletePost($id);
         $this->flash('success', 'Post permanently deleted.');
         $this->redirect('/admin/trash');
@@ -262,9 +284,13 @@ final class AdminController extends Controller
 
     public function emptyTrash(): void
     {
+        if ($this->isPost()) {
+            $this->validateCsrf();
+        }
+
         $trashed = $this->posts->trashed();
         $count = count($trashed);
-        
+
         foreach ($trashed as $id => $_) {
             $this->posts->deletePost($id);
         }
@@ -280,7 +306,13 @@ final class AdminController extends Controller
     public function settings(): void
     {
         if ($this->isPost()) {
-            $this->settings->setMany($_POST);
+            $this->validateCsrf();
+            $settings = array_map(function($value) {
+                return htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
+            }, $_POST);
+
+            $this->settings->setMany($settings);
+            Session::remove('_old');
             $this->flash('success', 'Settings saved successfully.');
             $this->redirect('/admin/settings');
         }
@@ -288,6 +320,8 @@ final class AdminController extends Controller
         $this->view('admin/settings', [
             'settings' => $this->settings->all(),
             'flash'    => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
+            'old' => Session::get('_old', []),
         ]);
     }
 
@@ -297,9 +331,8 @@ final class AdminController extends Controller
             'cms' => [
                 'name'    => 'Pico JSON CMS',
                 'version' => App::CORE_VERSION,
-                'storage' => 'Flat-file JSON',
+                'storage' => 'Flat-file JSON (sharded)',
             ],
-
             'env' => [
                 'php_version' => PHP_VERSION,
                 'php_sapi'    => PHP_SAPI,
@@ -307,14 +340,12 @@ final class AdminController extends Controller
                 'timezone'    => date_default_timezone_get(),
                 'memory'      => ini_get('memory_limit'),
             ],
-
             'paths' => [
                 'content_writable' => is_writable(App::path('content')),
                 'logs_writable'    => is_writable(App::path('logs')),
                 'root_writable'    => is_writable(BASE_PATH),
             ],
-
-            'plugins' => []
+            'plugins' => App::$plugins
         ];
 
         $this->view('admin/system', [
@@ -324,7 +355,7 @@ final class AdminController extends Controller
     }
 
     /* =====================================================
-     * Helpers (Frozen)
+     * Helpers
      * ===================================================== */
 
     private function guard(): void
@@ -342,45 +373,32 @@ final class AdminController extends Controller
         $content = trim($this->input('content', ''));
 
         if ($title === '' || $content === '') {
+            Session::set('_old', ['title' => $title, 'content' => $content]);
             $this->flash('error', 'Title and content are required.');
             $this->redirect($_SERVER['HTTP_REFERER'] ?? '/admin');
         }
 
-        return [$title, $content];
-    }
-
-    private function generateSlug(string $title, ?int $ignoreId = null): string
-    {
-        $base = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $title), '-'));
-        $slug = $base;
-        $i    = 1;
-
-        foreach ($this->posts->all() as $id => $post) {
-            if ($id === $ignoreId) continue;
-            if (($post['slug'] ?? '') === $slug) {
-                $slug = $base . '-' . $i++;
-            }
-        }
-
-        return $slug;
+        Session::remove('_old');
+        return [htmlspecialchars($title, ENT_QUOTES, 'UTF-8'), $content];
     }
 
     private function autoCleanTrash(): void
     {
         $limit = time() - (self::TRASH_DAYS * 86400);
-        $cleaned = 0;
-
-        foreach ($this->posts->trashed() as $id => $post) {
+        $trashed = $this->posts->trashed();
+        foreach ($trashed as $id => $post) {
             if ($post['deleted_at'] < $limit) {
                 $this->posts->deletePost($id);
-                $cleaned++;
             }
         }
+    }
 
-        // Optionally add flash for auto-cleanup
-        if ($cleaned > 0) {
-            // Note: This won't display since it's in constructor
-            // Consider logging instead
+    private function validateCsrf(): void
+    {
+        $token = $this->input('csrf_token', '');
+        if (!Session::validateCsrfToken($token)) {
+            $this->flash('error', 'Invalid CSRF token.');
+            $this->redirect('/admin');
         }
     }
 }

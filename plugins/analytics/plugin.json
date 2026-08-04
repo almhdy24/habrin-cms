@@ -1,0 +1,6 @@
+{
+    "name": "analytics",
+    "entry": "analytics.php",
+    "description": "Injects Google Analytics tracking code.",
+    "version": "1.0.0"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Default Theme",
+  "version": "1.0.0",
+  "description": "The default theme for Pico JSON CMS with a clean, modern design and full responsiveness.",
+  "author": "Pico JSON CMS",
+  "screenshot": "",
+  "requires": {
+    "php": ">=8.1",
+    "cms": ">=1.0.0"
+  }
+}

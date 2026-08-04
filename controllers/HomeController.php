@@ -1,14 +1,6 @@
 <?php
 /**
  * Pico JSON CMS — Home Controller
- *
- * CORE STATUS: SEMI-FROZEN (v1.0)
- *
- * Responsibilities:
- * - Homepage listing
- * - Single post rendering
- *
- * License: MIT
  */
 
 declare(strict_types=1);
@@ -16,6 +8,8 @@ declare(strict_types=1);
 namespace Controllers;
 
 use Core\Controller;
+use Core\App;
+use Core\View;
 use Models\PostsModel;
 use Models\SettingsModel;
 
@@ -28,31 +22,61 @@ final class HomeController extends Controller
     {
         parent::__construct();
 
-        $this->posts    = $this->model(PostsModel::class);
+        // Check for theme preview
+        $this->handleThemePreview();
+
+        $this->posts = $this->model(PostsModel::class);
         $this->settings = $this->model(SettingsModel::class);
     }
 
     /**
-     * Homepage
+     * Handle theme preview via URL parameter
      */
+    private function handleThemePreview(): void
+    {
+        if (isset($_GET['theme_preview'])) {
+            $theme = trim($_GET['theme_preview']);
+            $themeDir = App::path('themes', $theme);
+
+            // Validate theme exists
+            if (is_dir($themeDir) && file_exists($themeDir . '/theme.json')) {
+                // Temporarily override for this request
+                App::$config['theme'] = $theme;
+                // Clear view cache to reload templates
+                View::clearCache();
+                // Log preview
+                App::log("Theme preview: {$theme}", 'info');
+            }
+        }
+    }
+
     public function index(): void
     {
-        $posts = array_reverse($this->posts->published(), true);
-
         $page = max(1, (int) ($_GET['page'] ?? 1));
-        $pagination = paginate($posts, 5, $page);
+        $perPage = 5;
+
+        $result = $this->posts->published($page, $perPage);
+
+        // Calculate range
+        $total = $result['total'];
+        $currentPage = $result['currentPage'];
+        $totalPages = $result['totalPages'];
+        $items = $result['items'];
+
+        $start = ($currentPage - 1) * $perPage + 1;
+        $end = min($start + $perPage - 1, $total);
 
         $this->view('pages/home', [
-            'posts'       => $pagination['items'],
-            'currentPage' => $pagination['currentPage'],
-            'totalPages'  => $pagination['totalPages'],
+            'posts'       => $items,
+            'currentPage' => $currentPage,
+            'totalPages'  => $totalPages,
+            'totalPosts'  => $total,
+            'start'       => $start,
+            'end'         => $end,
             'settings'    => $this->settings->all(),
         ]);
     }
 
-    /**
-     * Single post by slug
-     */
     public function viewPost(string $slug): void
     {
         $post = $this->posts->findBySlug($slug);

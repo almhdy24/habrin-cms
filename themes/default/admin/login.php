@@ -1,35 +1,41 @@
 <?php $this->layout('layouts/auth', ['title' => 'Admin Login']) ?>
 
-<h1 class="title has-text-centered">Admin Login</h1>
-<?php $this->insert('partials/flash', ['flash' => $flash ?? []]) ?>
+<div style="max-width: 380px; margin: 0 auto; width: 100%;">
+  <h1 class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+    <i data-lucide="shield" style="color: var(--primary);"></i> Admin Login
+  </h1>
 
-<form method="POST" action="/admin/login">
-  <div class="field">
-    <label class="label">
-      <i data-lucide="user"></i>
-      <span>Username</span>
-    </label>
-    <div class="control">
-      <input class="input" type="text" name="username" placeholder="Username" required>
-    </div>
-  </div>
+  <?php $this->insert('partials/flash', ['flash' => $flash ?? []]) ?>
 
-  <div class="field">
-    <label class="label">
-      <i data-lucide="lock"></i>
-      <span>Password</span>
-    </label>
-    <div class="control">
-      <input class="input" type="password" name="password" placeholder="Password" required>
-    </div>
-  </div>
+  <form method="POST" action="/admin/login" class="card">
+    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
 
-  <div class="field mt-4">
-    <div class="control">
-      <button class="button is-primary is-fullwidth" type="submit">
-        <i data-lucide="log-in"></i>
-        <span>Login</span>
-      </button>
+    <div class="field">
+      <label class="label"><i data-lucide="user"></i> Username</label>
+      <input
+        class="input"
+        type="text"
+        name="username"
+        placeholder="Enter your username"
+        value="<?= htmlspecialchars($old['username'] ?? '') ?>"
+        required
+        autofocus
+      >
     </div>
-  </div>
-</form>
+
+    <div class="field">
+      <label class="label"><i data-lucide="lock"></i> Password</label>
+      <input
+        class="input"
+        type="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+      >
+    </div>
+
+    <button type="submit" class="button button-primary button-block">
+      <i data-lucide="log-in"></i> Login
+    </button>
+  </form>
+</div>

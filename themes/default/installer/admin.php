@@ -8,6 +8,7 @@
 
 <h2 class="title">Admin Setup</h2>
 <form method="post">
+  <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
   <div class="field">
     <label class="label">Site Name</label>
     <input class="input" name="site_name" required>

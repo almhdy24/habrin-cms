@@ -1,0 +1,671 @@
+[2026-08-04T15:14:00+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:14:00+00:00][info] Admin index: published count = 4
+[2026-08-04T15:14:00+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:14:57+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:14:57+00:00][info] Admin index: published count = 4
+[2026-08-04T15:14:57+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:16:04+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:16:04+00:00][info] Admin index: published count = 4
+[2026-08-04T15:16:04+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:16:09+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:16:09+00:00][info] Admin index: published count = 4
+[2026-08-04T15:16:09+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:16:12+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:16:12+00:00][info] Admin index: published count = 4
+[2026-08-04T15:16:12+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:16:40+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:16:40+00:00][info] Admin index: published count = 4
+[2026-08-04T15:16:40+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:18:30+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:18:30+00:00][info] Admin index: published count = 4
+[2026-08-04T15:18:30+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:18:35+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:18:35+00:00][info] Admin index: published count = 4
+[2026-08-04T15:18:35+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:18:41+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:18:41+00:00][info] Admin index: published count = 4
+[2026-08-04T15:18:41+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:18:45+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:18:45+00:00][info] Admin index: published count = 4
+[2026-08-04T15:18:45+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:19:25+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:19:25+00:00][info] Admin index: published count = 4
+[2026-08-04T15:19:25+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:19:26+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:19:26+00:00][info] Admin index: published count = 4
+[2026-08-04T15:19:26+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:19:27+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:19:27+00:00][info] Admin index: published count = 4
+[2026-08-04T15:19:27+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:19:33+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:19:33+00:00][info] Admin index: published count = 4
+[2026-08-04T15:19:33+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:19:37+00:00][info] Admin index: all count = 50000
+[2026-08-04T15:19:37+00:00][info] Admin index: published count = 4
+[2026-08-04T15:19:37+00:00][info] First post: [{"title":"Test Post #1: PHP","slug":"test-post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n## Section 2\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.","category":"PHP","author":"Admin","created_at":1785355911,"updated_at":1785355911,"deleted_at":null}]
+[2026-08-04T15:21:14+00:00][info] Admin index: all count = 0
+[2026-08-04T15:21:14+00:00][info] Admin index: published count = 4
+[2026-08-04T15:21:16+00:00][info] Admin index: all count = 0
+[2026-08-04T15:21:16+00:00][info] Admin index: published count = 4
+[2026-08-04T15:21:51+00:00][info] Admin index: all count = 0
+[2026-08-04T15:21:51+00:00][info] Admin index: published count = 4
+[2026-08-04T15:23:25+00:00][info] Admin index: all count = 1000
+[2026-08-04T15:23:25+00:00][info] Admin index: published count = 4
+[2026-08-04T15:23:25+00:00][info] First post: [{"title":"Post #1: PHP","slug":"post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nThe system should handle thousands of posts efficiently with atomic writes and slug indexing.","category":"PHP","author":"Admin","created_at":1785851992,"updated_at":1785851992,"deleted_at":null}]
+[2026-08-04T15:23:27+00:00][info] Admin index: all count = 1000
+[2026-08-04T15:23:27+00:00][info] Admin index: published count = 4
+[2026-08-04T15:23:27+00:00][info] First post: [{"title":"Post #1: PHP","slug":"post-1","content":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThis is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.\n\nThe system should handle thousands of posts efficiently with atomic writes and slug indexing.","category":"PHP","author":"Admin","created_at":1785851992,"updated_at":1785851992,"deleted_at":null}]
+[2026-08-04T15:23:47+00:00][info] Admin index: all=1000, published=4
+[2026-08-04T15:23:48+00:00][info] Admin index: all=1000, published=4
+[2026-08-04T15:28:41+00:00][info] Admin index: all=1000, published=1000
+[2026-08-04T15:28:44+00:00][info] Admin index: all=1000, published=1000
+[2026-08-04T15:28:50+00:00][info] Admin index: all=1000, published=1000
+[2026-08-04T15:30:41+00:00][info] Admin index: all=1000, published=1000
+[2026-08-04T15:32:47+00:00][info] Admin index: all=10000, published=10000
+[2026-08-04T15:33:34+00:00][info] Admin index: all=10000, published=10000
+[2026-08-04T15:33:51+00:00][info] Admin index: all=10000, published=10000
+[2026-08-04T16:07:25+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:27+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:31+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:31+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:31+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:36+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:36+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:42+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:42+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:56+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:56+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:56+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:56+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:07:56+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:07:56+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:07:56+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:07:56+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:09:12+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:09:12+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:09:12+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:09:12+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:09:37+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:09:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:09:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:09:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:09:37+00:00][warning] Plugin 'markdown' has invalid manifest
+[2026-08-04T16:13:09+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:13:09+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:13:09+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:14:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:14:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:14:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:14:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:14:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:14:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:14:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:19:16+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:19:16+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:19:16+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:19:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:19:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:19:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:20:01+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:20:01+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:20:01+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:20:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:30:54+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:30:54+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:30:54+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:30:54+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:30:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:30:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:30:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:31:10+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:31:10+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:07+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:07+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:07+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:07+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:07+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:07+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:07+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:16+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:16+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:16+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:23+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:23+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:24+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:24+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:24+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:25+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:25+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:25+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:25+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:26+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:31+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:31+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:35+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:35+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:35+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:35+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:33:35+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:33:35+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:33:35+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:33:35+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:42+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:43+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:43+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:43+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:43+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:46+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:46+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:51+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:51+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:51+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:51+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:51+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:51+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:51+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:51+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:35:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:56+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:35:56+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:35:56+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:35:56+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:15+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:15+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:15+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:16+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:16+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:16+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:16+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:20+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:20+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:20+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:20+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:20+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:20+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:20+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:20+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:29+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:29+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:29+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:29+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:29+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:29+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:29+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:29+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:35+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:35+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:35+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:35+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:35+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:35+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:35+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:35+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:38+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:38+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:38+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:38+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:38+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:38+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:38+00:00][error] Hook 'head' error: Typed static property Core\PluginSettings::$baseDir must not be accessed before initialization
+[2026-08-04T16:36:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:36:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:36:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:36:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:38:35+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:38:35+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:38:35+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:38:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:18+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:18+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:18+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:29+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:29+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:29+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:30+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:30+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:30+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:47+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:47+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:47+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:51+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:39:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:41:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:41:37+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:41+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:41+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:41:41+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:41+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:41+00:00][info] Plugin 'seo' disabled
+[2026-08-04T16:41:41+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:46+00:00][info] Plugin 'seo' disabled
+[2026-08-04T16:41:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:46+00:00][info] Plugin 'seo' disabled
+[2026-08-04T16:41:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:53+00:00][info] Plugin 'seo' disabled
+[2026-08-04T16:41:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:41:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:41:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:41:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:24+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:24+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:24+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:30+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:42:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:10+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:10+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:10+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:12+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:16+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:55+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:55+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:55+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:43:58+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:43:58+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:43:58+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:44:03+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:44:04+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:24+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:24+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:24+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:41+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:45+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:45:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:45:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:45:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:46:04+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:47:12+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:47:12+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:47:12+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:47:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:47:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:47:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:47:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:47:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:47:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:47:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:47:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:47:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:47:32+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:47:32+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:47:32+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:51:22+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:51:22+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:51:22+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:51:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:51:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:51:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:51:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:17+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:17+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:17+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:28+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:30+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:30+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:30+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:39+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:39+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:39+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:40+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:40+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:40+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:53:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:54:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:54:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:54:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:55:53+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:55:53+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:55:53+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:43+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:43+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:43+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:52+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:55+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:55+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:55+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:56+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:56:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:57:01+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:18+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:22+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:23+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:25+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:26+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:26+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:26+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T16:59:27+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T16:59:27+00:00][info] Plugin 'seo' loaded
+[2026-08-04T16:59:27+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:31+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:31+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:31+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:36+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:40+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:40+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:40+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:45+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:45+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:45+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:46+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:46+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:46+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:01:49+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:02:34+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:02:34+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:02:34+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:42+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:42+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:42+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:47+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:47+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:47+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:48+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:48+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:48+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:50+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:03:52+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:13+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:54+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:54+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:54+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:54+00:00][info] Theme preview: cleanblog
+[2026-08-04T17:04:54+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:54+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:54+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:04:57+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'sitemap' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'analytics' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'seo' loaded
+[2026-08-04T17:05:03+00:00][info] Plugin 'sitemap' loaded

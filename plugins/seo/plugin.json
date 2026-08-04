@@ -1,0 +1,6 @@
+{
+    "name": "seo",
+    "entry": "seo.php",
+    "description": "Adds meta tags for SEO (title, description, keywords).",
+    "version": "1.0.0"
+}

@@ -1,112 +1,151 @@
-Pico JSON CMS
+# Pico JSON CMS
 
-Pico JSON CMS is a lightweight, flat-file Content Management System built with PHP and JSON. It is designed for developers who want a simple, database-free CMS that is easy to deploy, inspect, extend, and maintain.
+[![Release](https://img.shields.io/github/v/release/almhdy24/pico-json-cms?label=release)](https://github.com/almhdy24/pico-json-cms/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/almhdy24/pico-json-cms/ci.yml?branch=main)](https://github.com/almhdy24/pico-json-cms/actions)
+[![PHP](https://img.shields.io/badge/php-8.1%2B-blue)](https://www.php.net/)
+[![License](https://img.shields.io/github/license/almhdy24/pico-json-cms)](LICENSE)
 
-The project uses JSON files as its primary data store and provides an extensible architecture with themes, plugins, hooks, filters, an administrative dashboard, Markdown content, and scalable sharded post storage.
-
-«Status: Active development — pre-1.0
-Current development version: "0.9.0-dev"
-Minimum PHP: "8.1"
-Storage: Flat-file JSON
-License: MIT»
+TL;DR: A lightweight, developer-friendly flat-file CMS written in PHP that stores content in JSON files. No database required — ideal for small blogs, documentation sites, and simple business pages.
 
 ---
 
-✨ Features
+Table of contents
 
-📝 Content Management
+- [About](#about)
+- [Features](#features)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Themes](#themes)
+- [Plugins](#plugins)
+- [Administration](#administration)
+- [Security & Production notes](#security--production-notes)
+- [Development & testing](#development--testing)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author & Support](#author--support)
 
-- Create, edit, publish, and delete posts
+---
+
+## About
+
+Pico JSON CMS is a minimalist, flat-file content management system built with PHP and JSON. It focuses on simplicity, transparency, and developer extensibility while providing a familiar admin interface for managing posts, pages, themes, and plugins.
+
+Key principles:
+
+- Keep deployment simple — no RDBMS required
+- Store readable, inspectable JSON files in `content/`
+- Provide a plugin & theme API for extensibility
+- Scale flat-file storage with sharding and indices when needed
+
+---
+
+## Features
+
 - Markdown-based post authoring
-- Soft-delete and Trash functionality
-- Restore or permanently delete trashed content
-- Static pages such as About and Contact
-- Public navigation menu management
-- Pagination for large post collections
-- Slug-based post URLs
+- Create / edit / publish / soft-delete posts and pages
+- Slug-based friendly URLs and pagination
+- Theme system with template fallback
+- Plugin system with actions, filters, and settings
+- Sharded JSON storage, slug index, and request-level caching for large collections
+- Admin dashboard with plugin & theme management
+- Basic built-in plugins: SEO, sitemap, analytics (development branch)
 
-⚡ Scalable Flat-File Storage
+---
 
-Pico JSON CMS does not require MySQL or another database server.
+## Quick start
 
-For larger installations, posts can be stored using a sharded JSON architecture:
+1. Clone the repository and enter the directory:
 
-- Posts distributed across multiple shard files
-- Configurable records per shard
-- Slug index for fast post lookup
-- Pagination indexes
-- Metadata for efficient post and trash counts
-- Request-level caching
-- Atomic writes with file locking
+```bash
+git clone https://github.com/almhdy24/pico-json-cms.git
+cd pico-json-cms
+```
 
-The architecture is designed to make flat-file storage practical for large datasets while preserving the simplicity of JSON.
+2. Install dependencies via Composer:
 
-«Performance should always be benchmarked against your actual hardware, filesystem, PHP version, and workload.»
+```bash
+composer install
+```
 
-🎨 Theme System
+3. Ensure the content storage directory is writable by the webserver:
 
-Pico JSON CMS supports multiple themes.
+```bash
+chmod -R 755 content/
+# or set proper ownership: chown -R www-data:www-data content/
+```
 
-Themes can provide:
+4. Run the web installer by visiting `/installer` once the site is served — for example:
 
-- Layouts
-- Pages
-- Partials
-- CSS
-- JavaScript
-- Images and other assets
-- "theme.json" metadata
+```
+http://your-domain.example/installer
+```
 
-The CMS supports an active theme with fallback resolution to the default theme for templates that are not provided by the active theme.
+The installer will initialize site configuration and create the first admin account.
 
-Current themes include:
+Default development credentials (change immediately in production):
 
-Theme| Description
-Default| Clean, modern, responsive default interface
-CleanBlog| Minimal and readable blogging experience
-Magazine| Editorial-inspired design for articles and long-form content
-Dark| Minimal dark interface optimized for low-light reading
+- Username: `admin`
+- Password: `secret123`
 
-Theme management is available from:
+---
 
-/admin/themes
+## Configuration
 
-Theme activation is handled through the administrative interface.
+Configuration is stored in `config.php` and the JSON files inside `content/` (e.g., `settings.json`). Key runtime considerations:
 
-🧩 Plugin System
+- Minimum PHP: 8.1+
+- Ensure the PHP JSON extension is enabled
+- URL rewriting (Apache/Nginx) is required for pretty URLs
+- The `content/` directory must be writable by the web server
 
-Plugins extend Pico JSON CMS without modifying the core application.
+Environment-specific overrides can be handled by your webserver or deployment scripts; sensitive values should never be committed to git.
 
-The plugin architecture supports:
+---
 
-- Plugin discovery
-- Plugin manifests
-- Enable/disable management
-- Actions
-- Filters
-- Plugin settings
-- Schema-driven settings fields
-- Input sanitization
-- Error isolation
+## Themes
 
-Example plugin structure:
+Themes live under `themes/` and may include layouts, pages, partials, and static assets. A theme typically contains a `theme.json` metadata file describing the theme.
 
-plugins/
-└── my-plugin/
-    ├── plugin.json
-    └── my-plugin.php
+Example `theme.json`:
 
-Example manifest:
+```json
+{
+  "name": "My Theme",
+  "version": "1.0.0",
+  "description": "A custom Pico JSON CMS theme.",
+  "author": "Your Name"
+}
+```
 
+Activate and manage themes from the admin at `/admin/themes`. The theme resolver loads templates from the active theme and falls back to the default theme when needed.
+
+---
+
+## Plugins
+
+Plugins live in `plugins/` and extend the CMS without modifying core files. A minimal plugin structure:
+
+```
+plugins/my-plugin/
+├── plugin.json
+└── my-plugin.php
+```
+
+Example `plugin.json` manifest:
+
+```json
 {
   "name": "My Plugin",
   "entry": "my-plugin.php",
   "description": "My awesome plugin",
   "version": "1.0.0"
 }
+```
 
-A plugin can register functionality through the CMS hook system.
+Register plugin settings and hooks in PHP using the provided API:
 
+```php
 use Core\Hooks;
 use Core\PluginSettings;
 
@@ -125,383 +164,122 @@ PluginSettings::register('my-plugin', [
 Hooks::add_action('head', function () {
     echo '<meta name="my-plugin" content="active">';
 });
+```
 
-🔌 Built-in Plugins
-
-The development branch currently includes plugins for functionality such as:
-
-- SEO metadata and Open Graph support
-- XML sitemap generation
-- Analytics integration
-
-Plugin availability may vary between releases.
-
-🛠 Administration
-
-The administrative panel provides management interfaces for:
-
-- Dashboard
-- Posts
-- Add/Edit Post
-- Trash
-- Static Pages
-- Navigation Menu
-- Plugins
-- Plugin Settings
-- Themes
-- Site Settings
-- System Information
-
-The admin interface includes CSRF protection and authentication controls.
-
-🔒 Security
-
-Security-related functionality includes:
-
-- CSRF protection for state-changing requests
-- Password hashing using PHP's "password_hash()"
-- Session regeneration during authentication
-- Login throttling
-- Authentication and authorization checks
-- Input validation
-- Output escaping
-- Theme path validation
-- Plugin path validation
-- Directory traversal protection
-- Atomic file writes
-- File locking
-- Secure HTTP headers where supported
-
-Security is an ongoing development priority. Deployments should still use HTTPS, secure server configuration, and appropriate filesystem permissions.
+Manage plugins from `/admin/plugins`.
 
 ---
 
-🚀 Installation
+## Example content (post)
 
-Requirements
+A single post stored in the JSON content files may look like this:
 
-- PHP "8.1" or newer
-- Composer
-- PHP JSON extension
-- Apache or Nginx
-- URL rewriting support
-
-The application is designed to run without a relational database.
-
----
-
-1. Clone the Repository
-
-git clone https://github.com/almhdy24/pico-json-cms.git
-cd pico-json-cms
-
-2. Install Dependencies
-
-composer install
-
-3. Configure Writable Storage
-
-The CMS requires its content storage directory to be writable by the web server.
-
-For example:
-
-chmod -R 755 content/
-
-Depending on your hosting environment, you may need different ownership or permissions.
-
-Avoid using "777" unless absolutely necessary.
-
-4. Run the Installer
-
-Open the installer in your browser:
-
-/installer
-
-For example:
-
-http://your-domain.example/installer
-
-The installer initializes the CMS and creates the initial administrator account and site configuration.
-
----
-
-🎨 Themes
-
-Themes live in:
-
-themes/
-
-A typical theme can contain:
-
-themes/my-theme/
-├── theme.json
-├── layouts/
-├── pages/
-├── partials/
-└── assets/
-    ├── css/
-    ├── js/
-    └── images/
-
-A basic "theme.json":
-
+```json
 {
-  "name": "My Theme",
-  "version": "1.0.0",
-  "description": "A custom Pico JSON CMS theme.",
-  "author": "Your Name"
+  "id": "post_0001",
+  "title": "Welcome to Pico JSON CMS",
+  "slug": "welcome-to-pico-json-cms",
+  "content": "# Hello world\nThis is a markdown post.",
+  "status": "published",
+  "created_at": "2026-01-01T12:00:00Z",
+  "updated_at": "2026-01-01T12:00:00Z",
+  "meta": {
+    "tags": ["intro", "cms"]
+  }
 }
+```
 
-The active theme is configured through the CMS configuration system.
-
-Theme management is available at:
-
-/admin/themes
-
-The theme resolver attempts to load templates from the active theme first and can fall back to the default theme when an active theme does not provide a required template.
-
-This allows administrative templates and shared functionality to remain available even when a public theme only implements frontend templates.
+For large sites, posts can be sharded across multiple JSON files and a slug index is used for efficient lookup.
 
 ---
 
-🧩 Plugins
+## Administration
 
-Plugins live in:
+Admin features include: dashboard, posts, pages, trash, navigation menu, plugin settings, themes, and system information. The admin area includes CSRF protection, authentication checks, and basic login throttling.
 
-plugins/
-
-A plugin normally contains:
-
-plugins/my-plugin/
-├── plugin.json
-└── my-plugin.php
-
-Plugins can interact with the CMS using actions and filters.
-
-Example:
-
-Hooks::add_action('head', function () {
-    echo '<meta name="my-plugin" content="active">';
-});
-
-Plugin settings can be registered through the settings API and exposed through the administrative interface.
-
-Manage installed plugins from:
-
-/admin/plugins
+Visit `/admin` to sign in.
 
 ---
 
-📂 Project Structure
+## Security & production notes
 
-pico-json-cms/
-├── README.md
-├── CHANGELOG.md
-├── LICENSE
-├── composer.json
-├── config.php
-├── index.php
-├── .htaccess
-│
-├── core/
-│   ├── App.php
-│   ├── Router.php
-│   ├── View.php
-│   ├── Controller.php
-│   ├── Model.php
-│   ├── Hooks.php
-│   ├── Session.php
-│   ├── Auth.php
-│   ├── PluginLoader.php
-│   ├── PluginSettings.php
-│   ├── PluginSettingsRegistry.php
-│   └── ThemeTemplateResolver.php
-│
-├── controllers/
-│   ├── HomeController.php
-│   ├── AdminController.php
-│   ├── AdminPagesController.php
-│   ├── AdminMenuController.php
-│   ├── AdminPluginsController.php
-│   ├── AdminThemesController.php
-│   └── ...
-│
-├── models/
-│   ├── PostsModel.php
-│   ├── SettingsModel.php
-│   ├── PagesModel.php
-│   ├── MenuModel.php
-│   ├── ThemesModel.php
-│   └── ...
-│
-├── themes/
-│   ├── default/
-│   ├── cleanblog/
-│   ├── magazine/
-│   └── dark/
-│
-├── plugins/
-│   ├── seo/
-│   ├── sitemap/
-│   └── analytics/
-│
-├── content/
-│   ├── posts.json
-│   ├── posts.index.json
-│   ├── settings.json
-│   ├── pages.json
-│   ├── menu.json
-│   ├── plugins.json
-│   ├── plugin-settings/
-│   └── .installed
-│
-└── scripts/
-    ├── seed.php
-    ├── seed_sharded.php
-    ├── benchmark.php
-    └── migrate_to_sharded.php
+This project includes security-focused features, but deploying to production requires additional hardening:
 
-The exact structure may change as the project evolves.
+- Always use HTTPS and HSTS
+- Run PHP 8.1+ and keep PHP up to date
+- Use secure filesystem permissions (avoid world-writable directories)
+- Protect admin routes with strong passwords and rate-limiting
+- Do not use default development credentials
+- Regularly back up the `content/` directory
+- Consider additional application-layer caching or reverse proxy for high traffic
 
 ---
 
-⚡ Performance
+## Development & testing
 
-Pico JSON CMS includes several mechanisms intended to improve performance with larger content collections:
+Quick checks and scripts shipped with the project:
 
-Sharded Storage
+- PHP syntax check:
 
-Large post collections can be distributed across multiple JSON files instead of a single massive file.
+```bash
+find . -type f -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+```
 
-Slug Index
+- Generate test data / seed sharded storage:
 
-Post slug lookups can use an index rather than scanning every post.
-
-Pagination Indexes
-
-Large collections can be paginated without loading the entire dataset into memory.
-
-Metadata
-
-Frequently requested statistics can be stored separately to avoid repeatedly scanning all content.
-
-Request-Level Caching
-
-Repeated reads during a single request can reuse cached model data.
-
-Atomic Writes
-
-Data writes can use temporary files and atomic replacement to reduce the risk of partially written JSON files.
-
-For large installations, always benchmark the application on the target environment.
-
----
-
-🧪 Development & Testing
-
-PHP Syntax Check
-
-Run a syntax check against PHP files outside the Composer vendor directory:
-
-find . \
-  -type f \
-  -name "*.php" \
-  -not -path "./vendor/*" \
-  -print0 | \
-  xargs -0 -n1 php -l
-
-Generate Test Data
-
-For sharded storage testing:
-
+```bash
 php scripts/seed_sharded.php 100000 10000
+```
 
-The exact arguments depend on the current implementation of the seeder.
+- Run benchmark script:
 
-Benchmark
-
+```bash
 php scripts/benchmark.php 500
-
-Benchmark results depend on:
-
-- PHP version
-- Storage device
-- Filesystem
-- Hosting environment
-- Number of posts
-- Request concurrency
-- Cache state
+```
 
 ---
 
-🛣️ Roadmap
+## Roadmap
 
-The project is currently evolving toward a stable "1.0.0" release.
+Planned and in-progress items toward a stable 1.0.0:
 
-Planned areas include:
+- Complete developer documentation and plugin/theme guides
+- Stable plugin API and migration guides
+- Search functionality and REST API
+- Caching improvements and optional user roles
 
-- [ ] Complete developer documentation
-- [ ] Theme development documentation
-- [ ] Plugin API documentation
-- [ ] Upgrade and migration guides
-- [ ] Stable plugin API
-- [ ] More built-in plugins
-- [ ] Search functionality
-- [ ] Caching improvements
-- [ ] Social sharing integrations
-- [ ] REST API
-- [ ] Optional user roles and permissions
-
-The roadmap is subject to change.
+(See `CHANGELOG.md` for release history.)
 
 ---
 
-🤝 Contributing
+## Contributing
 
-Contributions, bug reports, and ideas are welcome.
+Thanks for considering contributing! Please follow these steps:
 
-1. Fork the repository.
-2. Create a feature branch.
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Implement your change and include tests where appropriate
+4. Run syntax checks and any tests
+5. Commit and push your branch
+6. Open a Pull Request describing your change
 
-git checkout -b feature/amazing-feature
+Commit message guidance: keep messages focused and reference issues where applicable.
 
-3. Make your changes.
-4. Run syntax checks and tests.
-5. Commit your changes.
-
-git commit -m "Add amazing feature"
-
-6. Push your branch.
-
-git push origin feature/amazing-feature
-
-7. Open a Pull Request.
-
-Please keep changes focused and maintain the project's lightweight architecture.
+Code of conduct: be respectful and constructive in reviews and issues.
 
 ---
 
-📄 License
+## License
 
-Pico JSON CMS is licensed under the MIT License.
-
-See the "LICENSE" file for the complete license text.
+Pico JSON CMS is licensed under the MIT License. See `LICENSE` for details.
 
 ---
 
-👨‍💻 Author
+## Author & Support
 
-Elmahdi Abdallh
-
-PHP Backend & CMS Developer
+Elmahdi Abdallh — PHP Backend & CMS Developer
 
 - GitHub: https://github.com/almhdy24
 - Project: https://github.com/almhdy24/pico-json-cms
 
----
-
-⭐ Support the Project
-
-If Pico JSON CMS is useful to you, consider starring the repository on GitHub.
-
-Built with PHP, JSON, and a focus on simplicity.
+If you find the project useful, please star the repository. For questions or support, open an issue.

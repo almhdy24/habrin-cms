@@ -1,5 +1,32 @@
-/content/*.json
+# Runtime-generated CMS content
+/content/*
+
+# Keep the directory structure
+!/content/.gitkeep
+
+# Local environment files
+.env
+.env.*
+*.local
+
+# Vendor dependencies
 /vendor/
-/node_modules/
-/.env
+
+# IDE and OS files
 .DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.log
+*.tmp
+
+# Composer
+composer.lock
+composer.phar
+
+# Node modules (if any)
+/node_modules/
+
+# Build artifacts
+/build/
+/dist/

@@ -12,6 +12,7 @@
         "league/commonmark": "^2.8"
     },
     "require-dev": {
-        "kint-php/kint": "^6.1"
+        "kint-php/kint": "^6.1",
+        "phpunit/phpunit": "^9.6"
     }
 }

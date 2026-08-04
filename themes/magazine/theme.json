@@ -1,0 +1,11 @@
+{
+  "name": "Magazine",
+  "version": "1.0.0",
+  "description": "A clean editorial theme for news, articles, and long-form content. Features a bold header, category-style layout, and typography optimized for reading.",
+  "author": "Pico JSON CMS",
+  "screenshot": "",
+  "requires": {
+    "php": ">=8.1",
+    "cms": ">=1.0.0"
+  }
+}

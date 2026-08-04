@@ -1,0 +1,6 @@
+{
+    "urls_per_sitemap": 100,
+    "include_homepage": false,
+    "priority_homepage": "1.0",
+    "priority_posts": "0.8"
+}

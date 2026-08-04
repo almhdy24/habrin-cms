@@ -1,97 +1,81 @@
 <?php $this->layout('layouts/admin', ['title' => 'Trash']) ?>
 
-<section class="section">
-    <div class="container">
-        <div class="level">
-            <div class="level-left">
-                <h1 class="title">
-                    <i data-lucide="trash-2"></i>
-                    <span>Trash</span>
-                </h1>
-            </div>
-            <div class="level-right">
-                <a href="/admin" class="button is-light">
-                    <i data-lucide="arrow-left"></i>
-                    <span>Back to Posts</span>
-                </a>
-            </div>
-        </div>
+<section>
 
-        <?php if (!empty($posts)): ?>
-            <div class="notification is-light mb-4">
-                <i data-lucide="info"></i>
-                <span>Posts in trash will be automatically deleted after 30 days.</span>
-            </div>
+  <div class="flex flex-wrap items-center justify-between gap-1 mb-4">
+    <h2 class="mb-0"><i data-lucide="trash-2" style="color: var(--danger);"></i> Trash</h2>
+    <a href="/admin" class="button button-light">
+      <i data-lucide="arrow-left"></i> Back
+    </a>
+  </div>
 
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Deleted Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($posts as $id => $post): ?>
-                            <?php if (!empty($post['deleted_at'])): ?>
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <strong><?= htmlspecialchars($post['title']) ?></strong>
-                                            <div class="help">
-                                                <?= htmlspecialchars(substr($post['content'], 0, 60)) ?>...
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <?php if ($post['deleted_at']): ?>
-                                            <?= date('F j, Y g:i A', $post['deleted_at']) ?>
-                                            <div class="help">
-                                                <?php
-                                                $days_ago = floor((time() - $post['deleted_at']) / 86400);
-                                                echo "Deleted $days_ago day" . ($days_ago != 1 ? 's' : '') . " ago";
-                                                ?>
-                                            </div>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <div class="buttons are-small">
-                                            <a href="/admin/restore/<?= $id ?>" class="button is-success" onclick="return confirm('Restore this post?')">
-                                                <i data-lucide="refresh-cw"></i>
-                                                <span>Restore</span>
-                                            </a>
-                                            <a href="/admin/destroy/<?= $id ?>" class="button is-danger" onclick="return confirm('Permanently delete this post?\nThis action cannot be undone!')">
-                                                <i data-lucide="trash"></i>
-                                                <span>Delete Permanently</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="buttons mt-4">
-                <form method="POST" action="/admin/emptyTrash" style="display: inline;" onsubmit="return confirm('Empty all trash?\nThis action cannot be undone!')">
-                    <button type="submit" class="button is-danger">
-                        <i data-lucide="trash-2"></i>
-                        <span>Empty Trash</span>
-                    </button>
-                </form>
-            </div>
-        <?php else: ?>
-            <div class="notification is-light has-text-centered" style="padding: 3rem;">
-                <i data-lucide="trash-2" style="width: 48px; height: 48px; color: var(--secondary); margin-bottom: 1rem;"></i>
-                <h3 class="title is-5">Trash is empty</h3>
-                <p>No posts in the trash bin.</p>
-                <a href="/admin" class="button is-light mt-3">
-                    <i data-lucide="arrow-left"></i>
-                    <span>Back to Posts</span>
-                </a>
-            </div>
-        <?php endif; ?>
+  <?php if (!empty($posts)): ?>
+    <div class="notification notification-info mb-4">
+      <i data-lucide="info"></i>
+      <span>Posts in trash will be automatically deleted after <strong>30 days</strong>.</span>
     </div>
+
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Deleted</th>
+            <th style="min-width: 220px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($posts as $id => $post): ?>
+            <?php if (!empty($post['deleted_at'])): ?>
+            <tr>
+              <td><strong><?= htmlspecialchars($post['title']) ?></strong></td>
+              <td>
+                <?= date('M j, Y g:i A', (int) $post['deleted_at']) ?>
+                <div class="text-muted" style="font-size: 0.8rem;">
+                  <?php
+                  $days = floor((time() - (int) $post['deleted_at']) / 86400);
+                  echo $days . ' day' . ($days != 1 ? 's' : '') . ' ago';
+                  ?>
+                </div>
+              </td>
+              <td>
+                <div class="flex flex-wrap gap-1">
+                  <a href="/admin/restore/<?= (int) $id ?>" class="button button-sm button-success" onclick="return confirm('Restore this post?')">
+                    <i data-lucide="refresh-cw"></i> Restore
+                  </a>
+                  <form method="POST" action="/admin/destroy/<?= (int) $id ?>" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+                    <button type="submit" class="button button-sm button-danger" onclick="return confirm('Permanently delete this post?')">
+                      <i data-lucide="trash"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            <?php endif; ?>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4">
+      <form method="POST" action="/admin/emptyTrash" style="display:inline;" onsubmit="return confirm('Empty all trash? This cannot be undone.')">
+        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+        <button type="submit" class="button button-danger">
+          <i data-lucide="trash-2"></i> Empty Trash
+        </button>
+      </form>
+    </div>
+
+  <?php else: ?>
+    <div class="text-center" style="padding: 3rem 0;">
+      <i data-lucide="trash-2" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 1rem;"></i>
+      <h3 class="mb-1">Trash is empty</h3>
+      <p class="text-muted">No posts in the trash bin.</p>
+      <a href="/admin" class="button button-light mt-3">
+        <i data-lucide="arrow-left"></i> Back to Posts
+      </a>
+    </div>
+  <?php endif; ?>
+
 </section>

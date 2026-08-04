@@ -1,10 +1,4 @@
 <?php
-/**
- * Pico JSON CMS - Settings Model
- *
- * Stores global site configuration.
- * Intended for low-frequency writes.
- */
 
 declare(strict_types=1);
 
@@ -16,39 +10,53 @@ use Core\Model;
 class SettingsModel extends Model
 {
     protected string $file;
+    private array $defaults = [
+        'site_title' => 'My Pico CMS',
+        'site_description' => 'A lightweight flat-file CMS',
+        'site_keywords' => 'cms, php, json, blog',
+        'hero_heading' => 'Welcome to Pico CMS',
+        'hero_description' => 'A simple, fast, and secure flat-file CMS.',
+        'hero_button_text' => 'Get Started',
+        'hero_button_link' => '/about',
+        'meta' => []
+    ];
 
     protected function boot(): void
     {
         $this->file = App::path('content', 'settings.json');
+        $this->ensureDefaults();
     }
 
-    /**
-     * Retrieve a setting value
-     */
+    private function ensureDefaults(): void
+    {
+        $current = $this->all();
+        $merged = array_merge($this->defaults, $current);
+        if ($merged !== $current) {
+            $this->save($merged);
+        }
+    }
+
     public function get(string $key, mixed $default = null): mixed
     {
         $settings = $this->all();
         return $settings[$key] ?? $default;
     }
 
-    /**
-     * Update a single setting
-     */
     public function set(string $key, mixed $value): bool
     {
         $settings = $this->all();
         $settings[$key] = $value;
-
         return $this->save($settings);
     }
 
-    /**
-     * Update multiple settings at once
-     */
     public function setMany(array $values): bool
     {
-        return $this->save(
-            array_merge($this->all(), $values)
-        );
+        $settings = array_merge($this->all(), $values);
+        return $this->save($settings);
+    }
+
+    public function all(): array
+    {
+        return array_merge($this->defaults, parent::all());
     }
 }

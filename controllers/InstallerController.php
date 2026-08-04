@@ -68,7 +68,7 @@ final class InstallerController extends Controller
         if ($this->isPost()) {
             if (!in_array(false, $checks, true)) {
                 Session::set('installer.step', 'admin');
-                $this->redirect('/install');
+                $this->redirect('/installer');
             }
 
             $this->flash('error', 'System requirements not met.');
@@ -88,6 +88,7 @@ final class InstallerController extends Controller
     private function admin(): void
     {
         if ($this->isPost()) {
+            $this->validateCsrf();
             $this->handleAdminInstall();
             return;
         }
@@ -95,6 +96,7 @@ final class InstallerController extends Controller
         $this->view('installer/admin', [
             'step'  => 'admin',
             'flash' => $this->getFlash(),
+            'csrf_token' => Session::csrfToken(),
         ]);
     }
 
@@ -123,11 +125,9 @@ final class InstallerController extends Controller
 
         try {
             $settings = [
-                'site' => [
-                    'name'     => $site,
-                    'url'      => '',
-                    'timezone' => date_default_timezone_get(),
-                ],
+                'site_title' => htmlspecialchars($site, ENT_QUOTES, 'UTF-8'), // Changed from site_name to site_title
+                'site_description' => '',
+                'site_keywords' => '',
                 'meta' => [
                     'installed_at' => time(),
                     'core_version' => App::CORE_VERSION,
@@ -153,7 +153,7 @@ final class InstallerController extends Controller
             chmod($this->adminFile, 0600);
 
             Session::set('installer.step', 'finish');
-            $this->redirect('/install');
+            $this->redirect('/installer');
 
         } catch (\Throwable) {
             @unlink($this->settingsFile);
@@ -203,7 +203,15 @@ final class InstallerController extends Controller
     private function fail(string $message): never
     {
         $this->flash('error', $message);
-        $this->redirect('/install');
+        $this->redirect('/installer');
         exit;
+    }
+
+    private function validateCsrf(): void
+    {
+        $token = $this->input('csrf_token', '');
+        if (!Session::validateCsrfToken($token)) {
+            $this->fail('Invalid CSRF token.');
+        }
     }
 }

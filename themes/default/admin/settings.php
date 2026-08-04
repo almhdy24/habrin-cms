@@ -1,72 +1,62 @@
 <?php $this->layout('layouts/admin', ['title' => 'Settings']) ?>
 
-<section class="section">
-    <div class="container">
-        <div class="level">
-            <div class="level-left">
-                <h1 class="title">Settings</h1>
-            </div>
-            <div class="level-right">
-                <a href="/admin/dashboard" class="button is-light">
-                    <i data-lucide="arrow-left"></i>
-                    <span>Back to Dashboard</span>
-                </a>
-            </div>
-        </div>
-        
-        <form method="POST" action="/admin/settings" class="box">
-            <div class="field">
-                <label class="label">
-                    <i data-lucide="type"></i>
-                    <span>Site Title</span>
-                </label>
-                <div class="control">
-                    <input class="input" type="text" name="site_title" value="<?= htmlspecialchars($settings['site_title'] ?? '') ?>" placeholder="My Awesome Blog">
-                </div>
-            </div>
+<section>
 
-            <div class="field">
-                <label class="label">
-                    <i data-lucide="align-left"></i>
-                    <span>Site Description</span>
-                </label>
-                <div class="control">
-                    <textarea class="textarea" name="site_description" rows="3" placeholder="A brief description of your website"><?= htmlspecialchars($settings['site_description'] ?? '') ?></textarea>
-                </div>
-                <p class="help">
-                    <i data-lucide="info"></i>
-                    This appears in search results and social media shares.
-                </p>
-            </div>
+  <div class="flex flex-wrap items-center justify-between gap-1 mb-4">
+    <h2 class="mb-0"><i data-lucide="settings"></i> Settings</h2>
+    <a href="/admin/dashboard" class="button button-light">
+      <i data-lucide="arrow-left"></i> Back
+    </a>
+  </div>
 
-            <div class="field">
-                <label class="label">
-                    <i data-lucide="search"></i>
-                    <span>SEO Keywords</span>
-                </label>
-                <div class="control">
-                    <input class="input" type="text" name="site_keywords" value="<?= htmlspecialchars($settings['site_keywords'] ?? '') ?>" placeholder="blog, cms, php, json">
-                </div>
-                <p class="help">
-                    <i data-lucide="info"></i>
-                    Comma separated keywords for search engines
-                </p>
-            </div>
+  <form method="POST" action="/admin/settings" class="card">
+    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
 
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">
-                        <i data-lucide="save"></i>
-                        <span>Save Settings</span>
-                    </button>
-                    <a class="button is-light" href="/admin/dashboard">
-                        <i data-lucide="x"></i>
-                        <span>Cancel</span>
-                    </a>
-                </div>
-            </div>
-        </form>
-        
-        <?php $this->hook('admin_settings_after') ?>
+    <h3>General</h3>
+    <div class="field">
+      <label class="label"><i data-lucide="type"></i> Site Title</label>
+      <input class="input" type="text" name="site_title" value="<?= htmlspecialchars($old['site_title'] ?? $settings['site_title'] ?? '') ?>" placeholder="My Pico CMS">
     </div>
+
+    <div class="field">
+      <label class="label"><i data-lucide="align-left"></i> Site Description</label>
+      <textarea class="textarea" name="site_description" rows="2" placeholder="Brief description"><?= htmlspecialchars($old['site_description'] ?? $settings['site_description'] ?? '') ?></textarea>
+    </div>
+
+    <div class="field">
+      <label class="label"><i data-lucide="search"></i> SEO Keywords</label>
+      <input class="input" type="text" name="site_keywords" value="<?= htmlspecialchars($old['site_keywords'] ?? $settings['site_keywords'] ?? '') ?>" placeholder="blog, cms, php">
+    </div>
+
+    <hr>
+
+    <h3>Hero Section</h3>
+    <div class="field">
+      <label class="label"><i data-lucide="heading"></i> Hero Heading</label>
+      <input class="input" type="text" name="hero_heading" value="<?= htmlspecialchars($old['hero_heading'] ?? $settings['hero_heading'] ?? '') ?>" placeholder="Welcome to Pico CMS">
+    </div>
+
+    <div class="field">
+      <label class="label"><i data-lucide="align-left"></i> Hero Description</label>
+      <textarea class="textarea" name="hero_description" rows="2" placeholder="A simple, fast, and secure flat-file CMS."><?= htmlspecialchars($old['hero_description'] ?? $settings['hero_description'] ?? '') ?></textarea>
+    </div>
+
+    <div class="field">
+      <label class="label"><i data-lucide="button"></i> Hero Button Text</label>
+      <input class="input" type="text" name="hero_button_text" value="<?= htmlspecialchars($old['hero_button_text'] ?? $settings['hero_button_text'] ?? '') ?>" placeholder="Get Started">
+    </div>
+
+    <div class="field">
+      <label class="label"><i data-lucide="link"></i> Hero Button Link</label>
+      <input class="input" type="text" name="hero_button_link" value="<?= htmlspecialchars($old['hero_button_link'] ?? $settings['hero_button_link'] ?? '') ?>" placeholder="/about">
+    </div>
+
+    <div class="flex flex-wrap gap-1 mt-4">
+      <button type="submit" class="button button-primary"><i data-lucide="save"></i> Save Settings</button>
+      <a href="/admin/dashboard" class="button button-light"><i data-lucide="x"></i> Cancel</a>
+    </div>
+  </form>
+
+  <?php $this->hook('admin_settings_after') ?>
+
 </section>

@@ -7,33 +7,11 @@ namespace Core;
 use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;
 
-/**
- * ------------------------------------------------------
- * Pico JSON CMS — View Renderer (CORE)
- * ------------------------------------------------------
- *
- * CORE VERSION: 1.0.0
- *
- * Responsibilities:
- *  - Initialize template engine
- *  - Render views
- *  - Expose safe template helpers
- *
- * ⚠️ CORE FREEZE FILE
- * Rendering behavior MUST remain stable
- * ------------------------------------------------------
- */
-
 final class View
 {
-    /**
-     * Plates engine instance
-     */
     private static ?Engine $engine = null;
+    private static array $shared = [];
 
-    /**
-     * Initialize and return template engine
-     */
     private static function engine(): Engine
     {
         if (self::$engine !== null) {
@@ -41,60 +19,56 @@ final class View
         }
 
         $config = App::$config;
-        $theme  = $config['theme'] ?? 'default';
+        $theme = $config['theme'] ?? 'default';
 
-        $themePath = App::path('themes', $theme);
-
-        if (!is_dir($themePath)) {
-            throw new \RuntimeException("Theme not found: {$theme}");
+        // Sanitize theme name
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $theme)) {
+            $theme = 'default';
         }
 
+        $themePath = App::path('themes', $theme);
+        $defaultPath = App::path('themes', 'default');
+
+        // Fallback if active theme doesn't exist
+        if (!is_dir($themePath)) {
+            $theme = 'default';
+            $themePath = $defaultPath;
+        }
+
+        // Create engine with active theme as root
         self::$engine = new Engine($themePath);
 
-        // Global shared data
+        // Set custom resolver with fallback
+        self::$engine->setResolveTemplatePath(
+            new ThemeTemplateResolver($themePath, $defaultPath)
+        );
+
+        // Shared data
+        self::$engine->addData(self::$shared);
         self::$engine->addData([
             'config' => $config,
-            'flash'  => Session::getFlash(),
+            'flash' => Session::getFlash(),
         ]);
-         
-        // Pico extension
-        self::$engine->loadExtension(new class implements ExtensionInterface {
 
+        // Pico extensions
+        self::$engine->loadExtension(new class implements ExtensionInterface {
             public function register(Engine $engine): void
             {
-                // Hooks
                 $engine->registerFunction('hook', function (string $name, ...$args) {
                     Hooks::do_action($name, ...$args);
                 });
-
-                // Filters
-                $engine->registerFunction('filter', function (
-                    string $name,
-                    mixed $value,
-                    ...$args
-                ) {
+                $engine->registerFunction('filter', function (string $name, mixed $value, ...$args) {
                     return apply_filters($name, $value, ...$args);
                 });
-
-                // Asset helper
                 $engine->registerFunction('asset', function (string $path) {
-                    return rtrim(App::$config['base_url'], '/')
-                        . '/' . ltrim($path, '/');
+                    return rtrim(App::$config['base_url'] ?? '', '/') . '/' . ltrim($path, '/');
                 });
-
-                // Route helper
                 $engine->registerFunction('route', function (string $path) {
-                    return rtrim(App::$config['base_url'], '/')
-                        . $path;
+                    return rtrim(App::$config['base_url'] ?? '', '/') . '/' . ltrim($path, '/');
                 });
-
-                // CSRF field
                 $engine->registerFunction('csrf', function () {
-                    return '<input type="hidden" name="csrf" value="'
-                        . csrf_token() . '">';
+                    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(Session::csrfToken(), ENT_QUOTES, 'UTF-8') . '">';
                 });
-
-                // Admin flag
                 $engine->registerFunction('is_admin', function () {
                     return defined('IS_ADMIN') && IS_ADMIN;
                 });
@@ -104,23 +78,34 @@ final class View
         return self::$engine;
     }
 
-    /**
-     * Render a view
-     */
-    public static function render(string $view, array $data = []): void
-    {
-        Hooks::do_action('beforeRender', $view, $data);
-
-        echo self::engine()->render($view, $data);
-
-        Hooks::do_action('afterRender', $view, $data);
-    }
-
-    /**
-     * Share data globally with all views
-     */
     public static function share(array $data): void
     {
-        self::engine()->addData($data);
+        self::$shared = array_merge(self::$shared, $data);
+        if (self::$engine !== null) {
+            self::$engine->addData($data);
+        }
+    }
+
+    public static function getShared(?string $key = null): mixed
+    {
+        if ($key === null) {
+            return self::$shared;
+        }
+        return self::$shared[$key] ?? null;
+    }
+
+    public static function render(string $view, array $data = []): void
+    {
+        Hooks::do_action('before_render', $view, $data);
+        try {
+            echo self::engine()->render($view, $data);
+        } finally {
+            Hooks::do_action('after_render', $view, $data);
+        }
+    }
+
+    public static function clearCache(): void
+    {
+        self::$engine = null;
     }
 }

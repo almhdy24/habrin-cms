@@ -1,49 +1,59 @@
 <?php
 /**
- * Pico JSON CMS - Global Functions
- *
- * Author: Elmahdi
- * GitHub: https://github.com/almhdy24/pico-json-cms
- * Description:
- *   Global helper functions for hooks and pagination.
- *
- * License: MIT
+ * Pico JSON CMS — Global Functions
  */
 
 use Core\Hooks;
 
-function add_action($hook, $callback) {
-    Hooks::add_action($hook, $callback);
+// ---------- Actions ----------
+function add_action(string $hook, callable $callback, int $priority = 10): void
+{
+    Hooks::add_action($hook, $callback, $priority);
 }
 
-function do_action($hook, ...$args) {
+function do_action(string $hook, ...$args): void
+{
     Hooks::do_action($hook, ...$args);
 }
 
-function add_filter($hook, $callback) {
-    Hooks::add_filter($hook, $callback);
+function remove_action(string $hook, callable $callback, int $priority = 10): bool
+{
+    return Hooks::remove_action($hook, $callback, $priority);
 }
 
-function apply_filters($hook, $value, ...$args) {
+function has_action(string $hook): bool
+{
+    return Hooks::has_action($hook);
+}
+
+// ---------- Filters ----------
+function add_filter(string $hook, callable $callback, int $priority = 10): void
+{
+    Hooks::add_filter($hook, $callback, $priority);
+}
+
+function apply_filters(string $hook, mixed $value, ...$args): mixed
+{
     return Hooks::apply_filters($hook, $value, ...$args);
 }
 
-/**
- * Paginate an array of items.
- *
- * @param array $items Full array of items
- * @param int $perPage Number of items per page
- * @param int $currentPage Current page number
- * @return array ['items' => [], 'totalPages' => int]
- */
+function remove_filter(string $hook, callable $callback, int $priority = 10): bool
+{
+    return Hooks::remove_filter($hook, $callback, $priority);
+}
+
+function has_filter(string $hook): bool
+{
+    return Hooks::has_filter($hook);
+}
+
+// ---------- Pagination (existing) ----------
 function paginate(array $items, int $perPage = 5, int $currentPage = 1): array
 {
     $totalItems = count($items);
     $totalPages = max(1, ceil($totalItems / $perPage));
-
     $currentPage = max(1, min($currentPage, $totalPages));
     $offset = ($currentPage - 1) * $perPage;
-
     return [
         'items' => array_slice($items, $offset, $perPage, true),
         'totalPages' => $totalPages,

@@ -1,11 +1,13 @@
-<footer class="footer">
+<footer class="site-footer">
   <div class="container">
-    <p>
-      <i data-lucide="copyright"></i>
-      <?= date('Y') ?>
-      <?= $this->e($config['site_name'] ?? 'Pico CMS') ?>
-    </p>
-
-    <?php $this->hook('footer') ?>
+    <div class="footer-content">
+      <p>
+        &copy; <?= date('Y') ?>
+        <a href="/"><?= $this->e($settings['site_title'] ?? 'Pico CMS') ?></a>
+        &mdash; Built with <i data-lucide="heart" style="width:16px;height:16px;display:inline;color:var(--danger);"></i>
+        and <a href="https://github.com/almhdy24/pico-json-cms" target="_blank" rel="noopener">Pico JSON CMS</a>
+      </p>
+      <?php $this->hook('footer') ?>
+    </div>
   </div>
 </footer>

@@ -1,135 +1,197 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Core;
 
-/**
-* ------------------------------------------------------
-* Pico JSON CMS — Base Model (CORE)
-* ------------------------------------------------------
-*
-* CORE VERSION: 1.0.0
-*
-* This class is intentionally minimal.
-* It defines the ONLY supported way to interact
-* with JSON-backed storage in Pico JSON CMS.
-*
-* ⚠️ CORE FREEZE NOTICE
-* - Public methods MUST NOT change after v1.0.0
-* - Child models should add domain logic only
-* - No database logic belongs here
-* ------------------------------------------------------
-*/
 abstract class Model
 {
-  /**
-  * Absolute path to JSON storage file
-  * Must be defined by child models.
-  */
-  protected string $file;
+    protected string $file;
+    protected string $lockFile;
+    protected static array $cache = [];
 
-  /**
-  * Model constructor
-  *
-  * Ensures:
-  * - $file is defined
-  * - Storage file exists
-  */
-  final public function __construct() {
-    // Allow child model to configure itself
-    if (method_exists($this, 'boot')) {
-      $this->boot();
+    final public function __construct()
+    {
+        if (method_exists($this, 'boot')) {
+            $this->boot();
+        }
+
+        if (empty($this->file)) {
+            throw new \RuntimeException(
+                static::class . ' must define a $file property'
+            );
+        }
+
+        $this->lockFile = $this->file . '.lock';
+
+        if (!file_exists($this->file)) {
+            $this->initializeFile();
+        }
     }
 
-    if (empty($this->file)) {
-      throw new \RuntimeException(
-        static::class . ' must define a $file property'
-      );
+    protected function initializeFile(): void
+    {
+        $dir = dirname($this->file);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        $this->atomicWrite('{}');
     }
 
-    if (!file_exists($this->file)) {
-      $this->initializeFile();
-    }
-  }
+    /**
+     * Acquire exclusive lock and execute callback
+     * Always reads fresh data inside the lock
+     */
+    protected function withLock(callable $callback): mixed
+    {
+        $lockFp = fopen($this->lockFile, 'c');
+        if ($lockFp === false) {
+            throw new \RuntimeException("Unable to open lock file: {$this->lockFile}");
+        }
 
-  /**
-  * Initialize an empty JSON file
-  * This method is intentionally protected
-  * to prevent external misuse.
-  */
-  protected function initializeFile(): void
-  {
-    $dir = dirname($this->file);
+        if (!flock($lockFp, LOCK_EX)) {
+            fclose($lockFp);
+            throw new \RuntimeException("Unable to acquire lock: {$this->lockFile}");
+        }
 
-    if (!is_dir($dir)) {
-      mkdir($dir, 0755, true);
-    }
+        try {
+            // Clear cache before reading inside lock
+            $cacheKey = $this->file;
+            unset(static::$cache[$cacheKey]);
 
-    file_put_contents(
-      $this->file,
-      json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
-      LOCK_EX
-    );
-  }
+            $result = $callback();
+        } finally {
+            flock($lockFp, LOCK_UN);
+            fclose($lockFp);
+        }
 
-  /* =====================================================
-     * Read Operations
-     * ===================================================== */
-
-  /**
-  * Retrieve all records
-  *
-  * @return array<string|int, mixed>
-  */
-  public function all(): array
-  {
-    $json = file_get_contents($this->file);
-
-    if ($json === false) {
-      return [];
+        return $result;
     }
 
-    $data = json_decode($json, true);
+    /**
+     * Atomic write using temp file + rename
+     */
+    protected function atomicWrite(string $json): bool
+    {
+        $temp = $this->file . '.tmp.' . uniqid();
 
-    return is_array($data) ? $data : [];
-  }
+        if (file_put_contents($temp, $json, LOCK_EX) === false) {
+            @unlink($temp);
+            return false;
+        }
 
-  /**
-  * Find a record by ID
-  */
-  public function find(string|int $id): mixed
-  {
-    $items = $this->all();
-    return $items[$id] ?? null;
-  }
+        // Ensure the temp file is written before rename
+        clearstatcache(true, $temp);
 
-  /* =====================================================
-     * Write Operations
-     * ===================================================== */
+        if (!rename($temp, $this->file)) {
+            @unlink($temp);
+            return false;
+        }
 
-  /**
-  * Persist dataset atomically
-  *
-  * Uses temp file + rename to avoid corruption.
-  */
-  final public function save(array $data): bool
-  {
-    $temp = $this->file . '.tmp';
-
-    $json = json_encode(
-      $data,
-      JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-    );
-
-    if ($json === false) {
-      return false;
+        return true;
     }
 
-    if (file_put_contents($temp, $json, LOCK_EX) === false) {
-      return false;
+    /**
+     * Read all data with cache (used outside locks)
+     */
+    public function all(): array
+    {
+        $cacheKey = $this->file;
+        if (isset(static::$cache[$cacheKey])) {
+            return static::$cache[$cacheKey];
+        }
+
+        $json = @file_get_contents($this->file);
+        if ($json === false) {
+            return [];
+        }
+
+        $data = json_decode($json, true);
+        $data = is_array($data) ? $data : [];
+        static::$cache[$cacheKey] = $data;
+        return $data;
     }
 
-    return rename($temp, $this->file);
-  }
+    /**
+     * Fresh read inside lock
+     */
+    protected function freshAll(): array
+    {
+        $cacheKey = $this->file;
+        unset(static::$cache[$cacheKey]);
+
+        $json = @file_get_contents($this->file);
+        if ($json === false) {
+            return [];
+        }
+
+        $data = json_decode($json, true);
+        $data = is_array($data) ? $data : [];
+        static::$cache[$cacheKey] = $data;
+        return $data;
+    }
+
+    public function find(string|int $id): mixed
+    {
+        $items = $this->all();
+        return $items[$id] ?? null;
+    }
+
+    /**
+     * Save data atomically with lock (single record)
+     */
+    final public function save(array $data): bool
+    {
+        return $this->withLock(function () use ($data) {
+            $json = json_encode(
+                $data,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            );
+
+            if ($json === false) {
+                return false;
+            }
+
+            $success = $this->atomicWrite($json);
+
+            if ($success) {
+                $cacheKey = $this->file;
+                unset(static::$cache[$cacheKey]);
+            }
+
+            return $success;
+        });
+    }
+
+    /**
+     * Bulk save – writes data directly inside lock
+     * For seeding/import only
+     */
+    final public function bulkSave(array $data): bool
+    {
+        return $this->withLock(function () use ($data) {
+            $json = json_encode(
+                $data,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            );
+
+            if ($json === false) {
+                return false;
+            }
+
+            $success = $this->atomicWrite($json);
+
+            if ($success) {
+                $cacheKey = $this->file;
+                unset(static::$cache[$cacheKey]);
+            }
+
+            return $success;
+        });
+    }
+
+    public static function clearCache(): void
+    {
+        static::$cache = [];
+    }
 }

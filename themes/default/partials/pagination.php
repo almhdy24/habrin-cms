@@ -1,52 +1,57 @@
 <?php
-/**
- * Reusable Pagination Component
- *
- * Required variables:
- * - $currentPage (int)
- * - $totalPages (int)
- *
- * Optional:
- * - $basePath (string) → defaults to current path
- */
+$basePath = $basePath ?? parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$pageUrl = fn($p) => $this->route($basePath . '?page=' . $p);
 
-// Detect current path if not provided
-$basePath = $basePath ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+function renderPagination($current, $total, $pageUrl) {
+    $range = 2;
+    $pages = [1];
 
-// Helper to build page URLs safely
-$pageUrl = function (int $page) use ($basePath) {
-    return $this->route($basePath . '?page=' . $page);
-};
+    if ($current - $range > 2) {
+        $pages[] = '...';
+    }
+
+    for ($i = max(2, $current - $range); $i <= min($total - 1, $current + $range); $i++) {
+        if ($i > 1 && $i < $total) {
+            $pages[] = $i;
+        }
+    }
+
+    if ($current + $range < $total - 1) {
+        $pages[] = '...';
+    }
+
+    if ($total > 1) {
+        $pages[] = $total;
+    }
+
+    $pages = array_unique($pages);
+
+    foreach ($pages as $p) {
+        if ($p === '...') {
+            echo '<span class="pagination-ellipsis">…</span>';
+        } elseif ($p == $current) {
+            echo '<span class="pagination-link is-current">' . $p . '</span>';
+        } else {
+            echo '<a href="' . $pageUrl($p) . '" class="pagination-link">' . $p . '</a>';
+        }
+    }
+}
 ?>
 
 <?php if ($totalPages > 1): ?>
-<nav class="pagination is-centered mt-4" role="navigation" aria-label="pagination">
-
-  <!-- Previous -->
+<div class="pagination" style="margin-top: 1.5rem;">
   <?php if ($currentPage > 1): ?>
-    <a class="pagination-link"
-       href="<?= $pageUrl($currentPage - 1) ?>">
+    <a href="<?= $pageUrl($currentPage - 1) ?>" class="pagination-link" aria-label="Previous">
       <i data-lucide="chevron-left"></i>
-      <span>Previous</span>
     </a>
   <?php endif; ?>
 
-  <!-- Page numbers -->
-  <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-    <a class="pagination-link <?= $i === $currentPage ? 'is-current' : '' ?>"
-       href="<?= $pageUrl($i) ?>">
-      <?= $i ?>
-    </a>
-  <?php endfor; ?>
+  <?php renderPagination($currentPage, $totalPages, $pageUrl); ?>
 
-  <!-- Next -->
   <?php if ($currentPage < $totalPages): ?>
-    <a class="pagination-link"
-       href="<?= $pageUrl($currentPage + 1) ?>">
-      <span>Next</span>
+    <a href="<?= $pageUrl($currentPage + 1) ?>" class="pagination-link" aria-label="Next">
       <i data-lucide="chevron-right"></i>
     </a>
   <?php endif; ?>
-
-</nav>
+</div>
 <?php endif; ?>

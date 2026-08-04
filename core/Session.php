@@ -130,4 +130,32 @@ final class Session
 
         return $flash;
     }
+
+    /* =====================================================
+     * CSRF Protection
+     * ===================================================== */
+
+    /**
+     * Generate a CSRF token and store in session
+     */
+    public static function csrfToken(): string
+    {
+        self::start();
+        if (empty($_SESSION['_csrf_token'])) {
+            $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['_csrf_token'];
+    }
+
+    /**
+     * Validate a CSRF token
+     */
+    public static function validateCsrfToken(string $token): bool
+    {
+        self::start();
+        if (empty($_SESSION['_csrf_token'])) {
+            return false;
+        }
+        return hash_equals($_SESSION['_csrf_token'], $token);
+    }
 }

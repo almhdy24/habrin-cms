@@ -1,0 +1,11 @@
+{
+  "name": "CleanBlog",
+  "version": "1.0.0",
+  "description": "A minimalist, fast, and readable theme for Pico JSON CMS. No frills, just content.",
+  "author": "Pico JSON CMS",
+  "screenshot": "",
+  "requires": {
+    "php": ">=8.1",
+    "cms": ">=1.0.0"
+  }
+}

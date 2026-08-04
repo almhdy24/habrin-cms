@@ -1,6 +1,6 @@
 <?php $this->layout('layouts/installer', [
   'title' => 'Install – System Check',
-  'step' => 'system'
+  'step' => 'system',
   'flash' => $flash ?? [],
 ]) ?>
 <style>

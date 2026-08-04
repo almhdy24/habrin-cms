@@ -1,0 +1,6 @@
+{
+    "name": "sitemap",
+    "entry": "sitemap.php",
+    "description": "Generates /sitemap.xml with all published posts.",
+    "version": "1.0.0"
+}

@@ -1,8 +1,0 @@
-{
-    "total": 500000,
-    "published": 500000,
-    "trashed": 0,
-    "shards": 100,
-    "shard_size": 5000,
-    "last_id": 500000
-}

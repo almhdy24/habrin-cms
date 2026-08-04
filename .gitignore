@@ -1,32 +1,48 @@
-# Runtime-generated CMS content
+# ============================================================
+# Pico JSON CMS - Runtime Data
+# ============================================================
+
+# Ignore all generated CMS content
 /content/*
 
-# Keep the directory structure
+# Keep the content directory
 !/content/.gitkeep
 
-# Local environment files
-.env
-.env.*
-*.local
+# Runtime post shards
+/content/posts/
+/content/posts/*.json
 
-# Vendor dependencies
+# Runtime indexes
+/content/indexes/
+/content/indexes/*.json
+
+# Runtime settings and metadata
+/content/*.json
+
+# Plugin runtime settings
+/content/plugin-settings/
+
+# Installation marker
+/content/.installed
+
+# ============================================================
+# Dependencies
+# ============================================================
+
 /vendor/
 
-# IDE and OS files
+# ============================================================
+# Environment / Secrets
+# ============================================================
+
+.env
+.env.*
+
+# ============================================================
+# OS / Editor
+# ============================================================
+
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
-*.log
-*.tmp
-
-# Composer
-composer.lock
-composer.phar
-
-# Node modules (if any)
-/node_modules/
-
-# Build artifacts
-/build/
-/dist/

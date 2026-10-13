@@ -1,115 +1,129 @@
 # Pico JSON CMS
 
-A lightweight, developer-friendly flat-file CMS built in PHP.
+A simple, fast, and developer-friendly PHP CMS for flat-file content management.
 
-Store your content as JSON, write in Markdown, and manage your site with a simple admin panel — no database required.
+Build small websites without a database. Store content in readable JSON files, write in Markdown, and manage everything through a lightweight admin panel.
 
 [![Release](https://img.shields.io/github/v/release/almhdy24/pico-json-cms?label=release)](https://github.com/almhdy24/pico-json-cms/releases)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/almhdy24/pico-json-cms/ci.yml?branch=main)](https://github.com/almhdy24/pico-json-cms/actions)
 [![PHP](https://img.shields.io/badge/php-8.1%2B-blue)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/almhdy24/pico-json-cms)](LICENSE)
 
-Pico JSON CMS is designed for simple websites that need speed, clarity, and minimal setup. It is ideal for personal blogs, documentation sites, portfolios, and lightweight business pages that do not need the overhead of a traditional database-driven CMS.
+<div align="center">
 
-> Note: This project is not related to Pico CMS. It is a separate PHP-based flat-file CMS.
+  <p>
+    <strong>Minimal setup.</strong>
+    <strong>Zero database.</strong>
+    <strong>Simple publishing.</strong>
+  </p>
 
-## Why use it?
+</div>
 
-- No database required
-- Simple file-based content storage
-- Easy deployment to any PHP hosting provider
-- Markdown-friendly content workflow
-- Clean admin panel for managing posts
-- Flexible theme system
-- Plugin hooks for customization
-- Lightweight and developer-friendly
+## Why Pico JSON CMS?
 
-## Best for
+Pico JSON CMS is built for people who want a clean, lightweight alternative to large, heavy content management systems.
+
+It is ideal when you need:
+
+- a simple blog or documentation site
+- no database setup
+- easy file-based content management
+- fast deployment to any PHP hosting environment
+- full control over content and structure
+
+## Perfect for
 
 - Personal blogs
-- Documentation sites
 - Portfolios
+- Documentation sites
 - Small business websites
-- Simple content-driven pages
+- Lightweight content-driven pages
 
-## Not ideal for
+## Not built for
 
-- Large e-commerce platforms
-- High-traffic community sites
-- Multi-user enterprise publishing
-- Complex applications requiring a large relational database
+- Large enterprise publishing systems
+- E-commerce platforms with heavy catalog logic
+- Multi-user SaaS products
+- Complex database-centric apps
 
-## Features
+## Core features
 
 - JSON-based content storage
-- Markdown support
-- Simple admin dashboard
-- Theme customization
-- Plugin hook system
+- Markdown support for article writing
+- Simple admin interface
+- No database required
 - Flat-file architecture
-- Easy deployment and maintenance
+- Theme customization
+- Plugin-style extension points
+- Easy deployment on standard PHP hosting
+
+## See it in action
+
+Live demo:
+
+- https://pico-json-cms.alwaysdata.net/
 
 ## Quick start
 
-1. Download or clone the project.
+1. Download or clone this repository.
 2. Upload it to any PHP-enabled web server.
-3. Open the admin panel at `/admin/login`.
+3. Visit `/admin/login`.
 4. Log in with the default credentials.
-5. Start writing content.
+5. Start creating and publishing content.
 
-Default login:
+Default access:
 
 - Username: `admin`
 - Password: `secret123`
 
 > Change the admin credentials before deploying to production.
 
-## Demo
+## Project structure
 
-Live demo: https://pico-json-cms.alwaysdata.net/
+The project keeps things simple and transparent:
+
+- `content/` stores your JSON content
+- `templates/` or theme files handle presentation
+- `admin/` manages content and publishing tools
+- `docs/` contains project documentation
 
 ## Documentation
 
-See the project documentation for more details:
+- [Docs overview](docs/README.md)
+- [Full guide](docs/guide.md)
 
-- [Docs](docs/README.md)
-- [Guide](docs/guide.md)
+## Product vision
 
-## Project structure
+Pico JSON CMS aims to be the simplest flat-file CMS for people who want clean writing workflows, no database friction, and full control over small websites.
 
-The project is organized around a lightweight PHP app with JSON content files and a simple admin experience.
+The mission is to make publishing simple again:
 
-## Development goals
+- easy to understand
+- easy to host
+- easy to customize
+- easy to maintain
 
-The project aims to stay simple:
+## Security notes
 
-- minimal setup
-- easy hosting
-- transparent content storage
-- low maintenance
-- developer control
-
-## Security note
-
-Because this is a flat-file CMS, make sure you:
+Because this project is designed for lightweight deployment, make sure to:
 
 - change the default admin password
 - restrict access to the admin area
-- keep PHP and server software up to date
-- review file permissions before production deployment
+- keep your PHP version and server software updated
+- review file permissions before production use
 
 ## Contributing
 
-Contributions are welcome. If you want to improve the project, feel free to open an issue or submit a pull request.
-
-## License
-
-This project is open source and distributed under the MIT license. See the [LICENSE](LICENSE) file for details.
+Contributions are welcome. If you want to improve the project, open an issue or submit a pull request.
 
 ## Author
 
 Created by [Elmahdi Abdallh](https://github.com/almhdy24)
 
-## Summary
+## License
 
-Pico JSON CMS is built for people who want a clear, lightweight, file-based CMS without the complexity of a full database-driven system. It is simple, fast, and easy to host — ideal for small content sites and developer-friendly workflows.
+This project is open source and distributed under the MIT license. See the [LICENSE](LICENSE) file for details.
+
+---
+
+Pico JSON CMS is for teams and creators who want a lightweight publishing system that stays simple, transparent, and fast — without the overhead of a traditional CMS.

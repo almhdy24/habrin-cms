@@ -57,6 +57,59 @@ It is ideal when you need:
 - Plugin-style extension points
 - Easy deployment on standard PHP hosting
 
+## Why Pico JSON CMS is better than WordPress for small sites
+
+If your goal is a small, fast, low-maintenance site, Pico JSON CMS is intentionally simplified. Below are direct comparisons across the things that matter for small projects.
+
+- Setup and deployment
+  - Pico JSON CMS — Clone or upload to any PHP host, no DB setup, instant demo content.
+  - WordPress — Requires database creation, DB credentials, and often more hosting configuration.
+
+- Hosting cost and complexity
+  - Pico JSON CMS — Runs on the cheapest PHP shared hosts, minimal resources.
+  - WordPress — Often needs higher-tier hosting for performance, plus more frequent resource spikes.
+
+- Performance and speed
+  - Pico JSON CMS — Flat-file JSON + simple PHP = lightweight and fast responses by default.
+  - WordPress — Heavier PHP stack and many plugins; typically needs caching and tuning.
+
+- Security surface
+  - Pico JSON CMS — Much smaller codebase and fewer moving parts reduces attack surface.
+  - WordPress — Large ecosystem and many third-party plugins increase risk and require frequent updates.
+
+- Maintenance and upgrades
+  - Pico JSON CMS — Minimal updates required; fewer dependencies to manage.
+  - WordPress — Core + plugins + themes all require frequent updates and compatibility checks.
+
+- Privacy and control
+  - Pico JSON CMS — Content stored in human-readable JSON files you control; easy to audit and back up.
+  - WordPress — Content in a database; backups and migrations are heavier and more error-prone.
+
+- Developer experience and customization
+  - Pico JSON CMS — Code-first templates and JSON content make it fast for developers to customize and extend.
+  - WordPress — Powerful but often requires learning specific APIs (hooks, filters) and plugin internals.
+
+- Extensibility for small needs
+  - Pico JSON CMS — Simple hooks and themes are easy to extend for site-specific needs.
+  - WordPress — Powerful plugin ecosystem for many cases, but overkill for small, focused sites.
+
+- Reliability for low-traffic sites
+  - Pico JSON CMS — Fewer components means fewer things to break — great for personal blogs, docs, and portfolios.
+  - WordPress — More moving parts can create reliability issues unless properly managed.
+
+- AI / automation friendliness
+  - Pico JSON CMS — JSON content and Markdown make it easy to integrate AI tooling, content generation, and import/export workflows.
+  - WordPress — AI integrations are possible but often depend on plugins and custom work.
+
+When WordPress may be the better choice
+- You need a large plugin ecosystem out of the box (e-commerce, membership, complex SEO suites).
+- You expect heavy multi-user workflows, editorial roles, or a non-technical client who needs a polished WYSIWYG editor and plugin-driven features.
+- You require specialized integrations that already exist as stable WordPress plugins.
+
+Bottom line
+- Choose Pico JSON CMS when you want minimal friction, low cost, predictable performance, and full control for small sites.
+- Choose WordPress if you need a full-featured ecosystem, lots of prebuilt plugins, or high-scale editorial features.
+
 ## See it in action
 
 Live demo:

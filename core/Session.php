@@ -4,56 +4,28 @@ declare(strict_types=1);
 
 namespace Core;
 
-/**
- * ------------------------------------------------------
- * Pico JSON CMS — Session Manager (CORE)
- * ------------------------------------------------------
- *
- * CORE VERSION: 1.0.0
- *
- * Responsibilities:
- *  - Start and manage PHP sessions
- *  - Provide safe session access
- *  - Handle flash messages
- *
- * ⚠️ CORE FREEZE FILE
- * Public API MUST remain stable after v1.0.0
- * ------------------------------------------------------
- */
-
 final class Session
 {
-    /**
-     * Internal started flag
-     */
     private static bool $started = false;
 
-    /* =====================================================
-     * Bootstrap
-     * ===================================================== */
-
-    /**
-     * Start the session if not already started
-     */
     public static function start(): void
     {
         if (self::$started || session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
 
+        session_name('pico_json_cms');
         session_set_cookie_params([
+            'lifetime' => 0,
+            'path' => '/',
             'httponly' => true,
-            'secure'   => isset($_SERVER['HTTPS']),
+            'secure' => isset($_SERVER['HTTPS']) || (($_SERVER['SERVER_PORT'] ?? '') === '443'),
             'samesite' => 'Lax',
         ]);
 
         session_start();
         self::$started = true;
     }
-
-    /* =====================================================
-     * Basic API
-     * ===================================================== */
 
     public static function get(string $key, mixed $default = null): mixed
     {
@@ -79,44 +51,26 @@ final class Session
         unset($_SESSION[$key]);
     }
 
-    /**
-     * Regenerate session ID (security)
-     */
     public static function regenerate(): void
     {
         self::start();
         session_regenerate_id(true);
     }
 
-    /**
-     * Destroy session completely
-     */
     public static function destroy(): void
     {
         self::start();
         $_SESSION = [];
         session_destroy();
+        self::$started = false;
     }
 
-    /* =====================================================
-     * Flash Messages
-     * ===================================================== */
-
-    /**
-     * Store a flash message
-     */
     public static function flash(string $type, string $message): void
     {
         self::start();
-        $_SESSION['_flash'][] = [
-            'type'    => $type,
-            'message' => $message,
-        ];
+        $_SESSION['_flash'][] = ['type' => $type, 'message' => $message];
     }
 
-    /**
-     * Retrieve and clear flash messages
-     */
     public static function getFlash(): array
     {
         self::start();
@@ -131,31 +85,24 @@ final class Session
         return $flash;
     }
 
-    /* =====================================================
-     * CSRF Protection
-     * ===================================================== */
-
-    /**
-     * Generate a CSRF token and store in session
-     */
     public static function csrfToken(): string
     {
         self::start();
         if (empty($_SESSION['_csrf_token'])) {
             $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
         }
+
         return $_SESSION['_csrf_token'];
     }
 
-    /**
-     * Validate a CSRF token
-     */
     public static function validateCsrfToken(string $token): bool
     {
         self::start();
+
         if (empty($_SESSION['_csrf_token'])) {
             return false;
         }
+
         return hash_equals($_SESSION['_csrf_token'], $token);
     }
 }

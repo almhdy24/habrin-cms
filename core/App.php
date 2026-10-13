@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Core;
 
-defined('BASE_PATH') || define(
-    'BASE_PATH',
-    realpath(__DIR__ . '/..')
-);
-
 final class App
 {
-    public const CORE_VERSION = "0.9.0";
+    public const CORE_VERSION = '0.9.0';
     public const MIN_PHP_VERSION = '8.1.0';
 
     public static array $config = [];
@@ -21,22 +16,31 @@ final class App
 
     public static function path(string ...$segments): string
     {
+        $base = rtrim(BASE_PATH, DIRECTORY_SEPARATOR);
+        $parts = array_filter($segments, static fn ($part) => $part !== '');
+
+        if ($parts === []) {
+            return $base;
+        }
+
         return preg_replace(
             '#/+#',
             DIRECTORY_SEPARATOR,
-            BASE_PATH . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $segments)
-        );
+            $base . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $parts)
+        ) ?? $base;
     }
 
     public static function run(): void
     {
+        self::bootstrap();
+        self::loadConfig();
+        self::applyRuntimeSettings();
+
         Hooks::do_action('beforeRun');
         self::sendSecurityHeaders();
         Session::start();
         Hooks::do_action('afterSessionStart');
-        self::bootstrap();
         Hooks::do_action('afterBootstrap');
-        self::loadConfig();
         Hooks::do_action('afterConfigLoaded');
         self::loadPluginStatus();
         self::loadPlugins();
@@ -56,75 +60,106 @@ final class App
         \Core\PluginSettings::init();
     }
 
+    private static function applyRuntimeSettings(): void
+    {
+        $debug = (bool) (self::$config['debug'] ?? false);
+        error_reporting($debug ? E_ALL : E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
+        ini_set('display_errors', $debug ? '1' : '0');
+        ini_set('log_errors', '1');
+    }
+
     private static function ensureDirectories(): void
     {
-        self::ensureDir(self::path('content'));
-        self::ensureDir(self::path('logs'));
+        foreach (['content', 'logs'] as $dir) {
+            self::ensureDir(self::path($dir));
+        }
     }
 
     private static function ensureFiles(): void
     {
-        self::ensureFile('content/posts.json', '[]');
-        self::ensureFile('content/settings.json', '{}');
-        self::ensureFile('content/pages.json', '{}');
-        self::ensureFile('content/menu.json', '[]');
-        self::ensureFile('content/plugins.json', '{}');
+        foreach ([
+            'content/posts.json' => '[]',
+            'content/settings.json' => '{}',
+            'content/pages.json' => '{}',
+            'content/menu.json' => '[]',
+            'content/plugins.json' => '{}',
+        ] as $relativePath => $default) {
+            self::ensureFile($relativePath, $default);
+        }
     }
 
     private static function ensureDir(string $path): void
     {
-        if (!is_dir($path)) {
-            if (!mkdir($path, 0755, true) && !is_dir($path)) {
-                throw new \RuntimeException("Failed to create directory: {$path}");
-            }
+        if (is_dir($path)) {
+            return;
+        }
+
+        if (!mkdir($path, 0755, true) && !is_dir($path)) {
+            throw new \RuntimeException("Failed to create directory: {$path}");
         }
     }
 
     private static function ensureFile(string $relativePath, string $default): void
     {
         $path = self::path($relativePath);
+        $dir = dirname($path);
+
+        if (!is_dir($dir)) {
+            self::ensureDir($dir);
+        }
+
         if (!file_exists($path)) {
-            file_put_contents($path, $default, LOCK_EX);
+            if (file_put_contents($path, $default, LOCK_EX) === false) {
+                throw new \RuntimeException("Failed to create file: {$path}");
+            }
         }
     }
 
-    private static function loadConfig(): void
+    public static function loadConfig(): void
     {
         $configPath = self::path('config.php');
         if (!file_exists($configPath)) {
             throw new \RuntimeException("Config file missing: {$configPath}");
         }
-        self::$config = require $configPath;
-        if (!is_array(self::$config)) {
-            throw new \RuntimeException("Invalid config format");
+
+        $defaults = [
+            'app_name' => 'Pico JSON CMS',
+            'base_url' => '',
+            'theme' => 'default',
+            'debug' => false,
+            'admin_user' => 'admin',
+            'admin_password' => 'secret123',
+        ];
+
+        $config = require $configPath;
+        if (!is_array($config)) {
+            throw new \RuntimeException('Invalid config format');
         }
+
+        self::$config = array_replace($defaults, $config);
         self::$config['base_url'] ??= '';
-        self::$config['theme']    ??= 'default';
+        self::$config['theme'] ??= 'default';
         self::$configCache = self::$config;
     }
 
-    /**
-     * Safely update a configuration value
-     */
     public static function setConfig(string $key, mixed $value): bool
     {
-        $configPath = self::path('config.php');
+        $path = self::path('config.php');
         $config = self::$config;
         $config[$key] = $value;
 
-        // Write with proper formatting (preserve PHP syntax)
-        $content = '<?php' . "\n\n";
-        $content .= '/**' . "\n";
-        $content .= ' * Pico JSON CMS - Main Configuration' . "\n";
-        $content .= ' *' . "\n";
-        $content .= ' * Author: Elmahdi' . "\n";
-        $content .= ' * GitHub: https://github.com/almhdy24/pico-json-cms' . "\n";
-        $content .= ' *' . "\n";
-        $content .= ' * License: MIT' . "\n";
-        $content .= ' */' . "\n\n";
+        $content = "<?php\n\n";
+        $content .= "/**\n";
+        $content .= " * Pico JSON CMS - Main Configuration\n";
+        $content .= " *\n";
+        $content .= " * Author: Elmahdi\n";
+        $content .= " * GitHub: https://github.com/almhdy24/pico-json-cms\n";
+        $content .= " *\n";
+        $content .= " * License: MIT\n";
+        $content .= " */\n\n";
         $content .= 'return ' . self::varExportPretty($config) . ";\n";
 
-        if (file_put_contents($configPath, $content, LOCK_EX) === false) {
+        if (file_put_contents($path, $content, LOCK_EX) === false) {
             return false;
         }
 
@@ -132,15 +167,11 @@ final class App
         return true;
     }
 
-    /**
-     * Pretty var_export with proper indentation
-     */
     private static function varExportPretty(array $array, int $indent = 0): string
     {
         $indentStr = str_repeat('  ', $indent);
-        $nextIndent = str_repeat('  ', $indent + 1);
-
         $parts = [];
+
         foreach ($array as $key => $value) {
             $keyStr = var_export($key, true);
             if (is_array($value)) {
@@ -152,23 +183,24 @@ final class App
             }
         }
 
-        if (empty($parts)) {
-            return "[]";
+        if ($parts === []) {
+            return '[]';
         }
 
-        return "[\n" . implode(",\n", $parts) . "\n" . $indentStr . "]";
+        return "[\n" . implode(",\n", $parts) . "\n" . $indentStr . ']';
     }
 
     private static function loadPluginStatus(): void
     {
         $path = self::path('content', 'plugins.json');
         if (file_exists($path)) {
-            $data = json_decode(file_get_contents($path), true);
+            $data = json_decode((string) file_get_contents($path), true);
             if (is_array($data)) {
                 self::$pluginStatus = $data;
                 return;
             }
         }
+
         self::$pluginStatus = [];
     }
 
@@ -229,10 +261,7 @@ final class App
         $installed = file_exists(self::path('content', '.installed'));
         $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 
-        if (
-            str_starts_with($uri, '/themes/') ||
-            str_starts_with($uri, '/assets/')
-        ) {
+        if (str_starts_with($uri, '/themes/') || str_starts_with($uri, '/assets/')) {
             return;
         }
 
@@ -249,18 +278,24 @@ final class App
 
     public static function log(string $message, string $level = 'info'): void
     {
-        file_put_contents(
-            self::path('logs', 'app.log'),
-            '[' . date('c') . "][{$level}] {$message}\n",
-            FILE_APPEND | LOCK_EX
-        );
+        $logDir = self::path('logs');
+        if (!is_dir($logDir)) {
+            self::ensureDir($logDir);
+        }
+
+        $entry = '[' . date('c') . "][{$level}] {$message}\n";
+        file_put_contents(self::path('logs', 'app.log'), $entry, FILE_APPEND | LOCK_EX);
     }
 
     private static function sendSecurityHeaders(): void
     {
-        if (headers_sent()) return;
+        if (headers_sent()) {
+            return;
+        }
+
         header('X-Frame-Options: DENY');
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
     }
 }

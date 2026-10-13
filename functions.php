@@ -1,9 +1,20 @@
 <?php
+
 /**
  * Pico JSON CMS — Global Functions
  */
 
 use Core\Hooks;
+
+function app_config(string $key, mixed $default = null): mixed
+{
+    return Core\App::$config[$key] ?? $default;
+}
+
+function app_env(string $key, mixed $default = null): mixed
+{
+    return $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key) ?: $default;
+}
 
 // ---------- Actions ----------
 function add_action(string $hook, callable $callback, int $priority = 10): void
@@ -47,13 +58,14 @@ function has_filter(string $hook): bool
     return Hooks::has_filter($hook);
 }
 
-// ---------- Pagination (existing) ----------
+// ---------- Pagination ----------
 function paginate(array $items, int $perPage = 5, int $currentPage = 1): array
 {
     $totalItems = count($items);
-    $totalPages = max(1, ceil($totalItems / $perPage));
+    $totalPages = max(1, (int) ceil($totalItems / $perPage));
     $currentPage = max(1, min($currentPage, $totalPages));
     $offset = ($currentPage - 1) * $perPage;
+
     return [
         'items' => array_slice($items, $offset, $perPage, true),
         'totalPages' => $totalPages,

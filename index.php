@@ -11,54 +11,33 @@ declare(strict_types=1);
  * License: MIT
  */
 
-/* =====================================================
- * PHP Version Guard
- * ===================================================== */
-
-$minPhp = '8.1.0';
-
-if (version_compare(PHP_VERSION, $minPhp, '<')) {
-    http_response_code(500);
-    echo "Pico JSON CMS requires PHP {$minPhp} or higher. "
-       . "Current version: " . PHP_VERSION;
-    exit;
-}
-
 use Core\App;
 
-/* =====================================================
- * Error Reporting
- * ===================================================== */
-
-$debug = true; // move to config later
-
-error_reporting(E_ALL);
-
-if ($debug) {
-    ini_set('display_errors', '1');
-} else {
-    ini_set('display_errors', '0');
-    ini_set('log_errors', '1');
+$minPhp = App::MIN_PHP_VERSION;
+if (version_compare(PHP_VERSION, $minPhp, '<')) {
+    http_response_code(500);
+    echo "Pico JSON CMS requires PHP {$minPhp} or higher. Current version: " . PHP_VERSION;
+    exit(1);
 }
-
-/* =====================================================
- * Bootstrap
- * ===================================================== */
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/functions.php';
 
-/* =====================================================
- * Run Application
- * ===================================================== */
-
 try {
     App::run();
-
-    // Disable Kint disk usage (dev helper)
-    \Kint\Renderer\RichRenderer::$folder = false;
-
 } catch (Throwable $e) {
     http_response_code(500);
-    echo $e;
+
+    if (function_exists('error_log')) {
+        error_log('Pico JSON CMS fatal error: ' . $e->getMessage());
+    }
+
+    if (App::$config['debug'] ?? false) {
+        echo $e;
+        exit(1);
+    }
+
+    echo '<h1>Something went wrong</h1>';
+    echo '<p>The application encountered an unexpected error.</p>';
+    exit(1);
 }

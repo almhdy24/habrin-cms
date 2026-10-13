@@ -18,6 +18,7 @@ use Core\Session;
 use Core\View;
 use Core\App;
 use Core\Auth;
+use Core\Audit;
 use Models\PostsModel;
 use Models\SettingsModel;
 
@@ -114,7 +115,10 @@ final class AdminController extends Controller
         if ($valid) {
             Session::remove('login_throttle');
             Auth::login();
+            // Store actor identity for audit logs
+            Session::set('user', $username);
             $this->flash('success', 'Login successful.');
+            Audit::log($username, 'auth.login', ['ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown']);
             $this->redirect('/admin/dashboard');
             return;
         }
@@ -126,8 +130,10 @@ final class AdminController extends Controller
         if ($throttle['attempts'] >= self::MAX_LOGIN_ATTEMPTS) {
             $throttle['locked_until'] = time() + self::LOCKOUT_SECONDS;
             App::log('Admin account locked due to failed login attempts', 'warning');
+            Audit::log($username ?: 'unknown', 'auth.locked', ['attempts' => $throttle['attempts']]);
         } else {
             App::log('Failed admin login attempt for username: ' . $username, 'info');
+            Audit::log($username ?: 'unknown', 'auth.failed', ['attempts' => $throttle['attempts']]);
         }
 
         Session::set('login_throttle', $throttle);
@@ -143,6 +149,8 @@ final class AdminController extends Controller
 
     public function logout(): void
     {
+        $actor = Session::get('user') ?? 'unknown';
+        Audit::log($actor, 'auth.logout', ['ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown']);
         Auth::logout();
         Session::destroy();
         $this->flash('success', 'Logged out successfully.');
@@ -223,6 +231,9 @@ final class AdminController extends Controller
             'deleted_at' => null,
         ]);
 
+        // Audit
+        Audit::log(Session::get('user') ?? 'system', 'post.create', ['id' => $id, 'title' => $title]);
+
         $this->flash('success', 'Post created successfully.');
         $this->redirect('/admin');
     }
@@ -246,6 +257,8 @@ final class AdminController extends Controller
 
             $this->posts->savePost($id, $post);
 
+            Audit::log(Session::get('user') ?? 'system', 'post.update', ['id' => $id, 'title' => $title]);
+
             $this->flash('success', 'Post updated successfully.');
             $this->redirect('/admin');
         }
@@ -268,6 +281,7 @@ final class AdminController extends Controller
         if ($post = $this->posts->find($id)) {
             $post['deleted_at'] = time();
             $this->posts->savePost($id, $post);
+            Audit::log(Session::get('user') ?? 'system', 'post.delete', ['id' => $id]);
             $this->flash('success', 'Post moved to trash.');
         } else {
             $this->flash('error', 'Post not found.');
@@ -290,6 +304,7 @@ final class AdminController extends Controller
         if ($post = $this->posts->find($id)) {
             $post['deleted_at'] = null;
             $this->posts->savePost($id, $post);
+            Audit::log(Session::get('user') ?? 'system', 'post.restore', ['id' => $id]);
             $this->flash('success', 'Post restored successfully.');
         } else {
             $this->flash('error', 'Post not found.');
@@ -305,6 +320,7 @@ final class AdminController extends Controller
         }
 
         $this->posts->deletePost($id);
+        Audit::log(Session::get('user') ?? 'system', 'post.destroy', ['id' => $id]);
         $this->flash('success', 'Post permanently deleted.');
         $this->redirect('/admin/trash');
     }
@@ -320,7 +336,10 @@ final class AdminController extends Controller
 
         foreach ($trashed as $id => $_) {
             $this->posts->deletePost($id);
+            Audit::log(Session::get('user') ?? 'system', 'post.destroy', ['id' => $id]);
         }
+
+        Audit::log(Session::get('user') ?? 'system', 'post.empty_trash', ['count' => $count]);
 
         $this->flash('success', "{$count} posts permanently deleted.");
         $this->redirect('/admin/trash');
@@ -340,6 +359,9 @@ final class AdminController extends Controller
 
             $this->settings->setMany($settings);
             Session::remove('_old');
+
+            Audit::log(Session::get('user') ?? 'system', 'settings.update', ['keys' => array_keys($settings)]);
+
             $this->flash('success', 'Settings saved successfully.');
             $this->redirect('/admin/settings');
         }

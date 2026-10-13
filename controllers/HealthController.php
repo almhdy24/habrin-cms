@@ -13,6 +13,31 @@ final class HealthController
 {
     public function index(): void
     {
+        // Protect the health endpoint. If a health_key is configured, require it via header.
+        $healthKey = App::$config['health_key'] ?? null;
+        $allowed = false;
+
+        if ($healthKey) {
+            $provided = $_SERVER['HTTP_X_HEALTH_KEY'] ?? $_SERVER['HTTP_X_HEALTHKEY'] ?? '';
+            if (is_string($provided) && hash_equals($healthKey, $provided)) {
+                $allowed = true;
+            }
+        } else {
+            // Only allow localhost by default when no key is present
+            $remote = $_SERVER['REMOTE_ADDR'] ?? '';
+            $allowedIps = ['127.0.0.1', '::1'];
+            if (in_array($remote, $allowedIps, true)) {
+                $allowed = true;
+            }
+        }
+
+        if (!$allowed) {
+            http_response_code(403);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'forbidden']);
+            return;
+        }
+
         $checks = [];
 
         // Config file exists

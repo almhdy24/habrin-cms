@@ -26,6 +26,7 @@ final class AdminController extends Controller
     private const MAX_LOGIN_ATTEMPTS = 5;
     private const LOCKOUT_SECONDS   = 300;
     private const TRASH_DAYS        = 30;
+    private const LOGIN_BACKOFF_MAX = 5; // seconds
 
     private PostsModel $posts;
     private SettingsModel $settings;
@@ -72,6 +73,8 @@ final class AdminController extends Controller
         }
 
         if ($this->isPost()) {
+            // validate CSRF early
+            $this->validateCsrf();
             $this->processLogin($throttle);
             return;
         }
@@ -84,31 +87,55 @@ final class AdminController extends Controller
 
     private function processLogin(array $throttle): void
     {
-        $username = trim($this->input('username', ''));
+        $username = trim((string) $this->input('username', ''));
         $password = (string) $this->input('password', '');
 
-        $config = require App::path('content', '.admin.php');
+        // Load admin credentials from content/.admin.php if present, else fallback to config
+        $adminPath = App::path('content', '.admin.php');
+        if (file_exists($adminPath)) {
+            $adminCfg = require $adminPath;
+            $adminUser = $adminCfg['user'] ?? (App::$config['admin_user'] ?? 'admin');
+            $adminPassHash = $adminCfg['pass'] ?? (App::$config['admin_password'] ?? '');
+        } else {
+            $adminUser = App::$config['admin_user'] ?? 'admin';
+            // If config stores a plaintext password, hash it for comparison
+            $adminPassHash = password_hash((string) (App::$config['admin_password'] ?? ''), PASSWORD_DEFAULT);
+        }
 
-        $valid =
-            hash_equals($config['user'], $username) &&
-            password_verify($password, $config['pass']);
+        $valid = false;
+        if ($adminUser !== '') {
+            // Timing-safe compare for username; password_verify handles hashing safely
+            $userMatch = hash_equals((string) $adminUser, (string) $username);
+            if ($userMatch && is_string($adminPassHash) && $adminPassHash !== '') {
+                $valid = password_verify($password, $adminPassHash);
+            }
+        }
 
         if ($valid) {
             Session::remove('login_throttle');
             Auth::login();
             $this->flash('success', 'Login successful.');
             $this->redirect('/admin/dashboard');
+            return;
         }
 
+        // Failed attempt
         $throttle['attempts']++;
+        $backoff = min(self::LOGIN_BACKOFF_MAX, $throttle['attempts']);
 
         if ($throttle['attempts'] >= self::MAX_LOGIN_ATTEMPTS) {
             $throttle['locked_until'] = time() + self::LOCKOUT_SECONDS;
+            App::log('Admin account locked due to failed login attempts', 'warning');
+        } else {
+            App::log('Failed admin login attempt for username: ' . $username, 'info');
         }
 
         Session::set('login_throttle', $throttle);
-        sleep(1);
 
+        // Small delay to slow down brute force (exponential-ish)
+        sleep((int) $backoff);
+
+        // preserve username only (not password)
         Session::set('_old', ['username' => $username]);
         $this->flash('error', 'Invalid credentials.');
         $this->redirect('/admin/login');
@@ -308,7 +335,7 @@ final class AdminController extends Controller
         if ($this->isPost()) {
             $this->validateCsrf();
             $settings = array_map(function($value) {
-                return htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
+                return htmlspecialchars(trim((string) $value), ENT_QUOTES, 'UTF-8');
             }, $_POST);
 
             $this->settings->setMany($settings);
@@ -360,7 +387,10 @@ final class AdminController extends Controller
 
     private function guard(): void
     {
-        $action = explode('/', trim($_SERVER['REQUEST_URI'], '/'))[1] ?? 'index';
+        // Allow unauthenticated access only to login and installer
+        $uri = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/', '/');
+        $segments = $uri === '' ? [] : explode('/', $uri);
+        $action = $segments[1] ?? 'index';
 
         if (!in_array($action, ['login', 'logout'], true)) {
             Auth::requireAdmin();
@@ -369,8 +399,8 @@ final class AdminController extends Controller
 
     private function validatePost(): array
     {
-        $title   = trim($this->input('title', ''));
-        $content = trim($this->input('content', ''));
+        $title   = trim((string) $this->input('title', ''));
+        $content = trim((string) $this->input('content', ''));
 
         if ($title === '' || $content === '') {
             Session::set('_old', ['title' => $title, 'content' => $content]);
@@ -395,10 +425,11 @@ final class AdminController extends Controller
 
     private function validateCsrf(): void
     {
-        $token = $this->input('csrf_token', '');
+        $token = (string) $this->input('csrf_token', '');
         if (!Session::validateCsrfToken($token)) {
-            $this->flash('error', 'Invalid CSRF token.');
-            $this->redirect('/admin');
+            App::log('CSRF validation failed for admin action', 'warning');
+            $this->flash('error', 'Invalid CSRF token. Please try again.');
+            $this->redirect('/admin/login');
         }
     }
 }

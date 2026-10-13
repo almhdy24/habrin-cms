@@ -24,12 +24,28 @@ namespace Core;
 
 final class Auth
 {
+    private const SESSION_TIMEOUT = 1800; // 30 minutes
+
     /**
      * Check if current user is admin
      */
     public static function check(): bool
     {
-        return Session::get('is_admin') === true;
+        $isAdmin = Session::get('is_admin') === true;
+        if (!$isAdmin) {
+            return false;
+        }
+
+        $last = (int) (Session::get('last_activity', 0));
+        if ($last > 0 && (time() - $last) > self::SESSION_TIMEOUT) {
+            // session expired
+            self::logout();
+            return false;
+        }
+
+        // refresh last activity
+        Session::set('last_activity', time());
+        return true;
     }
 
     /**
@@ -50,6 +66,7 @@ final class Auth
     {
         Session::regenerate();
         Session::set('is_admin', true);
+        Session::set('last_activity', time());
     }
 
     /**
@@ -58,5 +75,6 @@ final class Auth
     public static function logout(): void
     {
         Session::remove('is_admin');
+        Session::remove('last_activity');
     }
 }

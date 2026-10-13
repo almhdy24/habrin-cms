@@ -10,6 +10,8 @@
  */
 
 return [
-  'base_url' => '',
-  'theme' => 'magazine'
+    'app_name' => 'Pico JSON CMS',
+    'base_url' => '',
+    'theme' => 'default',
+    'debug' => false,
 ];

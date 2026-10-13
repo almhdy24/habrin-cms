@@ -48,6 +48,7 @@ final class View
         self::$engine->addData([
             'config' => $config,
             'flash' => Session::getFlash(),
+            'csp_nonce' => $config['csp_nonce'] ?? null,
         ]);
 
         // Pico extensions
@@ -71,6 +72,15 @@ final class View
                 });
                 $engine->registerFunction('is_admin', function () {
                     return defined('IS_ADMIN') && IS_ADMIN;
+                });
+                // Return CSP nonce value for template use
+                $engine->registerFunction('nonce', function () {
+                    return App::$config['csp_nonce'] ?? '';
+                });
+                // Return nonce attribute for script/style tags
+                $engine->registerFunction('nonce_attr', function () {
+                    $n = App::$config['csp_nonce'] ?? '';
+                    return $n ? ' nonce="' . htmlspecialchars($n, ENT_QUOTES, 'UTF-8') . '"' : '';
                 });
             }
         });

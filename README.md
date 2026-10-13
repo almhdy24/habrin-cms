@@ -67,6 +67,10 @@ Pico JSON CMS keeps things intentionally lean:
 - Simple theme customization
 - Extensible architecture for plugins and hooks
 - Clear and readable project structure
+- Hardened admin auth and CSRF protection
+- Audit logging for admin actions
+- CSP nonce support and production security headers
+- Health endpoint for deployment checks
 
 ---
 
@@ -101,13 +105,19 @@ git clone https://github.com/almhdy24/pico-json-cms.git
 cd pico-json-cms
 ```
 
-### 2. Run locally
+### 2. Install PHP dependencies
 
 ```bash
-php -S localhost:8000 -t public
+composer install
 ```
 
-### 3. Open the admin panel
+### 3. Start the app locally
+
+```bash
+php -S localhost:8000
+```
+
+### 4. Open the admin panel
 
 Visit:
 
@@ -115,14 +125,58 @@ Visit:
 http://localhost:8000/admin/login
 ```
 
-### 4. Log in
+### 5. Configure secure admin credentials
 
-Default credentials:
+This project should not be used with the default password in production.
 
-- Username: `admin`
-- Password: `secret123`
+Create a secure `content/.admin.php` file with a bcrypt-hashed password:
 
-Important: Change these credentials before using the project in production.
+```php
+<?php
+return [
+    'user' => 'admin',
+    'pass' => '$2y$10$YOUR_BCRYPT_HASH_HERE',
+];
+```
+
+Generate a hash locally:
+
+```bash
+php -r "echo password_hash('YourStrongPassword', PASSWORD_DEFAULT), PHP_EOL;"
+```
+
+Then log in with your chosen username and password.
+
+---
+
+## Production security features
+
+Pico JSON CMS includes several built-in protections for deployment:
+
+- CSRF validation on admin actions
+- login throttling and lockout protection
+- session timeout handling for admin users
+- secure session cookie defaults
+- audit logging for admin events
+- Content Security Policy headers with nonce support
+- health endpoint checks for deployment validation
+- permission checks for writable content/log directories
+
+### Health endpoint
+
+A health endpoint is available at:
+
+```text
+/_health
+```
+
+It is protected by default. If you set a health key in configuration, call it with:
+
+```bash
+curl -H "X-Health-Key: your-very-strong-secret" https://your-domain/_health
+```
+
+If no key is configured, the endpoint is restricted to localhost by default.
 
 ---
 
@@ -130,14 +184,21 @@ Important: Change these credentials before using the project in production.
 
 ```text
 pico-json-cms/
-├── admin/          # admin logic and UI
 ├── content/        # JSON content files
-├── templates/      # theme and template files
+├── controllers/    # app controllers
+├── core/           # core framework classes
 ├── docs/           # documentation
-├── assets/         # images and static assets
-├── public/         # public entry files
-├── LICENSE
+├── logs/           # app and audit logs
+├── models/         # data models
+├── plugins/        # plugin modules
+├── themes/         # themes
+├── assets/         # static assets
+├── composer.json
+├── config.php
+├── functions.php
+├── index.php
 ├── README.md
+├── docs/DEPLOY.md
 └── ...
 ```
 
@@ -146,6 +207,7 @@ pico-json-cms/
 ## Documentation
 
 - [Docs Overview](docs/README.md)
+- [Deployment Guide](docs/DEPLOY.md)
 - [Full Guide](docs/guide.md)
 
 ---
@@ -154,11 +216,13 @@ pico-json-cms/
 
 Before deploying to production:
 
-- change the default admin password
+- replace the default admin password and use a hashed credential file
 - restrict access to admin routes
 - keep PHP and server software up to date
 - review file permissions
 - enable HTTPS in production
+- set a strong `health_key` if you use the health endpoint remotely
+- rotate log files regularly
 
 ---
 
@@ -199,8 +263,6 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ## Author
 
-Created by [Elmahdi Abdallh](https://github.com/almhdy24)
+Elmahdi Abdallh
 
----
-
-Pico JSON CMS is built for creators, developers, and small teams who want a simple and maintainable content system without the weight of a traditional CMS.
+GitHub: https://github.com/almhdy24

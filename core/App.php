@@ -36,6 +36,9 @@ final class App
         self::loadConfig();
         self::applyRuntimeSettings();
 
+        // Permissions check (content/logs must be writable)
+        self::checkPermissions();
+
         Hooks::do_action('beforeRun');
         self::sendSecurityHeaders();
         Session::start();
@@ -297,5 +300,52 @@ final class App
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: strict-origin-when-cross-origin');
         header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
+
+        $debug = (bool) (self::$config['debug'] ?? false);
+
+        // HSTS when not in debug and running over HTTPS
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443');
+        if ($isHttps && !$debug) {
+            header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
+        }
+
+        // Basic Content Security Policy - conservative
+        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;";
+        header('Content-Security-Policy: ' . $csp);
+    }
+
+    /**
+     * Ensure content and logs paths are writable. In production this should fail fast.
+     */
+    private static function checkPermissions(): void
+    {
+        $contentPath = self::path('content');
+        $logsPath = self::path('logs');
+        $errors = [];
+
+        if (!is_dir($contentPath) || !is_writable($contentPath)) {
+            $errors[] = "Content directory not writable: {$contentPath}";
+        }
+        if (!is_dir($logsPath) || !is_writable($logsPath)) {
+            $errors[] = "Logs directory not writable: {$logsPath}";
+        }
+
+        if (!empty($errors)) {
+            foreach ($errors as $err) {
+                self::log($err, 'error');
+            }
+
+            $debug = (bool) (self::$config['debug'] ?? false);
+            if ($debug) {
+                // In debug mode, surface warnings but continue
+                foreach ($errors as $err) {
+                    error_log($err);
+                }
+                return;
+            }
+
+            // In production, prevent startup to avoid silent failures
+            throw new \\RuntimeException("Startup permission errors: " . implode('; ', $errors));
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Core;
 
 final class App
 {
-    public const CORE_VERSION = '0.9.0';
+    public const CORE_VERSION = '1.0.0';
     public const MIN_PHP_VERSION = '8.1.0';
 
     public static array $config = [];
@@ -154,6 +154,12 @@ final class App
     public static function setConfig(string $key, mixed $value): bool
     {
         $path = self::path('config.php');
+        if (empty(self::$config) && file_exists($path)) {
+            $existing = require $path;
+            if (is_array($existing)) {
+                self::$config = $existing;
+            }
+        }
         $config = self::$config;
         $config[$key] = $value;
 

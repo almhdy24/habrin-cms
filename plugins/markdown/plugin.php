@@ -6,7 +6,7 @@
 declare(strict_types=1);
 
 use Core\Hooks;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\MarkdownConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
@@ -18,11 +18,12 @@ Hooks::add_filter('post_content', function (string $content, array $post): strin
     static $converter = null;
 
     if ($converter === null) {
-
-        $environment = new Environment([
+        $config = [
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
-        ]);
+        ];
+
+        $environment = new Environment($config);
 
         // Core Markdown
         $environment->addExtension(new CommonMarkCoreExtension());
@@ -31,7 +32,7 @@ Hooks::add_filter('post_content', function (string $content, array $post): strin
         $environment->addExtension(new TableExtension());
         $environment->addExtension(new StrikethroughExtension());
 
-        $converter = new CommonMarkConverter([], $environment);
+        $converter = new MarkdownConverter($environment);
     }
 
     return $converter->convert($content)->getContent();

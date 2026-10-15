@@ -14,16 +14,20 @@ final class Session
             return;
         }
 
-        session_name('pico_json_cms');
-        session_set_cookie_params([
-            'lifetime' => 0,
-            'path' => '/',
-            'httponly' => true,
-            'secure' => isset($_SERVER['HTTPS']) || (($_SERVER['SERVER_PORT'] ?? '') === '443'),
-            'samesite' => 'Lax',
-        ]);
+        if (!headers_sent()) {
+            session_name('pico_json_cms');
+            session_set_cookie_params([
+                'lifetime' => 0,
+                'path' => '/',
+                'httponly' => true,
+                'secure' => isset($_SERVER['HTTPS']) || (($_SERVER['SERVER_PORT'] ?? '') === '443'),
+                'samesite' => 'Lax',
+            ]);
+        }
 
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
         self::$started = true;
     }
 
@@ -54,7 +58,9 @@ final class Session
     public static function regenerate(): void
     {
         self::start();
-        session_regenerate_id(true);
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+            session_regenerate_id(true);
+        }
     }
 
     public static function destroy(): void

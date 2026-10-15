@@ -766,11 +766,24 @@ class PostsModel
     }
 
     // --------------------------------------------------------------------
-    // Not supported
+    // Base Model Contract Compliance
     // --------------------------------------------------------------------
 
+    /**
+     * Get all active (non-trashed) posts
+     */
     public function all(): array
     {
-        throw new \RuntimeException('all() not supported in sharded mode.');
+        $result = [];
+        $shards = (int) ($this->metadata['shards'] ?? 0);
+        for ($s = 0; $s < $shards; $s++) {
+            $shardData = $this->readShard($s);
+            foreach ($shardData as $id => $post) {
+                if (!$this->isTrashed($post)) {
+                    $result[(string) $id] = $post;
+                }
+            }
+        }
+        return $result;
     }
 }

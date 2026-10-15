@@ -1,5 +1,22 @@
 {
     "name": "pico-json-cms/pico-json-cms",
+    "description": "A lightweight, secure, and fast flat-file JSON and Markdown CMS in PHP.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Elmahdi",
+            "homepage": "https://github.com/almhdy24"
+        }
+    ],
+    "keywords": [
+        "cms",
+        "flat-file",
+        "json",
+        "markdown",
+        "php8",
+        "blog"
+    ],
     "autoload": {
         "psr-4": {
             "Core\\": "core/",
@@ -8,6 +25,7 @@
         }
     },
     "require": {
+        "php": ">=8.1.0",
         "league/plates": "^3.6",
         "league/commonmark": "^2.8"
     },

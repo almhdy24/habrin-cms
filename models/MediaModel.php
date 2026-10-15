@@ -120,9 +120,6 @@ class MediaModel
         // Verify MIME type using finfo
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = $finfo ? finfo_file($finfo, $tmpPath) : mime_content_type($tmpPath);
-        if ($finfo) {
-            finfo_close($finfo);
-        }
 
         // Normalize text/xml or image/svg to image/svg+xml for SVG
         if ($ext === 'svg' && in_array($mime, ['text/plain', 'text/xml', 'text/html', 'image/svg', 'image/svg+xml'], true)) {

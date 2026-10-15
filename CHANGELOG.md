@@ -4,6 +4,24 @@ All notable changes to Pico JSON CMS are documented in this file.
 
 This project follows the principles of "Keep a Changelog" (https://keepachangelog.com/) and "Semantic Versioning" (https://semver.org/).
 
+[1.0.0] — 2026-10-15
+
+Production-ready release with security hardening, core freeze compliance, publishing workflows, and comprehensive automated testing.
+
+Added
+
+- Security: Strict CSRF token verification across all administrative state-changing actions.
+- Security: Removed default admin credentials; installer mandates custom strong passwords with default-password rejection.
+- Security: Direct access denial `.htaccess` protection for `content/`, `logs/`, `backups/`, and script execution prevention in `assets/uploads/`.
+- Security: Path traversal validation in PluginLoader manifests and theme preview handlers.
+- Security: Strict MIME validation, extension whitelisting, file size limits, and SVG XSS sanitization (scripts/iframes/handlers stripped).
+- Publishing: Drafts workflow with status indicators, draft counter, and authenticated administrator preview banner.
+- Publishing: Sharded post search across titles, slugs, and content with pagination.
+- Media: Secure Media Library with file upload, preview, markdown snippet copying, and deletion.
+- Backups: One-click ZIP/JSON export and restoration with automatic pre-restore safety snapshots and zip traversal prevention.
+- Tests: Comprehensive PHPUnit test suite with 37 tests and 112 assertions covering Router, Auth, Session, Posts, Media, Backups, and Security.
+- Core: Implemented `all()` on `PostsModel` to comply with frozen `Core\Model` contract in `CORE_FREEZE.md`.
+
 ---
 
 [0.9.0-dev] — 2026-08-04

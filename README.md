@@ -1,268 +1,163 @@
 # Pico JSON CMS
 
-A lightweight, developer-friendly flat-file CMS built in PHP.
+A lightweight, secure, and fast flat-file CMS built with PHP 8.1+.
 
-Store your content in readable JSON, write in Markdown, and publish your site with a simple admin panel — without a database.
+Store content in structured JSON, write in Markdown, upload media securely, and publish instantly with a responsive admin panel — without database configuration, Node.js, or complex infrastructure.
 
 [![Release](https://img.shields.io/github/v/release/almhdy24/pico-json-cms?label=release)](https://github.com/almhdy24/pico-json-cms/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/almhdy24/pico-json-cms/ci.yml?branch=main)](https://github.com/almhdy24/pico-json-cms/actions)
 [![PHP](https://img.shields.io/badge/php-8.1%2B-blue)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/almhdy24/pico-json-cms?style=social)](https://github.com/almhdy24/pico-json-cms/stargazers)
-
-<div align="center">
-
-  <h2>Simple. Fast. Open.</h2>
-
-  <p>
-    Pico JSON CMS is a modern flat-file CMS for people who want a clean, lightweight, and fully controllable publishing workflow.
-  </p>
-
-  <p>
-    <a href="https://pico-json-cms.alwaysdata.net">Live Demo</a> ·
-    <a href="#quick-start">Quick Start</a> ·
-    <a href="#features">Features</a> ·
-    <a href="#contributing">Contributing</a>
-  </p>
-
-</div>
+[![Tests](https://img.shields.io/badge/tests-37%20passed%20%7C%20112%20assertions-success)](tests/)
 
 ---
 
-## Why build another CMS?
+## 🎯 Highlights
 
-Most small websites do not need the overhead of a large database-driven platform.
-
-Pico JSON CMS is built for:
-- personal blogs
-- documentation sites
-- portfolios
-- small business websites
-- lightweight content-driven pages
-
-It gives you the simplicity of file-based content management without sacrificing a clean admin experience.
-
----
-
-## What makes it different?
-
-Pico JSON CMS keeps things intentionally lean:
-
-- No database required
-- JSON content files instead of complex CMS storage
-- Markdown-based writing
-- Easy deployment to PHP hosting
-- Small codebase and less maintenance overhead
-- Good fit for simple websites and developer workflows
+- **Zero Database Required**: Pure flat-file persistence with atomic writes and sharded JSON storage.
+- **Security-First Architecture**: Strictly verified CSRF tokens, session fixation defense, login lockout backoff, SVG sanitization, MIME verification, and path traversal prevention.
+- **Web-Based Installer**: Guided initial setup with strong password enforcement and automatic installation locking.
+- **Media Library**: Drag-and-drop file uploads with extension whitelist, MIME inspection, XSS-safe SVG handling, and instant Markdown copy snippets.
+- **Backup & Safe Restore**: Native ZIP / JSON exports with automatic pre-restore safety snapshots and zip path traversal validation.
+- **Drafts & Publishing Workflow**: Seamless draft vs. published state management with private admin preview banners.
+- **Full-Text Search**: Fast, incremental search across post titles, content, and slugs.
+- **Extensible Hook System**: WordPress-style actions and filters for plugins and customizable themes.
+- **Themes & Layouts**: Server-rendered Plates templates with fallback inheritance.
 
 ---
 
-## Features
+## 🚀 Quick Start
 
-- JSON-based flat-file content storage
-- Markdown-friendly authoring
-- Lightweight admin panel
-- No database setup required
-- Easy deployment on PHP servers
-- Simple theme customization
-- Extensible architecture for plugins and hooks
-- Clear and readable project structure
-- Hardened admin auth and CSRF protection
-- Audit logging for admin actions
-- CSP nonce support and production security headers
-- Health endpoint for deployment checks
+### 1. Requirements
 
----
+- PHP 8.1.0 or higher
+- PHP extensions: `json`, `mbstring`, `fileinfo`, `zip` (optional for zip backups)
+- Apache / Nginx with URL rewriting enabled (`mod_rewrite` for Apache)
 
-## Why Pico JSON CMS is better than WordPress for small sites
+### 2. Installation
 
-If your project is small, simple, and focused, Pico JSON CMS is often the better choice.
-
-| Area | Pico JSON CMS | WordPress |
-|---|---|---|
-| Setup | Very simple | More setup and DB configuration |
-| Hosting | Lightweight and affordable | Usually heavier and more expensive |
-| Performance | Fast by default | Often needs optimization and caching |
-| Maintenance | Fewer moving parts | More plugins/themes/core updates |
-| Security surface | Smaller and simpler | Larger and more complex |
-| Content storage | Human-readable JSON files | Database-based |
-| Best for | Blogs, docs, portfolios, small sites | Large ecosystems and plugin-driven sites |
-
-Choosing Pico JSON CMS makes sense when you want:
-- less complexity
-- lower hosting costs
-- better control
-- a cleaner, simpler development workflow
-
----
-
-## Quick Start
-
-### 1. Clone the repository
+Clone the repository and install Composer dependencies:
 
 ```bash
 git clone https://github.com/almhdy24/pico-json-cms.git
 cd pico-json-cms
+composer install --no-dev --optimize-autoloader
 ```
 
-### 2. Install PHP dependencies
+Ensure web-server write permissions on storage directories:
 
 ```bash
-composer install
+chmod -R 775 content logs backups assets/uploads
 ```
 
-### 3. Start the app locally
+### 3. Run the Web Installer
+
+Start the built-in development server (or point your virtual host to the directory):
 
 ```bash
 php -S localhost:8000
 ```
 
-### 4. Open the admin panel
-
-Visit:
+Navigate to:
 
 ```text
-http://localhost:8000/admin/login
+http://localhost:8000/installer
 ```
 
-### 5. Configure secure admin credentials
-
-This project should not be used with the default password in production.
-
-Create a secure `content/.admin.php` file with a bcrypt-hashed password:
-
-```php
-<?php
-return [
-    'user' => 'admin',
-    'pass' => '$2y$10$YOUR_BCRYPT_HASH_HERE',
-];
-```
-
-Generate a hash locally:
-
-```bash
-php -r "echo password_hash('YourStrongPassword', PASSWORD_DEFAULT), PHP_EOL;"
-```
-
-Then log in with your chosen username and password.
+The installer verifies environment compatibility, initializes core configuration, and prompts you to configure your primary administrator account with a strong password. Once finished, it creates `content/.installed` to permanently lock installer endpoints.
 
 ---
 
-## Production security features
+## 🔒 Security Hardening
 
-Pico JSON CMS includes several built-in protections for deployment:
+Pico JSON CMS incorporates defense-in-depth protections:
 
-- CSRF validation on admin actions
-- login throttling and lockout protection
-- session timeout handling for admin users
-- secure session cookie defaults
-- audit logging for admin events
-- Content Security Policy headers with nonce support
-- health endpoint checks for deployment validation
-- permission checks for writable content/log directories
+1. **No Default Credentials**:
+   - The installer mandates a custom administrator password and rejects predictable defaults.
+   - Passwords are encrypted with `PASSWORD_BCRYPT`.
+   - Admin credentials are stored outside the web root or strictly protected in `content/.admin.php` with direct execution prevention (`defined('BASE_PATH') || exit;`).
 
-### Health endpoint
+2. **Session Security & Login Throttling**:
+   - Cookie parameters: `HttpOnly`, `SameSite=Lax`, and dynamic `Secure` over HTTPS.
+   - Session identifiers are regenerated upon authentication.
+   - Login attempts trigger progressive backoff and 5-minute lockouts after 5 consecutive failures.
+   - Inactive sessions expire after 30 minutes.
 
-A health endpoint is available at:
+3. **CSRF Protection**:
+   - State-changing actions (publish, edit, delete, trash, restore, destroy, upload, restore backup) strictly validate cryptographically secure CSRF tokens on POST requests.
 
-```text
-/_health
-```
+4. **Input Sanitization & Output Escaping**:
+   - Markdown rendering strips raw HTML tags (`html_input => strip`) and disallows unsafe URI schemes.
+   - Fallback rendering escapes HTML entities with UTF-8 support.
+   - Strict regex validation on analytics tracking IDs and theme preview parameters.
 
-It is protected by default. If you set a health key in configuration, call it with:
+5. **Upload Validation**:
+   - Whitelist of permitted extensions (`jpg`, `jpeg`, `png`, `gif`, `webp`, `svg`).
+   - File size enforced (5 MB maximum).
+   - Strict MIME inspection via `finfo`.
+   - SVG files are checked for embedded scripts, iframes, and `on*` event handlers.
+   - Script execution is blocked via `assets/uploads/.htaccess`.
 
-```bash
-curl -H "X-Health-Key: your-very-strong-secret" https://your-domain/_health
-```
-
-If no key is configured, the endpoint is restricted to localhost by default.
+6. **Directory Access Restrictions**:
+   - Distributed `.htaccess` files enforce `Require all denied` on `content/`, `logs/`, and `backups/`.
 
 ---
 
-## Project Structure
+## 🛠️ Testing & Verification
+
+Run the automated test suite:
+
+```bash
+php vendor/bin/phpunit
+```
+
+Test coverage includes:
+- **RouterTest**: Route registration, matching, dynamic parameter extraction (`/post/{slug}`).
+- **AuthTest**: State checks, password verification, CSRF lifecycle, session timeouts.
+- **PostsModelTest**: CRUD, sharded storage, slug collision resolution, drafts isolation, search, trash, and base contract compliance.
+- **MediaModelTest**: Image uploads, MIME validation, extension whitelisting, SVG XSS sanitization, deletion safeguards.
+- **BackupModelTest**: ZIP/JSON archive generation, path traversal rejection during restoration, deletion safety.
+- **SecurityTest**: Path traversal in plugin manifests and theme previews, HTML stripping in Markdown, directory access rules.
+- **PagesAndMenuModelTest**: Static page persistence and hierarchical menu order.
+
+---
+
+## 📁 Project Layout
 
 ```text
 pico-json-cms/
-├── content/        # JSON content files
-├── controllers/    # app controllers
-├── core/           # core framework classes
-├── docs/           # documentation
-├── logs/           # app and audit logs
-├── models/         # data models
-├── plugins/        # plugin modules
-├── themes/         # themes
-├── assets/         # static assets
-├── composer.json
-├── config.php
-├── functions.php
-├── index.php
-├── README.md
-├── docs/DEPLOY.md
-└── ...
+├── assets/             # Static CSS, JS, and uploads
+│   └── uploads/        # User media uploads (protected against script execution)
+├── backups/            # System backup archives (access denied)
+├── content/            # JSON data storage, shards, and indexes (access denied)
+│   ├── indexes/        # Incremental slug and pagination indexes
+│   └── posts/          # Sharded post JSON files
+├── controllers/        # Application MVC controllers
+├── core/               # Frozen core architecture (App, Router, Auth, Session, Hooks)
+├── docs/               # Technical guides, deployment, and API references
+├── logs/               # Application runtime and audit logs (access denied)
+├── models/             # Business logic and JSON persistence models
+├── plugins/            # Plugin modules (Markdown, SEO, Sitemap, Analytics)
+├── tests/              # PHPUnit regression and integration test suite
+├── themes/             # Frontend themes and admin layouts
+├── config.php          # Main site configuration
+├── index.php           # Public web entry point
+└── composer.json       # Project dependencies and autoloading definitions
 ```
 
 ---
 
-## Documentation
+## 📖 Documentation
 
-- [Docs Overview](docs/README.md)
 - [Deployment Guide](docs/DEPLOY.md)
-- [Full Guide](docs/guide.md)
+- [Complete User Guide](docs/guide.md)
+- [Admin Manual](docs/admin.md)
+- [Frequently Asked Questions](docs/faq.md)
+- [Upgrade Guide](UPGRADE.md)
+- [Core Freeze Contract](CORE_FREEZE.md)
 
 ---
 
-## Security Notes
+## 📄 License
 
-Before deploying to production:
-
-- replace the default admin password and use a hashed credential file
-- restrict access to admin routes
-- keep PHP and server software up to date
-- review file permissions
-- enable HTTPS in production
-- set a strong `health_key` if you use the health endpoint remotely
-- rotate log files regularly
-
----
-
-## Roadmap
-
-We aim to keep the project focused, useful, and easy to maintain.
-
-Planned improvements include:
-- better admin UX
-- more theme examples
-- plugin documentation
-- easier setup guides
-- AI-friendly content workflows
-- improved content import/export tools
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-You can help by:
-- reporting bugs
-- improving docs
-- suggesting features
-- submitting PRs
-- creating themes or plugins
-
-If you are planning a larger change, it’s a good idea to open an issue first so the project direction stays clear and consistent.
-
----
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-## Author
-
-Elmahdi Abdallh
-
-GitHub: https://github.com/almhdy24
+This software is open-source under the [MIT License](LICENSE).
+Created and maintained by [Elmahdi Abdallh](https://github.com/almhdy24).

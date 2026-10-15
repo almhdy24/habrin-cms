@@ -1,5 +1,35 @@
 # Upgrade Guide
 
+## From v0.9.x → v1.0.0
+
+🎉 This is a **major stable release** bringing core freeze compliance, comprehensive security hardening, and publishing enhancements.
+
+### What You Must Do
+1. Backup your `content/` and `assets/uploads/` folders before updating.
+2. Update dependencies using `composer install --no-dev`.
+3. Verify that directory `.htaccess` protection files are present in `content/`, `logs/`, `backups/`, and `assets/uploads/`.
+4. Ensure your active theme contains `theme.json` with `"cms": ">=0.9.0"`.
+5. Run the test suite: `php vendor/bin/phpunit`.
+
+### What Changed
+- **Core Stability**: `PostsModel::all()` is fully implemented and adheres to `CORE_FREEZE.md`.
+- **Security Hardening**:
+  - Removed all default credentials.
+  - Implemented CSRF defense-in-depth across administrative actions.
+  - Markdown input strips dangerous raw HTML and scripts.
+  - Media uploads validate MIME types and sanitize SVGs.
+  - Directory traversal prevented in plugin manifests and theme previews.
+- **New Capabilities**:
+  - Media Library (`/admin/media`)
+  - Backup & Restoration with safety snapshots (`/admin/backup`)
+  - Drafts workflow with preview banners
+  - Search across posts, slugs, and body
+
+### What Is Preserved
+- All posts, pages, menu structures, and site settings are 100% backward-compatible.
+
+---
+
 ## From v0.2.0 → v0.3.0
 
 ⚠️ This is a **minor security** upgrade.

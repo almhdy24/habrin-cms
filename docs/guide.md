@@ -1,118 +1,95 @@
-# Complete Guide
+# Complete User & Administrator Guide
 
-## Installation
+## Overview
 
-### Option 1: Manual Download
-1. Download the ZIP from GitHub: [almhdy24/pico-json-cms](https://github.com/almhdy24/pico-json-cms)
-2. Extract the files into your web server folder
-3. Done! Your site files are ready.
+Pico JSON CMS is a fast, flat-file content management system designed for simplicity, security, and developer control. It requires no relational database, storing all data in sharded JSON structures and rendering content with lightweight Plates PHP templates.
 
-### Option 2: Git
+---
+
+## Installation & First Run
+
+### 1. Requirements
+- PHP 8.1.0 or higher
+- Composer
+- Required extensions: `json`, `mbstring`, `fileinfo`
+- Recommended: `zip` (for native ZIP backup creation and restoration)
+
+### 2. Setup
+Clone the repository and install Composer packages:
+
 ```bash
 git clone https://github.com/almhdy24/pico-json-cms.git
 cd pico-json-cms
+composer install --no-dev
 ```
 
-### Composer Dependencies
-
-pico-json-cms uses **Parsedown** to render Markdown posts. Install dependencies with Composer:
+Set file permissions so the web server can write to data directories:
 
 ```bash
-composer install
+chmod -R 775 content logs backups assets/uploads
 ```
 
-This will create the `vendor/` folder and load Parsedown automatically.
-
-### First Run
-
-1. Open your site in a browser (e.g., `http://localhost/pico-json-cms/` or your domain)
-2. Sample posts will appear if included
-3. Go to `/admin/login`
-4. Login with the default credentials: `admin / secret123`
-
-⚠️ **Important:** Change the default password immediately in `admin.php`:
-
-```php
-// Replace 'secret123' with your strong password:
-$admin_password_hash = password_hash('your-strong-password', PASSWORD_DEFAULT);
-```
-
-### File Structure
-
-```
-pico-json-cms/
-├── README.md
-├── admin.php
-├── assets/
-│   ├── bulma.min.css
-│   ├── easymde.min.css
-│   └── easymde.min.js
-├── composer.json
-├── composer.lock
-├── config.php
-├── content/
-│   ├── posts.json
-│   └── settings.json
-├── controllers/
-│   ├── AdminController.php
-│   └── HomeController.php
-├── core/
-│   ├── App.php
-│   ├── Auth.php
-│   ├── Controller.php
-│   ├── Hooks.php
-│   ├── Model.php
-│   ├── Router.php
-│   └── View.php
-├── docs/
-├── functions.php
-├── index.php
-├── models/
-│   ├── PostsModel.php
-│   └── SettingsModel.php
-└── plugins/
-    ├── markdown-plugin.php
-    └── syntax-highlighting.php
-```
-
-### Creating Your First Post
-
-1. Login to the admin panel (`/admin/login`)
-2. Click **Add New Post**
-3. Fill in:
-   - **Title** (required)
-   - **Slug** (auto-generated, editable)
-   - **Content** (supports **HTML** and **Markdown** if plugin enabled)
-4. Click **Save** → Post is live at `/post/your-slug`
-
-### Site Settings
-
-Edit `content/settings.json` directly or via the admin panel:
-
-```json
-{
-  "site_title": "My Awesome Site",
-  "site_description": "A simple blog powered by pico-json-cms",
-  "posts_per_page": 5
-}
-```
-
-### Deployment Tips
-
-**Local Development:**
+### 3. Web Installer
+Launch the built-in development server:
 
 ```bash
 php -S localhost:8000
 ```
 
-**Shared Hosting / AlwaysData:**
+Visit `http://localhost:8000/installer` in your browser.
 
-1. Upload all files via FTP/SFTP or Git
-2. Ensure `content/` folder is writable (permissions `755` or `775`)
-3. Visit your domain → CMS is ready
+The installer will:
+1. Verify system requirements and write permissions.
+2. Initialize default site settings (`content/settings.json`, `content/pages.json`, `content/menu.json`).
+3. Securely create your first administrator account with a strong password of your choice.
+4. Create the lock file (`content/.installed`) to permanently disable the installer.
 
-### Notes
+---
 
-- Markdown content is rendered via `Parsedown`
-- To use Markdown in posts, simply write your content using `.md` syntax in the post editor
-- Existing HTML posts continue to work
+## Content Publishing Workflow
+
+### Creating and Editing Posts
+1. Log in to `/admin/login`.
+2. Click **New Post** in the sidebar.
+3. Provide a **Title**. A URL-friendly slug is generated automatically.
+4. Choose the status:
+   - **Published**: The post will immediately appear on the homepage and feed.
+   - **Draft**: The post is saved privately. Unauthenticated visitors cannot view it. Logged-in administrators can preview drafts at `/post/your-slug` with a visible preview banner.
+5. Write your content using Markdown.
+6. Click **Save Post**.
+
+### Media Library
+1. Navigate to `/admin/media`.
+2. Drag and drop or browse for images (`JPG`, `PNG`, `GIF`, `WEBP`, `SVG`).
+3. Once uploaded, click the **Copy Markdown** snippet button.
+4. Paste the snippet directly into your Markdown editor.
+5. Uploaded files are protected against arbitrary code execution by server configuration.
+
+### Search Functionality
+- Both the public site and admin dashboard support full-text search across titles, slugs, and body content.
+- Administrators can search both published posts and drafts. Public visitors only search published posts.
+
+---
+
+## Backup & Recovery
+
+1. Navigate to `/admin/backup`.
+2. Click **Create Backup Now**. The CMS packages all posts, pages, menu configurations, and settings into a timestamped `.zip` archive (with `.json` fallback).
+3. Download the archive for offsite storage.
+4. To restore, upload a previously exported backup archive. The CMS automatically generates a pre-restoration safety snapshot before restoring any files, and verifies archive entries against directory traversal attacks (`../`).
+
+---
+
+## Theme & Plugin Management
+
+- **Themes**: Switch between themes under `/admin/themes`. Active themes inherit layouts and templates from the `default` theme fallback.
+- **Plugins**: Activate, deactivate, and configure plugins (such as SEO metadata, Sitemap generation, and Google Analytics) under `/admin/plugins`.
+
+---
+
+## Security Architecture
+
+- **Authentication**: Salted `password_hash` (bcrypt) with progressive delay on repeated login failures and account lockout.
+- **CSRF Tokens**: All administrative POST requests are protected by cryptographically random CSRF tokens.
+- **XSS Protection**: Markdown input strips dangerous HTML tags and event attributes.
+- **Directory Protection**: Sensitive directories (`content/`, `logs/`, `backups/`) deny all direct HTTP access via `.htaccess`.

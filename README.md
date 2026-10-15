@@ -1,27 +1,38 @@
 # Habrin CMS
 
+> **Publish without the clutter.**
+
 A modern, lightweight, fast, and mobile-friendly flat-file CMS built with PHP 8.1+.
 
-Store content in structured JSON, write in Markdown, manage media effortlessly, and publish instantly with a polished, touch-first admin panel — without databases, Node.js, or complex infrastructure.
+Store content in structured JSON, write in Markdown, manage media effortlessly, and publish instantly with a calm, tactile, editorial admin panel — without databases, Node.js, build steps, or complex infrastructure.
 
-[![Release](https://img.shields.io/github/v/release/almhdy24/pico-json-cms?label=release)](https://github.com/almhdy24/pico-json-cms/releases)
+[![Release](https://img.shields.io/github/v/release/almhdy24/habrin-cms?label=release)](https://github.com/almhdy24/habrin-cms/releases)
 [![PHP](https://img.shields.io/badge/php-8.1%2B-blue)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-37%20passed%20%7C%20112%20assertions-success)](tests/)
 
 ---
 
-## 🎨 Highlights & Design System
+## 🎨 Design System & Brand Identity
 
+Habrin CMS is crafted with a quiet, tactile editorial philosophy: **clean typography, subtle borders, clear hierarchy, and no gradients or generic AI-style UI**.
+
+- **Brand Palette**:
+  - `Paper`: `#F7F6F2` (Warm, natural canvas)
+  - `Ink`: `#202421` (High-contrast, legible typography)
+  - `Primary Green`: `#315C52` (Distinctive botanical accent)
+  - `Hover Green`: `#274A42` (Deep tactile response)
+  - `Borders`: `#E5E1D8` (Subtle structural framing)
+  - `White`: `#FFFFFF` (Clean elevated card surfaces)
 - **Zero Database Required**: Pure flat-file persistence with atomic writes, sharded JSON storage, and slug indexing.
 - **Mobile-First Responsive Admin**:
   - Full-screen collapsible drawer sidebar with hamburger toggle on phones and tablets.
-  - Sticky mobile header for quick dashboard access and status awareness.
+  - Sticky mobile header for one-tap navigation and status awareness.
   - High-contrast, touch-friendly UI components (all interactive controls $\ge$ 44px).
-  - Modern typography, layered SVG brand mark, and dark slate dashboard styling.
+  - Explicit form labels, clear helper descriptions, and visible focus states.
 - **Editorial Experience**:
   - 2-column post editor (editor canvas on left, publishing metadata & status on right).
-  - Live word and character counter.
+  - Real-time word and character counter.
   - Drafts vs. Published states with dedicated status badges and authenticated draft preview banners.
   - Fast full-text search across titles, slugs, and body.
 - **Interactive Media Library**:
@@ -56,7 +67,7 @@ Store content in structured JSON, write in Markdown, manage media effortlessly, 
 Clone the repository and install Composer dependencies:
 
 ```bash
-git clone https://github.com/almhdy24/pico-json-cms.git habrin-cms
+git clone https://github.com/almhdy24/habrin-cms.git
 cd habrin-cms
 composer install --no-dev --optimize-autoloader
 ```

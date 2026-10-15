@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($title ?? 'Admin', ENT_QUOTES, 'UTF-8') ?> - Habrin CMS</title>
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#315C52">
+  <link rel="icon" type="image/svg+xml" href="<?= $this->asset('themes/default/assets/img/favicon.svg') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/admin.css') ?>">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
@@ -20,16 +21,13 @@
   <aside class="admin-sidebar" id="adminSidebar" aria-label="Habrin CMS Admin Navigation">
     <div class="admin-sidebar-brand">
       <a href="/admin/dashboard" class="brand-link">
-        <svg class="brand-mark" viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="habrinAdminGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#818cf8" />
-              <stop offset="100%" stop-color="#4f46e5" />
-            </linearGradient>
-          </defs>
-          <rect width="40" height="40" rx="10" fill="url(#habrinAdminGrad)" />
-          <path d="M12 10V30M28 10V30M12 20H28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-          <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+        <svg class="brand-mark" viewBox="0 0 40 40" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="#315C52" />
+          <rect x="0.5" y="0.5" width="39" height="39" rx="7.5" stroke="#274A42" stroke-width="1" />
+          <path d="M12 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M28 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 20H28" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <rect x="18.5" y="18.5" width="3" height="3" fill="#FFFFFF" rx="0.5" />
         </svg>
         <div class="brand-info">
           <span class="brand-title">Habrin</span>

@@ -1,5 +1,7 @@
 # Habrin CMS — Admin Panel & Mobile Guide
 
+> **Publish without the clutter.**
+
 The Habrin CMS administration interface is designed with a modern, mobile-first philosophy: fast, practical, accessible, and completely independent of heavy external JavaScript or CSS frameworks.
 
 ---

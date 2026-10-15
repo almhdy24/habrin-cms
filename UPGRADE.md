@@ -13,15 +13,17 @@
 
 ### What Changed
 - **Product Identity & Branding**:
-  - Rebranded to **Habrin CMS**.
+  - Rebranded to **Habrin CMS** with official tagline: *“Publish without the clutter.”*
+  - Distinctive tactile palette: Paper (`#F7F6F2`), Ink (`#202421`), Primary Green (`#315C52`), Hover Green (`#274A42`), Borders (`#E5E1D8`), and White (`#FFFFFF`). No gradients or generic AI-style UI.
   - Default session cookie renamed to `habrin_session`.
-  - SVG brand mark assets added to `assets/images/habrin-logo.svg`.
+  - SVG brand mark assets added to `assets/images/habrin-logo.svg` and `assets/images/favicon.svg`.
 - **Mobile-First Design System**:
   - Full-screen collapsible drawer navigation with hamburger toggle for phones and tablets.
   - Sticky mobile header for one-tap navigation.
   - Editorial 2-column post editor with real-time word/character counter and responsive collapse.
   - Non-blocking toast notification engine (`window.habrinToast`) replacing invasive browser alerts.
   - Touch target compliance ($\ge$ 44px) across all buttons, inputs, and links.
+  - Accessible form fields with explicit labels, visible focus states, and helpful descriptions.
 - **Core Freeze Compliance**:
   - `PostsModel::all()` implemented adhering to frozen `Core\Model` contracts.
   - All frozen APIs (`Core\App`, `Core\Router`, `Core\Auth`, `Core\Session`, `Core\Hooks`, `Core\Model`, `Core\View`) fully preserved.
@@ -88,4 +90,4 @@
 ---
 
 Need help?  
-Open an issue on GitHub: https://github.com/almhdy24/pico-json-cms/issues
+Open an issue on GitHub: https://github.com/almhdy24/habrin-cms/issues

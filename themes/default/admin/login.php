@@ -2,21 +2,18 @@
 
 <div style="width: 100%;">
   <div class="text-center mb-4">
-    <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; margin-bottom: 1rem; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);">
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 12px; margin-bottom: 1rem;">
       <svg viewBox="0 0 40 40" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="habrinLoginGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#6366f1" />
-            <stop offset="100%" stop-color="#4338ca" />
-          </linearGradient>
-        </defs>
-        <rect width="40" height="40" rx="10" fill="url(#habrinLoginGrad)" />
-        <path d="M12 10V30M28 10V30M12 20H28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-        <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+        <rect width="40" height="40" rx="8" fill="#315C52" />
+        <rect x="0.5" y="0.5" width="39" height="39" rx="7.5" stroke="#274A42" stroke-width="1" />
+        <path d="M12 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M28 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 20H28" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="18.5" y="18.5" width="3" height="3" fill="#FFFFFF" rx="0.5" />
       </svg>
     </div>
-    <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.35rem;">Sign in to Habrin</h1>
-    <p class="text-muted" style="font-size: 0.92rem; margin: 0;">Enter your administrator credentials to continue</p>
+    <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.35rem; color: var(--ink);">Sign in to Habrin</h1>
+    <p class="text-muted" style="font-size: 0.92rem; margin: 0;">Publish without the clutter.</p>
   </div>
 
   <?php $this->insert('partials/flash', ['flash' => $flash ?? []]) ?>

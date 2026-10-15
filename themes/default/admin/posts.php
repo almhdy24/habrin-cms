@@ -23,11 +23,20 @@
     <div class="flex flex-wrap items-center gap-2">
       <form method="GET" action="/admin" class="flex gap-1" style="align-items: center;">
         <div style="position: relative;">
-          <input type="text" name="q" value="<?= htmlspecialchars((string) ($searchQuery ?? ''), ENT_QUOTES, 'UTF-8') ?>" placeholder="Search posts..." class="input" style="padding: 0.45rem 0.75rem; font-size: 0.9rem; width: 200px;">
+          <label for="adminSearchInput" class="sr-only">Search articles</label>
+          <input
+            id="adminSearchInput"
+            type="text"
+            name="q"
+            value="<?= htmlspecialchars((string) ($searchQuery ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+            placeholder="Search posts..."
+            class="input"
+            style="min-height: 40px; padding: 0.45rem 0.75rem; font-size: 0.9rem; width: 220px;"
+          >
         </div>
-        <button type="submit" class="button button-sm button-light" title="Search"><i data-lucide="search"></i></button>
+        <button type="submit" class="button button-sm button-light" style="min-height: 40px;" title="Search"><i data-lucide="search"></i></button>
         <?php if (!empty($searchQuery)): ?>
-          <a href="/admin" class="button button-sm button-light" title="Clear search"><i data-lucide="x"></i></a>
+          <a href="/admin" class="button button-sm button-light" style="min-height: 40px;" title="Clear search"><i data-lucide="x"></i></a>
         <?php endif; ?>
       </form>
 

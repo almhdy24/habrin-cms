@@ -3,18 +3,18 @@
     <div class="header-inner">
       <div class="header-brand">
         <a href="/" class="brand-link">
-          <svg viewBox="0 0 40 40" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="habrinNavGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#6366f1" />
-                <stop offset="100%" stop-color="#4f46e5" />
-              </linearGradient>
-            </defs>
-            <rect width="40" height="40" rx="9" fill="url(#habrinNavGrad)" />
-            <path d="M12 10V30M28 10V30M12 20H28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+          <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="40" height="40" rx="8" fill="#315C52" />
+            <rect x="0.5" y="0.5" width="39" height="39" rx="7.5" stroke="#274A42" stroke-width="1" />
+            <path d="M12 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M28 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 20H28" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="18.5" y="18.5" width="3" height="3" fill="#FFFFFF" rx="0.5" />
           </svg>
-          <span class="brand-name"><?= $this->e($settings['site_title'] ?? 'Habrin CMS') ?></span>
+          <div>
+            <span class="brand-name"><?= $this->e($settings['site_title'] ?? 'Habrin CMS') ?></span>
+            <span class="brand-tagline-sub">Publish without the clutter</span>
+          </div>
         </a>
       </div>
 

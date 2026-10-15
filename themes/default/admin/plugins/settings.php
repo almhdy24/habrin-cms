@@ -24,7 +24,7 @@
   .plugin-settings-form .field.has-error .textarea,
   .plugin-settings-form .field.has-error select {
     border-color: var(--danger) !important;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(155, 44, 44, 0.14) !important;
   }
   .plugin-settings-form .field .help {
     font-size: 0.85rem;

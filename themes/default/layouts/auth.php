@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($title ?? 'Sign In', ENT_QUOTES, 'UTF-8') ?> - Habrin CMS</title>
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#315C52">
+  <link rel="icon" type="image/svg+xml" href="<?= $this->asset('themes/default/assets/img/favicon.svg') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>

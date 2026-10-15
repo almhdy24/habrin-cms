@@ -1,6 +1,6 @@
 {
     "name": "habrin/habrin",
-    "description": "Habrin CMS — A modern, lightweight, secure, and mobile-friendly flat-file CMS in PHP.",
+    "description": "Habrin CMS — Publish without the clutter. A modern, lightweight, secure, and mobile-friendly flat-file CMS in PHP.",
     "type": "project",
     "license": "MIT",
     "authors": [

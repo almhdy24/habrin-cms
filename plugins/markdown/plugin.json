@@ -7,7 +7,7 @@
     "license": "MIT",
     "requires": {
         "php": ">=8.1",
-        "pico": ">=1.0.0"
+        "habrin": ">=1.0.0"
     },
     "bootstrap": "plugin.php"
 }

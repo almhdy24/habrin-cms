@@ -51,7 +51,7 @@ final class View
             'csp_nonce' => $config['csp_nonce'] ?? null,
         ]);
 
-        // Pico extensions
+        // Habrin view extensions
         self::$engine->loadExtension(new class implements ExtensionInterface {
             public function register(Engine $engine): void
             {

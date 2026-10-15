@@ -1,9 +1,11 @@
 # Frequently Asked Questions (FAQ)
 
+> **Publish without the clutter.**
+
 ## Product & Identity
 
 ### What is Habrin CMS?
-Habrin CMS is a lightweight, mobile-friendly flat-file content management system designed around structured JSON persistence, Markdown content, and an intuitive administrative suite.
+Habrin CMS is a lightweight, mobile-friendly flat-file content management system designed around structured JSON persistence, Markdown content, and an intuitive administrative suite. Its brand philosophy is simple: **publish without the clutter** — offering clean typography, subtle borders, accessible contrast, and zero unnecessary dependencies or gradients.
 
 ### Is this related to Pico CMS?
 No. Pico CMS (picocms.org) is an unrelated Markdown-based flat-file CMS from 2013. Habrin CMS is an independent, modern platform featuring sharded JSON storage, mobile drawer admin UX, built-in media management, automated backups, and strict security hardening.

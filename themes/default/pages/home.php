@@ -2,8 +2,9 @@
 
 <!-- Hero Section -->
 <section class="hero-home">
+  <div class="hero-tagline-badge"><i data-lucide="feather"></i> Publish without the clutter</div>
   <h1><?= $this->e($settings['hero_heading'] ?? 'Welcome to Habrin CMS') ?></h1>
-  <p><?= $this->e($settings['hero_description'] ?? 'A modern, lightweight flat-file CMS built with PHP and JSON.') ?></p>
+  <p><?= $this->e($settings['hero_description'] ?? 'A modern, lightweight flat-file CMS built for independent publishing.') ?></p>
   <?php if (!empty($settings['hero_button_text']) && !empty($settings['hero_button_link'])): ?>
     <a href="<?= $this->e($settings['hero_button_link']) ?>" class="button">
       <?= $this->e($settings['hero_button_text']) ?> <i data-lucide="arrow-right"></i>

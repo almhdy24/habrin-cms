@@ -10,11 +10,14 @@ Official stable release of Habrin CMS: featuring modern product branding, a resp
 
 Added
 
-- Branding & Identity: Complete transformation into Habrin CMS with custom layered isometric SVG mark, updated package descriptor (`habrin/habrin`), and session management (`habrin_session`).
+- Branding & Identity: Complete transformation into Habrin CMS with official tagline: *“Publish without the clutter.”*
+- Design System: Pure tactile aesthetic using Paper (`#F7F6F2`), Ink (`#202421`), Primary Green (`#315C52`), Hover Green (`#274A42`), Borders (`#E5E1D8`), and White (`#FFFFFF`). No gradients or generic AI-style decoration.
+- Design System: Custom vector SVG emblem and favicon in brand green and paper white.
 - Design System & Mobile UX: Collapsible off-canvas drawer navigation with mobile top bar and hamburger toggle.
 - Design System & Mobile UX: 2-column post editor with live word and character counters, slug preview, and responsive mobile collapse.
+- Design System & Mobile UX: Accessible form fields with explicit labels, helpful placeholders, accessible contrast, and visible focus states ($\ge$ 44px touch targets).
 - Design System & Mobile UX: Non-blocking animated toast notification engine (`window.habrinToast`) for instant feedback.
-- Design System & Mobile UX: High-contrast dashboard metrics, categorized sidebar navigation (`Content`, `Structure`, `Maintenance`), and $\ge$ 44px touch targets.
+- Design System & Mobile UX: High-contrast dashboard metrics, categorized sidebar navigation (`Content`, `Structure`, `Maintenance`), and clean table views.
 - Security: Strict CSRF token verification across all administrative state-changing actions.
 - Security: Removed default admin credentials; installer mandates custom strong passwords with default-password rejection.
 - Security: Direct access denial `.htaccess` protection for `content/`, `logs/`, `backups/`, and script execution prevention in `assets/uploads/`.

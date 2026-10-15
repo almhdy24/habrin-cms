@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($title ?? 'Installer', ENT_QUOTES, 'UTF-8') ?> - Habrin CMS</title>
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#315C52">
+  <link rel="icon" type="image/svg+xml" href="<?= $this->asset('themes/default/assets/img/favicon.svg') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
   <?php $this->hook('head') ?>
@@ -16,18 +17,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1.25rem;
-      background: radial-gradient(circle at top, rgba(99, 102, 241, 0.12), transparent 45%),
-                  linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      padding: 2.5rem 1.25rem;
+      background: var(--paper);
     }
 
     .installer-box {
-      background: #ffffff;
+      background: var(--white);
       width: 100%;
       max-width: 540px;
-      padding: 2.25rem;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      box-shadow: var(--shadow-md);
     }
 
     .installer-header {
@@ -57,12 +58,13 @@
       align-items: center;
       gap: 0.5rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
     }
 
     .installer-step.active {
       color: var(--primary);
+      font-weight: 700;
     }
 
     .installer-step.done {
@@ -88,19 +90,16 @@
       <div class="installer-header">
         <div class="logo-wrap">
           <svg viewBox="0 0 40 40" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="habrinInstGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#6366f1" />
-                <stop offset="100%" stop-color="#4f46e5" />
-              </linearGradient>
-            </defs>
-            <rect width="40" height="40" rx="10" fill="url(#habrinInstGrad)" />
-            <path d="M12 10V30M28 10V30M12 20H28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+            <rect width="40" height="40" rx="8" fill="#315C52" />
+            <rect x="0.5" y="0.5" width="39" height="39" rx="7.5" stroke="#274A42" stroke-width="1" />
+            <path d="M12 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M28 11V29" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 20H28" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="18.5" y="18.5" width="3" height="3" fill="#FFFFFF" rx="0.5" />
           </svg>
         </div>
-        <h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Habrin CMS Setup</h1>
-        <p class="text-muted" style="font-size: 0.9rem; margin: 0;">Guided initial configuration</p>
+        <h1 style="font-size: 1.5rem; margin-bottom: 0.25rem; color: var(--ink);">Habrin CMS Setup</h1>
+        <p class="text-muted" style="font-size: 0.9rem; margin: 0;">Publish without the clutter.</p>
       </div>
 
       <!-- Stepper -->

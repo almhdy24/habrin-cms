@@ -1,5 +1,7 @@
 # Complete User & Administrator Guide
 
+> **Publish without the clutter.**
+
 ## Overview
 
 Habrin CMS is a fast, flat-file content management system designed for simplicity, security, and developer control. It requires no relational database, storing all data in sharded JSON structures and rendering content with lightweight Plates PHP templates.
@@ -18,7 +20,7 @@ Habrin CMS is a fast, flat-file content management system designed for simplicit
 Clone the repository and install Composer packages:
 
 ```bash
-git clone https://github.com/almhdy24/pico-json-cms.git habrin-cms
+git clone https://github.com/almhdy24/habrin-cms.git
 cd habrin-cms
 composer install --no-dev
 ```

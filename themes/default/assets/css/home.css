@@ -1,70 +1,88 @@
+/* ============================================================
+   Habrin CMS — Homepage Styles (Clean Editorial Aesthetic)
+   ============================================================ */
+
 .hero-home {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
   margin-bottom: 3.5rem;
-  padding: clamp(3rem, 8vw, 5rem) 2rem;
+  padding: clamp(2.5rem, 6vw, 4rem) 2rem;
   text-align: center;
-  color: white;
-  background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.12), transparent 28%),
-              radial-gradient(circle at 90% 80%, rgba(255,255,255,0.1), transparent 30%),
-              linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #7c3aed 100%);
+  color: var(--paper);
+  background: var(--primary);
+  border: 1px solid var(--primary-hover);
   border-radius: var(--radius-lg);
-  box-shadow: 0 20px 50px rgba(79,70,229,0.2);
-}
-.hero-home::before, .hero-home::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  border-radius: 50%;
-  pointer-events: none;
-  background: rgba(255,255,255,0.06);
-}
-.hero-home::before { width: 360px; height: 360px; top: -220px; right: -100px; }
-.hero-home::after { width: 260px; height: 260px; bottom: -170px; left: -80px; }
-.hero-home h1 {
-  position: relative;
-  margin-bottom: 0.8rem;
-  color: white;
-  font-size: clamp(2rem, 6vw, 3.4rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-.hero-home p {
-  position: relative;
-  max-width: 650px;
-  margin: 0 auto 1.75rem;
-  color: rgba(255,255,255,0.88);
-  font-size: clamp(1rem, 2vw, 1.2rem);
-}
-.hero-home .button {
-  position: relative;
-  background: white;
-  color: var(--primary);
-  border-color: white;
-  font-weight: 700;
-  box-shadow: 0 8px 20px rgba(15,23,42,0.12);
-}
-.hero-home .button:hover {
-  background: #f8fafc;
-  color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(15,23,42,0.18);
+  box-shadow: var(--shadow-sm);
 }
 
-#posts { scroll-margin-top: 90px; }
+.hero-home .hero-tagline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 1.1rem;
+  background: var(--primary-hover);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(247, 246, 242, 0.22);
+}
+.hero-home .hero-tagline-badge i,
+.hero-home .hero-tagline-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hero-home h1 {
+  color: var(--white);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.85rem;
+}
+
+.hero-home p {
+  max-width: 620px;
+  margin: 0 auto 1.75rem;
+  color: rgba(247, 246, 242, 0.92);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.hero-home .button {
+  background: var(--white);
+  color: var(--primary);
+  border-color: var(--white);
+  font-weight: 700;
+}
+.hero-home .button:hover {
+  background: var(--paper);
+  color: var(--primary-hover);
+  border-color: var(--paper);
+}
+
+#posts {
+  scroll-margin-top: 90px;
+}
 
 .section-title {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   margin-bottom: 0.35rem;
-  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
   font-weight: 800;
   letter-spacing: -0.02em;
 }
-.section-title i, .section-title svg { width: 28px; height: 28px; color: var(--primary); }
+.section-title i, .section-title svg {
+  width: 26px;
+  height: 26px;
+  color: var(--primary);
+}
+
 .section-subtitle {
   margin-bottom: 1.75rem;
   color: var(--text-muted);
@@ -82,17 +100,16 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 280px;
+  min-height: 260px;
   padding: 1.5rem;
-  background: white;
+  background: var(--white);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
-  transition: transform var(--transition-slow), box-shadow var(--transition-slow), border-color var(--transition-slow);
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 .post-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(129,140,248,0.7);
+  border-color: var(--primary);
   box-shadow: var(--shadow-hover);
 }
 
@@ -101,68 +118,103 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
 }
 .post-card .post-meta .date {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   min-width: 0;
 }
-.post-card .post-meta .date i, .post-card .post-meta .date svg { width: 16px; height: 16px; flex-shrink: 0; }
+.post-card .post-meta .date i, .post-card .post-meta .date svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
 
 .post-card h3 {
   margin-bottom: 0.65rem;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   line-height: 1.35;
+  letter-spacing: -0.015em;
 }
 .post-card h3 a {
-  color: var(--text);
-  background: linear-gradient(var(--primary), var(--primary)) no-repeat 0 100% / 0 2px;
-  transition: color var(--transition), background-size var(--transition);
+  color: var(--ink);
+  transition: color var(--transition);
 }
-.post-card h3 a:hover { color: var(--primary); background-size: 100% 2px; }
+.post-card h3 a:hover {
+  color: var(--primary);
+}
 
 .post-card .excerpt {
   flex: 1;
-  margin-bottom: 1.4rem;
-  color: var(--text-light);
+  margin-bottom: 1.25rem;
+  color: var(--text-muted);
   font-size: 0.94rem;
-  line-height: 1.75;
+  line-height: 1.65;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   overflow: hidden;
 }
+
 .post-card .actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: auto;
 }
-.post-card .actions .button { font-size: 0.85rem; }
+.post-card .actions .button {
+  font-size: 0.85rem;
+}
 
 .empty-state {
-  padding: clamp(3rem, 8vw, 5rem) 2rem;
+  padding: clamp(3rem, 6vw, 4.5rem) 1.5rem;
   text-align: center;
-  background: white;
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
+  background: var(--white);
+  border: 1px dashed var(--border-dark);
+  border-radius: var(--radius);
 }
-.empty-state i, .empty-state svg { width: 48px; height: 48px; margin: 0 auto 1.25rem; color: var(--text-muted); }
-.empty-state h3 { margin-bottom: 0.5rem; }
-.empty-state p { color: var(--text-muted); }
+.empty-state i, .empty-state svg {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 1.15rem;
+  color: var(--primary);
+}
+.empty-state h3 {
+  margin-bottom: 0.4rem;
+  color: var(--ink);
+}
+.empty-state p {
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
 
 @media (max-width: 768px) {
-  .hero-home { margin-bottom: 2.5rem; padding: 3rem 1.5rem; border-radius: var(--radius); }
-  .posts-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .post-card { min-height: 0; padding: 1.25rem; }
+  .hero-home {
+    margin-bottom: 2.25rem;
+    padding: 2.5rem 1.25rem;
+  }
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .post-card {
+    min-height: 0;
+    padding: 1.25rem;
+  }
 }
+
 @media (max-width: 480px) {
-  .hero-home { padding: 2.5rem 1.25rem; }
-  .hero-home .button { width: 100%; }
-  .post-card .post-meta { align-items: flex-start; }
+  .hero-home {
+    padding: 2rem 1rem;
+  }
+  .hero-home .button {
+    width: 100%;
+  }
+  .post-card .post-meta {
+    align-items: flex-start;
+  }
 }

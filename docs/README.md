@@ -1,6 +1,8 @@
 # Habrin CMS Documentation
 
-**A modern, lightweight, mobile-friendly flat-file CMS that stores everything in JSON files. No database needed.**
+> **Publish without the clutter.**
+
+A modern, lightweight, mobile-friendly flat-file CMS that stores everything in JSON files. No database needed.
 
 ---
 

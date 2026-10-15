@@ -9,6 +9,9 @@
   <meta name="description" content="<?= $this->e($settings['site_description'] ?? '') ?>">
   <meta name="keywords" content="<?= $this->e($settings['site_keywords'] ?? '') ?>">
 
+  <meta name="theme-color" content="#315C52">
+  <link rel="icon" type="image/svg+xml" href="<?= $this->asset('themes/default/assets/img/favicon.svg') ?>">
+
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/home.css') ?>">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>

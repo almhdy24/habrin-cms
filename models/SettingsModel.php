@@ -12,10 +12,10 @@ class SettingsModel extends Model
     protected string $file;
     private array $defaults = [
         'site_title' => 'Habrin CMS',
-        'site_description' => 'A modern, lightweight, mobile-friendly flat-file CMS',
-        'site_keywords' => 'habrin, cms, php, json, blog, markdown',
+        'site_description' => 'Publish without the clutter.',
+        'site_keywords' => 'habrin, cms, php, json, blog, markdown, publishing',
         'hero_heading' => 'Welcome to Habrin CMS',
-        'hero_description' => 'A modern, fast, and secure flat-file CMS.',
+        'hero_description' => 'Publish without the clutter. Fast, private, and database-free.',
         'hero_button_text' => 'Get Started',
         'hero_button_link' => '/about',
         'meta' => []

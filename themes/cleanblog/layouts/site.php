@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $this->e($title ?? ($settings['site_title'] ?? 'CleanBlog')) ?></title>
   <meta name="description" content="<?= $this->e($settings['site_description'] ?? '') ?>">
+  <link rel="icon" type="image/svg+xml" href="<?= $this->asset('assets/images/favicon.svg') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/cleanblog/assets/css/style.css') ?>">
   <?php $this->hook('head') ?>
 </head>

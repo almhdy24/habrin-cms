@@ -6,7 +6,7 @@
   <div class="dashboard-welcome">
     <div>
       <h2>Welcome back to Habrin CMS</h2>
-      <p>Your flat-file content platform is running smoothly. Fast, private, and database-free.</p>
+      <p>Publish without the clutter. Fast, private, and database-free.</p>
     </div>
     <div class="dashboard-welcome-actions">
       <a href="/admin/add" class="button button-primary">

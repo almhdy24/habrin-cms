@@ -31,8 +31,7 @@ class PluginSettingsRegistry
                 'min' => null,
                 'max' => null,
                 'rows' => 4,
-                'options' => [],
-                'sanitize' => 'text',
+                'sanitize' => $field['sanitize'] ?? (in_array($field['type'] ?? '', ['bool', 'boolean', 'checkbox'], true) ? 'bool' : 'text'),
                 'description' => '',
             ], $field);
         }

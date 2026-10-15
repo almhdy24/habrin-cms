@@ -81,9 +81,9 @@
             <button type="submit" class="button button-primary button-block button-lg">
               <i data-lucide="check"></i> Publish Article
             </button>
-            <a href="/admin/media" target="_blank" rel="noopener" class="button button-light button-block">
-              <i data-lucide="image"></i> Media Library
-            </a>
+            <button type="button" class="button button-light button-block" id="btnInsertMedia">
+              <i data-lucide="image"></i> Insert Media
+            </button>
             <a href="/admin" class="button button-light button-block text-muted">
               Cancel
             </a>
@@ -95,9 +95,28 @@
   </form>
 </section>
 
+<!-- Media Selection Modal -->
+<dialog id="mediaModal" style="border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; max-width: 640px; width: 90vw; background: var(--white); box-shadow: var(--shadow-lg);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+    <h3 style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+      <i data-lucide="image"></i> <span>Media Library</span>
+    </h3>
+    <button type="button" id="closeMediaModalBtn" class="button button-sm button-light" style="padding: 0.25rem 0.5rem;">✕</button>
+  </div>
+  <div id="mediaModalList" style="max-height: 360px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; padding: 0.25rem;">
+    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1rem;">Loading media...</div>
+  </div>
+  <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+    <a href="/admin/media" target="_blank" rel="noopener" class="button button-sm button-light">
+      <i data-lucide="upload"></i> Upload More
+    </a>
+    <button type="button" id="cancelMediaModalBtn" class="button button-sm button-light">Close</button>
+  </div>
+</dialog>
+
 <!-- EasyMDE Editor Integration -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
-<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<link rel="stylesheet" href="<?= $this->asset('assets/easymde.min.css') ?>">
+<script src="<?= $this->asset('assets/easymde.min.js') ?>"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -113,7 +132,12 @@ document.addEventListener('DOMContentLoaded', function () {
     toolbar: [
       "bold", "italic", "heading", "|",
       "quote", "unordered-list", "ordered-list", "|",
-      "link", "image", "code", "table", "|",
+      "link", {
+        name: "insertMedia",
+        action: function() { openMediaModal(); },
+        className: "fa fa-picture-o",
+        title: "Insert Media from Library"
+      }, "code", "table", "|",
       "preview", "fullscreen"
     ]
   });
@@ -126,5 +150,81 @@ document.addEventListener('DOMContentLoaded', function () {
 
   editor.codemirror.on('change', updateCount);
   updateCount();
+
+  // Media Modal handling
+  const modal = document.getElementById('mediaModal');
+  const openBtn = document.getElementById('btnInsertMedia');
+  const closeBtn = document.getElementById('closeMediaModalBtn');
+  const cancelBtn = document.getElementById('cancelMediaModalBtn');
+  const listContainer = document.getElementById('mediaModalList');
+
+  function openMediaModal() {
+    if (!modal) return;
+    if (typeof modal.showModal === 'function') {
+      modal.showModal();
+    } else {
+      modal.style.display = 'block';
+    }
+    loadMedia();
+  }
+
+  function closeMediaModal() {
+    if (!modal) return;
+    if (typeof modal.close === 'function') {
+      modal.close();
+    } else {
+      modal.style.display = 'none';
+    }
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openMediaModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeMediaModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeMediaModal);
+
+  function loadMedia() {
+    listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">Loading media files...</div>';
+    fetch('/admin/media/json')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.items || data.items.length === 0) {
+          listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">No media items found. Upload images in the Media Library.</div>';
+          return;
+        }
+
+        listContainer.innerHTML = '';
+        data.items.forEach(item => {
+          const card = document.createElement('div');
+          card.style.cssText = 'border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; text-align: center; background: var(--paper); display: flex; flex-direction: column; justify-content: space-between;';
+          
+          let previewHtml = '';
+          if (item.is_image) {
+            previewHtml = `<div style="height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;"><img src="${item.url}" alt="${item.name}" style="max-height: 80px; max-width: 100%; object-fit: cover; border-radius: 4px;"></div>`;
+          } else {
+            previewHtml = `<div style="height: 80px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; font-weight: bold; color: var(--text-muted);">📄</div>`;
+          }
+
+          card.innerHTML = `
+            ${previewHtml}
+            <div style="font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 0.5rem;" title="${item.name}">${item.name}</div>
+            <button type="button" class="button button-sm button-primary button-block" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Insert</button>
+          `;
+
+          const insertBtn = card.querySelector('button');
+          insertBtn.addEventListener('click', () => {
+            const snippet = item.is_image ? `![${item.name}](${item.url})` : `[${item.name}](${item.url})`;
+            editor.codemirror.replaceSelection(snippet);
+            closeMediaModal();
+            if (window.habrinToast) {
+              window.habrinToast('Media inserted into editor', 'success');
+            }
+          });
+
+          listContainer.appendChild(card);
+        });
+      })
+      .catch(err => {
+        listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--danger); padding: 1.5rem;">Failed to load media items.</div>';
+      });
+  }
 });
 </script>

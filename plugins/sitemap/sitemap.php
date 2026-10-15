@@ -79,28 +79,39 @@ class SitemapHandler
 
     public static function chunk(string $page): void
     {
-        $page = max(1, (int) $page);
+        $pageNum = max(1, (int) $page);
         $settings = PluginSettings::getEffective('sitemap');
-        $per = max(100, min(50000, (int) ($settings['urls_per_sitemap'] ?? 10000)));
+        // Cap at 1000 to match PostsModel page chunk capacity
+        $per = max(50, min(1000, (int) ($settings['urls_per_sitemap'] ?? 1000)));
         $includeHome = (bool) ($settings['include_homepage'] ?? true);
         $priorityHome = $settings['priority_homepage'] ?? '1.0';
         $priorityPosts = $settings['priority_posts'] ?? '0.8';
 
         $model = new PostsModel();
-        $result = $model->publishedPaginated($page, $per);
+        $total = $model->publishedCount();
+        $maxChunks = max(1, (int) ceil($total / $per));
+
+        if ($pageNum > $maxChunks) {
+            http_response_code(404);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Sitemap chunk not found';
+            return;
+        }
+
+        $result = $model->publishedPaginated($pageNum, $per);
 
         header('Content-Type: application/xml; charset=utf-8');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
-        if ($includeHome && $page === 1) {
+        if ($includeHome && $pageNum === 1) {
             echo '  <url>' . "\n";
             echo '    <loc>' . self::xmlEscape(self::baseUrl() . '/') . '</loc>' . "\n";
-            echo '    <priority>' . htmlspecialchars($priorityHome) . '</priority>' . "\n";
+            echo '    <priority>' . htmlspecialchars((string) $priorityHome, ENT_QUOTES, 'UTF-8') . '</priority>' . "\n";
             echo '  </url>' . "\n";
         }
 
-        if ($page === 1) {
+        if ($pageNum === 1) {
             try {
                 $pagesModel = new \Models\PagesModel();
                 foreach ($pagesModel->getAll() as $pageSlug => $pageData) {
@@ -121,7 +132,7 @@ class SitemapHandler
             echo '  <url>' . "\n";
             echo '    <loc>' . self::xmlEscape($url) . '</loc>' . "\n";
             echo '    <lastmod>' . $lastmod . '</lastmod>' . "\n";
-            echo '    <priority>' . htmlspecialchars($priorityPosts) . '</priority>' . "\n";
+            echo '    <priority>' . htmlspecialchars((string) $priorityPosts, ENT_QUOTES, 'UTF-8') . '</priority>' . "\n";
             echo '  </url>' . "\n";
         }
 
@@ -132,7 +143,10 @@ class SitemapHandler
     {
         $base = rtrim(App::$config['base_url'] ?? '', '/');
         if (empty($base)) {
-            $base = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443');
+            $scheme = $isHttps ? 'https' : 'http';
+            $host = preg_replace('/[^a-zA-Z0-9.:-]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+            $base = $scheme . '://' . $host;
         }
         return $base;
     }

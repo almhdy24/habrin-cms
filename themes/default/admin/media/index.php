@@ -20,7 +20,8 @@
     <form method="POST" action="/admin/media/upload" enctype="multipart/form-data" class="flex flex-wrap items-center gap-2 mt-3">
       <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
       <div style="flex: 1; min-width: 240px;">
-        <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg" required class="input" style="padding: 0.45rem;">
+        <label for="mediaFileInput" class="label" style="margin-bottom: 0.25rem;">Select file to upload</label>
+        <input type="file" id="mediaFileInput" name="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg" required class="input" style="padding: 0.45rem;">
       </div>
       <button type="submit" class="button button-primary">
         <i data-lucide="upload"></i> Upload Asset

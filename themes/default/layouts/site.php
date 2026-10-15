@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/home.css') ?>">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="<?= $this->asset('assets/lucide.min.js') ?>"></script>
 
   <?php $this->hook('head') ?>
 </head>
@@ -31,10 +31,15 @@
 
 <script>
   // Initialize Lucide icons
-  lucide.createIcons();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 
   // Mobile menu toggle – pure JavaScript, no dependencies
   document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
     const burger = document.querySelector('.navbar-burger');
     const nav = document.querySelector('.header-nav');
 

@@ -27,15 +27,27 @@ final class PluginLoader
                 $manifestFile = $fullPath . '/plugin.json';
                 if (is_file($manifestFile)) {
                     $manifest = json_decode((string) file_get_contents($manifestFile), true);
-                    if (is_array($manifest) && isset($manifest['name'], $manifest['entry']) && is_string($manifest['entry'])) {
-                        $entry = trim($manifest['entry']);
+                    if (is_array($manifest)) {
+                        $pluginName = strtolower(trim((string) ($manifest['slug'] ?? $manifest['name'] ?? $file)));
+                        $entry = trim((string) ($manifest['entry'] ?? $manifest['bootstrap'] ?? ''));
+                        if ($entry === '') {
+                            foreach (['plugin.php', $file . '.php', 'index.php'] as $cand) {
+                                if (is_file($fullPath . DIRECTORY_SEPARATOR . $cand)) {
+                                    $entry = $cand;
+                                    break;
+                                }
+                            }
+                        }
+
                         // Reject directory traversal sequences
-                        if (!str_contains($entry, '..') && !str_starts_with($entry, '/') && !str_starts_with($entry, '\\')) {
+                        if ($entry !== '' && !str_contains($entry, '..') && !str_starts_with($entry, '/') && !str_starts_with($entry, '\\')) {
                             $entryFile = $fullPath . DIRECTORY_SEPARATOR . $entry;
                             $realEntry = realpath($entryFile);
                             $realDir = realpath($fullPath);
                             if ($realEntry !== false && $realDir !== false && str_starts_with($realEntry, $realDir . DIRECTORY_SEPARATOR) && is_file($realEntry)) {
-                                $plugins[$manifest['name']] = [
+                                $manifest['name'] = $pluginName;
+                                $manifest['entry'] = $entry;
+                                $plugins[$pluginName] = [
                                     'file' => $realEntry,
                                     'manifest' => $manifest,
                                 ];

@@ -36,10 +36,10 @@ PluginSettings::register('analytics', [
     ],
 ]);
 
-// Hook into body_end
-Hooks::add_action('body_end', function () {
+// Hook into body_end and admin_body_end
+$analyticsRenderer = function () {
     $settings = PluginSettings::getEffective('analytics');
-    $trackingId = $settings['tracking_id'] ?? '';
+    $trackingId = trim((string) ($settings['tracking_id'] ?? ''));
     $enabled = (bool) ($settings['enable_analytics'] ?? true);
     $adminTracking = (bool) ($settings['enable_admin_tracking'] ?? false);
 
@@ -51,7 +51,6 @@ Hooks::add_action('body_end', function () {
         return;
     }
 
-    $trackingId = trim((string) ($settings['tracking_id'] ?? ''));
     if (!preg_match('/^[A-Za-z0-9-]+$/', $trackingId)) {
         return;
     }
@@ -68,4 +67,7 @@ Hooks::add_action('body_end', function () {
   gtag('config', '{$safeTrackingId}');
 </script>
 HTML;
-});
+};
+
+Hooks::add_action('body_end', $analyticsRenderer);
+Hooks::add_action('admin_body_end', $analyticsRenderer);

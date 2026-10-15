@@ -1,13 +1,14 @@
 {
-    "name": "Markdown",
+    "name": "markdown",
     "slug": "markdown",
     "version": "1.0.0",
-    "description": "Convert Markdown content to HTML using league/commonmark",
-    "author": "Elmahdi",
+    "description": "Convert Markdown and Front Matter content to HTML using league/commonmark",
+    "author": "Habrin Team",
     "license": "MIT",
     "requires": {
         "php": ">=8.1",
         "habrin": ">=1.0.0"
     },
+    "entry": "plugin.php",
     "bootstrap": "plugin.php"
 }

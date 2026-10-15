@@ -32,6 +32,17 @@ final class AdminMediaController extends Controller
         ]);
     }
 
+    public function json(): void
+    {
+        $items = $this->media->getAll();
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'success' => true,
+            'items' => $items,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
     public function upload(): void
     {
         if (!$this->isPost()) {

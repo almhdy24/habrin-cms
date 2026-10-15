@@ -48,23 +48,42 @@ PluginSettings::register('seo', [
 ]);
 
 // Hook into head
-Hooks::add_action('head', function () {
+Hooks::add_action('head', function (mixed $maybePost = null) {
     $settings = View::getShared('settings') ?? [];
     $pluginSettings = PluginSettings::getEffective('seo');
 
-    $title = $pluginSettings['default_title'] ?? $settings['site_title'] ?? 'Habrin CMS';
-    $desc = $pluginSettings['default_description'] ?? $settings['site_description'] ?? '';
+    $post = is_array($maybePost) ? $maybePost : (View::getShared('current_post') ?? null);
+    $siteTitle = $settings['site_title'] ?? 'Habrin CMS';
+    $defaultTitle = !empty($pluginSettings['default_title']) ? $pluginSettings['default_title'] : $siteTitle;
+    $title = $post ? ($post['title'] ?? $defaultTitle) : $defaultTitle;
+
+    $siteDesc = $settings['site_description'] ?? '';
+    $defaultDesc = !empty($pluginSettings['default_description']) ? $pluginSettings['default_description'] : $siteDesc;
+    if ($post) {
+        $plain = preg_replace('/\s+/', ' ', trim(strip_tags((string) ($post['content'] ?? ''))));
+        $desc = mb_substr($plain, 0, 160);
+        if ($desc === '') $desc = $defaultDesc;
+    } else {
+        $desc = $defaultDesc;
+    }
+
     $author = $pluginSettings['author'] ?? '';
     $enableOg = (bool) ($pluginSettings['enable_og_tags'] ?? true);
 
-    echo '<meta name="description" content="' . htmlspecialchars($desc) . '">' . "\n";
+    if (!empty($desc)) {
+        echo '<meta name="description" content="' . htmlspecialchars($desc, ENT_QUOTES, 'UTF-8') . '">' . "\n";
+    }
+    if (!empty($settings['site_keywords'])) {
+        echo '<meta name="keywords" content="' . htmlspecialchars($settings['site_keywords'], ENT_QUOTES, 'UTF-8') . '">' . "\n";
+    }
     if (!empty($author)) {
-        echo '<meta name="author" content="' . htmlspecialchars($author) . '">' . "\n";
+        echo '<meta name="author" content="' . htmlspecialchars($author, ENT_QUOTES, 'UTF-8') . '">' . "\n";
     }
 
     $baseUrl = rtrim(App::$config['base_url'] ?? '', '/');
     if (empty($baseUrl)) {
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443') ? 'https' : 'http';
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443');
+        $scheme = $isHttps ? 'https' : 'http';
         $host = preg_replace('/[^a-zA-Z0-9.:-]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
         $baseUrl = $scheme . '://' . $host;
     }
@@ -74,17 +93,12 @@ Hooks::add_action('head', function () {
     echo '<link rel="canonical" href="' . htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8') . '">' . "\n";
 
     if ($enableOg) {
-        echo '<meta property="og:title" content="' . htmlspecialchars($title) . '">' . "\n";
-        echo '<meta property="og:type" content="website">' . "\n";
-        echo '<meta property="og:url" content="' . htmlspecialchars($canonicalUrl) . '">' . "\n";
-
-        $post = View::getShared('current_post') ?? null;
-        if ($post) {
-            $excerpt = strip_tags($post['content'] ?? '');
-            $excerpt = mb_substr($excerpt, 0, 200);
-            echo '<meta property="og:description" content="' . htmlspecialchars($excerpt) . '">' . "\n";
-        } elseif (!empty($desc)) {
-            echo '<meta property="og:description" content="' . htmlspecialchars($desc) . '">' . "\n";
+        $ogType = $post ? 'article' : 'website';
+        echo '<meta property="og:title" content="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '">' . "\n";
+        echo '<meta property="og:type" content="' . $ogType . '">' . "\n";
+        echo '<meta property="og:url" content="' . htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8') . '">' . "\n";
+        if (!empty($desc)) {
+            echo '<meta property="og:description" content="' . htmlspecialchars($desc, ENT_QUOTES, 'UTF-8') . '">' . "\n";
         }
     }
 });

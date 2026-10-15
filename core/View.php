@@ -71,7 +71,7 @@ final class View
                     return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(Session::csrfToken(), ENT_QUOTES, 'UTF-8') . '">';
                 });
                 $engine->registerFunction('is_admin', function () {
-                    return defined('IS_ADMIN') && IS_ADMIN;
+                    return \Core\Auth::check();
                 });
                 // Return CSP nonce value for template use
                 $engine->registerFunction('nonce', function () {

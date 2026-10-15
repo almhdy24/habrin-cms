@@ -51,7 +51,7 @@ final class App
 
         // Safe fallback if markdown or another content renderer is not enabled
         if (!Hooks::has_filter('post_content')) {
-            Hooks::add_filter('post_content', static function (string $content): string {
+            Hooks::add_filter('post_content', static function (string $content, array $post = []): string {
                 return nl2br(htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
             }, 100);
         }

@@ -1,7 +1,13 @@
 <?php
 $basePath = $basePath ?? parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-$pageUrl = fn($p) => $this->route($basePath . '?page=' . $p);
+$queryParams = $_GET ?? [];
+$pageUrl = function($p) use ($basePath, $queryParams) {
+    $params = $queryParams;
+    $params['page'] = $p;
+    return $this->route($basePath . '?' . http_build_query($params));
+};
 
+if (!function_exists('renderPagination')) {
 function renderPagination($current, $total, $pageUrl) {
     $range = 2;
     $pages = [1];
@@ -35,6 +41,7 @@ function renderPagination($current, $total, $pageUrl) {
             echo '<a href="' . $pageUrl($p) . '" class="pagination-link">' . $p . '</a>';
         }
     }
+}
 }
 ?>
 

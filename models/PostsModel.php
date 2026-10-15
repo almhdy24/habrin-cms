@@ -57,9 +57,16 @@ class PostsModel
     private function loadMetadata(): void
     {
         if (file_exists($this->metadataFile)) {
-            $data = json_decode(file_get_contents($this->metadataFile), true);
+            $data = json_decode((string) file_get_contents($this->metadataFile), true);
             if (is_array($data)) {
                 $this->metadata = $data;
+                // Self-healing: if counts are zero but shard files exist and have posts, sync
+                if (($this->metadata['total'] ?? 0) === 0 && file_exists($this->getShardFile(0))) {
+                    $shard0 = json_decode((string) file_get_contents($this->getShardFile(0)), true);
+                    if (!empty($shard0) && is_array($shard0)) {
+                        $this->syncMetadataAndIndexes();
+                    }
+                }
                 return;
             }
         }
@@ -74,6 +81,9 @@ class PostsModel
             'page_chunk_size' => $this->pageChunkSize,
             'slug_buckets' => $this->slugBuckets,
         ];
+        if (file_exists($this->getShardFile(0))) {
+            $this->syncMetadataAndIndexes();
+        }
     }
 
     private function saveMetadata(): void
@@ -545,6 +555,7 @@ class PostsModel
     public function savePost(int|string $id, array $post): bool
     {
         $id = (int) $id;
+        $this->loadMetadata();
         $shard = $this->getShardForId($id);
         $shardData = $this->readShard($shard);
         $oldPost = $shardData[(string) $id] ?? null;
@@ -706,7 +717,76 @@ class PostsModel
 
     public function finalizeIndex(): void
     {
-        $this->rebuildPageIndex();
+        $this->syncMetadataAndIndexes();
+    }
+
+    /**
+     * Scan shards, recalculate metadata counts, and rebuild page and slug indexes
+     */
+    public function syncMetadataAndIndexes(): void
+    {
+        $this->ensureDirectories();
+        $total = 0;
+        $published = 0;
+        $drafts = 0;
+        $trashed = 0;
+        $maxId = 0;
+        $maxShard = 0;
+        $entries = [];
+
+        $shardFiles = glob($this->postDir . '/shard-*.json') ?: [];
+        foreach ($shardFiles as $file) {
+            $base = basename($file, '.json');
+            if (preg_match('/^shard-(\d+)$/', $base, $m)) {
+                $s = (int) $m[1];
+                if ($s > $maxShard) $maxShard = $s;
+                $shardData = json_decode((string) file_get_contents($file), true) ?: [];
+                foreach ($shardData as $id => $post) {
+                    $idInt = (int) $id;
+                    if ($idInt > $maxId) $maxId = $idInt;
+                    $total++;
+                    if ($this->isTrashed($post)) {
+                        $trashed++;
+                    } elseif ($this->isDraft($post)) {
+                        $drafts++;
+                    } else {
+                        $published++;
+                        $entries[] = [$idInt, $s, (int) ($post['created_at'] ?? 0)];
+                    }
+                }
+            }
+        }
+
+        $this->metadata['total'] = $total;
+        $this->metadata['published'] = $published;
+        $this->metadata['drafts'] = $drafts;
+        $this->metadata['trashed'] = $trashed;
+        $this->metadata['shards'] = max(1, $maxShard + 1);
+        $this->metadata['last_id'] = max($maxId, (int) ($this->metadata['last_id'] ?? 0));
+        $this->saveMetadata();
+
+        // Sort entries by created_at DESC
+        usort($entries, fn($a, $b) => ($b[2] ?? 0) <=> ($a[2] ?? 0));
+        $chunks = array_chunk($entries, $this->pageChunkSize);
+        if (empty($chunks)) {
+            $i = 0;
+            while (file_exists($this->getPageIndexFile($i))) {
+                unlink($this->getPageIndexFile($i));
+                $i++;
+            }
+        } else {
+            foreach ($chunks as $idx => $chunk) {
+                $this->writePageChunk($idx, $chunk);
+            }
+            $i = count($chunks);
+            while (file_exists($this->getPageIndexFile($i))) {
+                unlink($this->getPageIndexFile($i));
+                $i++;
+            }
+        }
+
+        // Rebuild slug index as well
+        $this->rebuildSlugIndex();
     }
 
     /**
@@ -719,7 +799,7 @@ class PostsModel
             $shardData = $this->readShard($s);
             foreach ($shardData as $id => $post) {
                 if ($this->isPublished($post)) {
-                    $created = $post['created_at'] ?? 0;
+                    $created = (int) ($post['created_at'] ?? 0);
                     $entries[] = ['id' => (int) $id, 'shard' => $s, 'created' => $created];
                 }
             }
@@ -728,7 +808,7 @@ class PostsModel
 
         $chunks = array_chunk($entries, $this->pageChunkSize);
         foreach ($chunks as $idx => $chunk) {
-            $data = array_map(fn($e) => [$e['id'], $e['shard']], $chunk);
+            $data = array_map(fn($e) => [$e['id'], $e['shard'], (int) ($e['created'] ?? 0)], $chunk);
             $this->writePageChunk($idx, $data);
         }
 

@@ -1,44 +1,66 @@
-<?php $this->layout('layouts/site', ['title' => ($settings['site_title'] ?? 'Dark')]) ?>
+<?php $this->layout('layouts/site', ['title' => ($settings['site_title'] ?? 'Dark') . ' - Feed']) ?>
 
-<section class="posts">
+<section class="tech-feed">
   <?php if (empty($posts)): ?>
-    <div class="no-posts">
-      <h2>No posts yet</h2>
-      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
-        <p><a href="/admin/add">Create your first post</a></p>
+    <div class="empty-state">
+      <div class="terminal-icon">&gt;_</div>
+      <h2>No articles found</h2>
+      <p class="text-muted">Repository contains no published logs or articles yet.</p>
+      <?php if ($this->is_admin()): ?>
+        <p class="mt-3"><a href="/admin/add" class="tech-btn"><i data-lucide="plus"></i> New Entry</a></p>
       <?php endif; ?>
     </div>
   <?php else: ?>
-    <?php foreach ($posts as $postId => $post): ?>
-      <article class="post-card">
-        <div class="post-meta">
-          <time datetime="<?= date('c', (int) $post['created_at']) ?>"><?= date('M j, Y', (int) $post['created_at']) ?></time>
-          <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
-            <a href="/admin/edit/<?= (int) $postId ?>" class="edit-link">Edit</a>
-          <?php endif; ?>
-        </div>
-        <h2><a href="/post/<?= $this->e($post['slug']) ?>"><?= $this->e($post['title']) ?></a></h2>
-        <div class="post-excerpt">
-          <?php
-          $rendered = $this->filter('post_content', $post['content'], $post);
-          $plain = strip_tags($rendered);
-          echo htmlspecialchars(mb_substr($plain, 0, 160)) . '…';
-          ?>
-        </div>
-        <a href="/post/<?= $this->e($post['slug']) ?>" class="read-more">Read more →</a>
-      </article>
-    <?php endforeach; ?>
+    <div class="cards-grid">
+      <?php foreach ($posts as $postId => $post): ?>
+        <?php
+        $wordCount = str_word_count(strip_tags((string) $post['content']));
+        $readTime = max(1, (int) ceil($wordCount / 200));
+        ?>
+        <article class="tech-card">
+          <div class="card-meta">
+            <span class="mono-date">[<?= date('Y-m-d', (int) $post['created_at']) ?>]</span>
+            <span class="badge-read"><?= $readTime ?>m</span>
+            <?php if ($this->is_admin()): ?>
+              <a href="/admin/edit/<?= (int) $postId ?>" class="card-edit">edit</a>
+            <?php endif; ?>
+          </div>
+
+          <h2 class="card-title">
+            <a href="/post/<?= $this->e($post['slug']) ?>"><?= $this->e($post['title']) ?></a>
+          </h2>
+
+          <div class="card-summary">
+            <?php
+            $rendered = $this->filter('post_content', $post['content'], $post);
+            $plain = trim(strip_tags($rendered));
+            echo htmlspecialchars(mb_substr($plain, 0, 180)) . (mb_strlen($plain) > 180 ? '…' : '');
+            ?>
+          </div>
+
+          <div class="card-action">
+            <a href="/post/<?= $this->e($post['slug']) ?>" class="tech-link">read_post() &rarr;</a>
+          </div>
+        </article>
+      <?php endforeach; ?>
+    </div>
 
     <?php if ($totalPages > 1): ?>
-      <div class="pagination">
+      <nav class="pagination-wrap" aria-label="Pagination">
         <?php if ($currentPage > 1): ?>
-          <a href="?page=<?= $currentPage - 1 ?>">← Previous</a>
+          <a href="?page=<?= $currentPage - 1 ?>" class="page-link">&lt; prev_page</a>
+        <?php else: ?>
+          <span class="page-disabled">&lt; prev_page</span>
         <?php endif; ?>
-        <span><?= $currentPage ?> / <?= $totalPages ?></span>
+
+        <span class="page-status">[ <?= $currentPage ?> / <?= $totalPages ?> ]</span>
+
         <?php if ($currentPage < $totalPages): ?>
-          <a href="?page=<?= $currentPage + 1 ?>">Next →</a>
+          <a href="?page=<?= $currentPage + 1 ?>" class="page-link">next_page &gt;</a>
+        <?php else: ?>
+          <span class="page-disabled">next_page &gt;</span>
         <?php endif; ?>
-      </div>
+      </nav>
     <?php endif; ?>
   <?php endif; ?>
 </section>

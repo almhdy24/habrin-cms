@@ -16,13 +16,14 @@ final class Session
 
         if (!headers_sent()) {
             session_name('habrin_session');
-            session_set_cookie_params([
-                'lifetime' => 0,
-                'path' => '/',
-                'httponly' => true,
-                'secure' => isset($_SERVER['HTTPS']) || (($_SERVER['SERVER_PORT'] ?? '') === '443'),
-                'samesite' => 'Lax',
-            ]);
+                $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443');
+                session_set_cookie_params([
+                    'lifetime' => 0,
+                    'path' => '/',
+                    'httponly' => true,
+                    'secure' => $isHttps,
+                    'samesite' => 'Lax',
+                ]);
         }
 
         if (session_status() !== PHP_SESSION_ACTIVE) {

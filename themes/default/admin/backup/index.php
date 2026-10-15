@@ -28,7 +28,8 @@
     <form method="POST" action="/admin/backup/restore" enctype="multipart/form-data" class="flex flex-wrap items-center gap-2" onsubmit="return confirm('Restore this backup? Current content will be automatically backed up first, then replaced.')">
       <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
       <div style="flex: 1; min-width: 240px;">
-        <input type="file" name="backup_file" accept=".zip,.json" required class="input" style="padding: 0.45rem;">
+        <label for="backupFileInput" class="label" style="margin-bottom: 0.25rem;">Select backup archive</label>
+        <input type="file" id="backupFileInput" name="backup_file" accept=".zip,.json" required class="input" style="padding: 0.45rem;">
       </div>
       <button type="submit" class="button button-danger">
         <i data-lucide="rotate-ccw"></i> Restore Archive

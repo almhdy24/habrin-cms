@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="<?= $this->asset('themes/default/assets/img/favicon.svg') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= $this->asset('themes/default/assets/css/admin.css') ?>">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+  <script src="<?= $this->asset('assets/lucide.min.js') ?>"></script>
   <?php $this->hook('admin_head') ?>
 </head>
 <body>

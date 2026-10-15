@@ -19,10 +19,12 @@
     <span>Latest Posts</span>
   </div>
   <?php if (!empty($posts)): ?>
-    <p class="section-subtitle">
-      Showing <?= number_format($start) ?>–<?= number_format($end) ?>
-      of <?= number_format($totalPosts) ?> post<?= $totalPosts != 1 ? 's' : '' ?>
-    </p>
+    <?php if (isset($start, $end, $totalPosts)): ?>
+      <p class="section-subtitle">
+        Showing <?= number_format($start) ?>–<?= number_format($end) ?>
+        of <?= number_format($totalPosts) ?> post<?= $totalPosts != 1 ? 's' : '' ?>
+      </p>
+    <?php endif; ?>
   <?php else: ?>
     <p class="section-subtitle">No posts yet.</p>
   <?php endif; ?>
@@ -32,7 +34,7 @@
       <i data-lucide="file-text" style="width: 48px; height: 48px;"></i>
       <h3>No posts yet</h3>
       <p class="text-muted">The first post will appear here.</p>
-      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+      <?php if ($this->is_admin()): ?>
         <a href="/admin/add" class="button button-primary mt-3">
           <i data-lucide="plus-circle"></i> Create First Post
         </a>
@@ -48,7 +50,7 @@
               <i data-lucide="calendar"></i>
               <?= date('F j, Y', (int) $post['created_at']) ?>
             </span>
-            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+            <?php if ($this->is_admin()): ?>
               <a href="/admin/edit/<?= (int) $postId ?>" class="button button-sm button-light" title="Edit">
                 <i data-lucide="edit" style="width:14px;height:14px;"></i>
               </a>

@@ -726,3 +726,49 @@ p { margin-bottom: 1rem; }
   html { scroll-behavior: auto; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ============================================================
+   Language Selector & RTL Rules
+   ============================================================ */
+.lang-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: var(--bg-soft);
+  padding: 0.18rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.lang-pill {
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  line-height: 1.2;
+}
+.lang-pill:hover {
+  color: var(--ink);
+  background: rgba(49, 92, 82, 0.08);
+}
+.lang-pill.is-active {
+  background: var(--primary);
+  color: var(--white);
+}
+
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Cairo", "Amiri", "Tahoma", sans-serif;
+}
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+  text-align: right;
+}
+[dir="rtl"] .header-nav {
+  margin-right: auto;
+  margin-left: 0;
+}
+

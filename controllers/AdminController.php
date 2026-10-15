@@ -165,14 +165,49 @@ final class AdminController extends Controller
     {
         $this->posts->clearCache();
 
+        $pagesModel = $this->model(\Models\PagesModel::class);
+        $mediaModel = $this->model(\Models\MediaModel::class);
+        $backupModel = $this->model(\Models\BackupModel::class);
+
+        $pagesCount = count($pagesModel->getAll());
+        $mediaCount = count($mediaModel->all());
+        $backupsCount = count($backupModel->list());
+        $drafts = $this->posts->drafts();
+        $recentDrafts = array_slice($drafts, 0, 5, true);
+
+        // Recent Audit Log
+        $recentAudit = [];
+        $auditPath = App::path('logs', 'audit.log');
+        if (file_exists($auditPath)) {
+            $lines = file($auditPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if (is_array($lines)) {
+                $recentLines = array_slice(array_reverse($lines), 0, 6);
+                foreach ($recentLines as $line) {
+                    $json = json_decode($line, true);
+                    if (is_array($json)) {
+                        $recentAudit[] = $json;
+                    }
+                }
+            }
+        }
+
+        // System Health
+        $systemHealthy = is_writable(App::path('content')) && is_writable(App::path('logs'));
+
         $this->view('admin/dashboard', [
-            'posts'      => $this->posts->all(),
-            'postsCount' => $this->posts->publishedCount(),
-            'draftCount' => $this->posts->draftsCount(),
-            'trashCount' => $this->posts->trashedCount(),
-            'settings'   => $this->settings->all(),
-            'flash'      => $this->getFlash(),
-            'csrf_token' => Session::csrfToken(),
+            'posts'         => $this->posts->all(),
+            'postsCount'    => $this->posts->publishedCount(),
+            'draftCount'    => $this->posts->draftsCount(),
+            'trashCount'    => $this->posts->trashedCount(),
+            'pagesCount'    => $pagesCount,
+            'mediaCount'    => $mediaCount,
+            'backupsCount'  => $backupsCount,
+            'recentDrafts'  => $recentDrafts,
+            'recentAudit'   => $recentAudit,
+            'systemHealthy' => $systemHealthy,
+            'settings'      => $this->settings->all(),
+            'flash'         => $this->getFlash(),
+            'csrf_token'    => Session::csrfToken(),
         ]);
     }
 
@@ -510,13 +545,107 @@ final class AdminController extends Controller
         $this->redirect('/admin/settings');
     }
 
+    public function setLang(string $code): void
+    {
+        if (\Core\I18n::isSupported($code)) {
+            \Core\I18n::setLocale($code);
+            $this->flash('success', __('common.saved'));
+        }
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/admin';
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        $refHost = parse_url($referer, PHP_URL_HOST);
+        if ($refHost && $refHost !== $host) {
+            $referer = '/admin';
+        }
+        $this->redirect($referer);
+    }
+
+    public function bulk(): void
+    {
+        if (!$this->isPost()) {
+            $this->redirect('/admin');
+        }
+
+        $this->validateCsrf();
+
+        $action = (string) $this->input('bulk_action', '');
+        $postIds = (array) $this->input('post_ids', []);
+
+        if (empty($postIds) || !in_array($action, ['publish', 'draft', 'trash'], true)) {
+            $this->flash('error', __('validation.required', ['field' => 'bulk_action']));
+            $this->redirect('/admin');
+        }
+
+        $count = 0;
+        foreach ($postIds as $id) {
+            $id = (int) $id;
+            $post = $this->posts->find($id);
+            if (!$post) {
+                continue;
+            }
+
+            if ($action === 'publish') {
+                $post['status'] = 'published';
+                $post['updated_at'] = time();
+                $this->posts->savePost($id, $post);
+                $count++;
+            } elseif ($action === 'draft') {
+                $post['status'] = 'draft';
+                $post['updated_at'] = time();
+                $this->posts->savePost($id, $post);
+                $count++;
+            } elseif ($action === 'trash') {
+                $post['deleted_at'] = time();
+                $this->posts->savePost($id, $post);
+                $count++;
+            }
+        }
+
+        Audit::log(Session::get('user') ?? 'system', 'posts.bulk_' . $action, ['count' => $count]);
+        $this->flash('success', __('posts.bulk_success', ['count' => (string) $count]));
+        $this->redirect('/admin');
+    }
+
     public function system(): void
     {
+        // Directory sizes
+        $contentSize = $this->getDirSize(App::path('content'));
+        $uploadsSize = $this->getDirSize(App::path('assets', 'uploads'));
+        $backupsSize = $this->getDirSize(App::path('backups'));
+
+        // Extension checks
+        $requiredExtensions = [
+            'json'     => extension_loaded('json'),
+            'mbstring' => extension_loaded('mbstring'),
+            'fileinfo' => extension_loaded('fileinfo'),
+        ];
+
+        $optionalExtensions = [
+            'gd'       => extension_loaded('gd'),
+            'curl'     => extension_loaded('curl'),
+            'zip'      => extension_loaded('zip'),
+            'zlib'     => extension_loaded('zlib'),
+            'opcache'  => extension_loaded('Zend OPcache'),
+        ];
+
+        // Security / Config warnings
+        $warnings = [];
+        if (ini_get('display_errors') === '1' && !(App::$config['debug'] ?? false)) {
+            $warnings[] = 'display_errors is enabled in php.ini. It is recommended to disable it in production.';
+        }
+        if (!is_writable(App::path('content'))) {
+            $warnings[] = 'content/ directory is not writable.';
+        }
+        if (!is_writable(App::path('logs'))) {
+            $warnings[] = 'logs/ directory is not writable.';
+        }
+
         $system = [
             'cms' => [
                 'name'    => 'Habrin CMS',
                 'version' => App::CORE_VERSION,
                 'storage' => 'Flat-file JSON (sharded)',
+                'theme'   => App::$config['theme'] ?? 'default',
             ],
             'env' => [
                 'php_version' => PHP_VERSION,
@@ -524,13 +653,28 @@ final class AdminController extends Controller
                 'os'          => PHP_OS_FAMILY,
                 'timezone'    => date_default_timezone_get(),
                 'memory'      => ini_get('memory_limit'),
+                'upload_max'  => ini_get('upload_max_filesize'),
+                'post_max'    => ini_get('post_max_size'),
+                'max_execution_time' => ini_get('max_execution_time'),
             ],
             'paths' => [
                 'content_writable' => is_writable(App::path('content')),
                 'logs_writable'    => is_writable(App::path('logs')),
+                'backups_writable' => is_writable(App::path('backups')),
+                'uploads_writable' => is_writable(App::path('assets', 'uploads')),
                 'root_writable'    => is_writable(BASE_PATH),
             ],
-            'plugins' => App::$plugins
+            'storage' => [
+                'content_size' => $this->formatBytes($contentSize),
+                'uploads_size' => $this->formatBytes($uploadsSize),
+                'backups_size' => $this->formatBytes($backupsSize),
+            ],
+            'extensions' => [
+                'required' => $requiredExtensions,
+                'optional' => $optionalExtensions,
+            ],
+            'warnings' => $warnings,
+            'plugins'  => App::$plugins
         ];
 
         $this->view('admin/system', [
@@ -543,14 +687,38 @@ final class AdminController extends Controller
      * Helpers
      * ===================================================== */
 
+    private function getDirSize(string $path): int
+    {
+        if (!is_dir($path)) return 0;
+        $size = 0;
+        try {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS));
+            foreach ($files as $file) {
+                $size += $file->getSize();
+            }
+        } catch (\Throwable $e) {}
+        return $size;
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        }
+        if ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        }
+        return $bytes . ' B';
+    }
+
     private function guard(): void
     {
-        // Allow unauthenticated access only to login and installer
+        // Allow unauthenticated access only to login, logout, and language switch
         $uri = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/', '/');
         $segments = $uri === '' ? [] : explode('/', $uri);
         $action = $segments[1] ?? 'index';
 
-        if (!in_array($action, ['login', 'logout'], true)) {
+        if (!in_array($action, ['login', 'logout', 'lang'], true)) {
             Auth::requireAdmin();
         }
     }

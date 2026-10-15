@@ -16,13 +16,19 @@
     </button>
 
     <nav class="site-nav">
-      <a href="/">Home</a>
+      <a href="/"><?= __('nav.home') ?></a>
       <?php foreach ($menuItems ?? [] as $item): ?>
         <a href="<?= $this->e($item['url']) ?>"><?= $this->e($item['label']) ?></a>
       <?php endforeach; ?>
       <?php if ($this->is_admin()): ?>
-        <a href="/admin/dashboard" class="admin-link"><i data-lucide="layout-dashboard"></i> Console</a>
+        <a href="/admin/dashboard" class="admin-link"><i data-lucide="layout-dashboard"></i> <?= __('nav.dashboard') ?></a>
       <?php endif; ?>
+      <span class="lang-selector" style="display: inline-flex; gap: 0.2rem; margin-left: 0.5rem;">
+        <a href="/admin/lang/en" class="lang-pill <?= current_lang() === 'en' ? 'is-active' : '' ?>">EN</a>
+        <a href="/admin/lang/ar" class="lang-pill <?= current_lang() === 'ar' ? 'is-active' : '' ?>">العربية</a>
+        <a href="/admin/lang/fr" class="lang-pill <?= current_lang() === 'fr' ? 'is-active' : '' ?>">FR</a>
+        <a href="/admin/lang/es" class="lang-pill <?= current_lang() === 'es' ? 'is-active' : '' ?>">ES</a>
+      </span>
     </nav>
   </div>
 </header>

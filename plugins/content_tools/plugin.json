@@ -1,0 +1,8 @@
+{
+    "name": "content_tools",
+    "entry": "content_tools.php",
+    "title": "Content Tools",
+    "description": "Smart writing and publishing assistant: reading-time estimates, word count analysis, pre-publication validation checks, and metadata warnings.",
+    "version": "1.0.0",
+    "author": "Habrin Core Team"
+}

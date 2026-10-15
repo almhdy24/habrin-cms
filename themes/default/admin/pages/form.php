@@ -1,64 +1,67 @@
-<?php $this->layout('layouts/admin', ['title' => $page ? 'Edit Page' : 'Create Page']) ?>
+<?php 
+$pageTitle = $page ? __('pages.edit_page') : __('pages.create_page');
+$this->layout('layouts/admin', ['title' => $pageTitle]);
+$pageId = $page ? (string) ($page['slug'] ?? 'edit') : 'new';
+?>
 
 <section>
   <div class="flex flex-wrap items-center justify-between gap-1 mb-4">
     <div>
-      <h2 class="mb-1"><i data-lucide="file-text"></i> <?= $page ? 'Edit Page' : 'Create Page' ?></h2>
-      <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Standalone static page with Markdown support.</p>
+      <h2 class="mb-1"><i data-lucide="file-text"></i> <?= $pageTitle ?></h2>
+      <p class="text-muted" style="margin: 0; font-size: 0.9rem;"><?= __('dashboard.tagline') ?></p>
     </div>
     <div class="flex gap-1">
       <a href="/admin/pages" class="button button-light">
-        <i data-lucide="arrow-left"></i> All Pages
+        <i data-lucide="arrow-left"></i> <?= __('pages.title') ?>
       </a>
       <?php if ($page && !empty($page['slug'])): ?>
         <a href="/<?= htmlspecialchars($page['slug'], ENT_QUOTES, 'UTF-8') ?>" class="button button-light" target="_blank" rel="noopener">
-          <i data-lucide="external-link"></i> View Page
+          <i data-lucide="external-link"></i> <?= __('pages.view_page') ?>
         </a>
       <?php endif; ?>
     </div>
   </div>
 
-  <form method="POST" class="card">
+  <form method="POST" class="card" id="pageForm">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
     <div class="field">
-      <label class="label" for="pageTitle"><i data-lucide="type"></i> Page Title <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(required)</span></label>
+      <label class="label" for="pageTitle"><i data-lucide="type"></i> <?= __('pages.page_title') ?> <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(<?= __('common.required') ?>)</span></label>
       <input
         id="pageTitle"
         class="input"
         type="text"
         name="title"
-        placeholder="e.g. About Our Publication"
+        placeholder="<?= __('pages.page_title') ?>"
         value="<?= htmlspecialchars((string) ($page['title'] ?? '')) ?>"
         required
         autofocus
         style="font-size: 1.15rem; font-weight: 600;"
       >
-      <p class="field-hint"><i data-lucide="info"></i> The public title displayed at the top of the standalone page.</p>
     </div>
 
     <?php if (!$page): ?>
       <div class="field">
-        <label class="label" for="pageSlug"><i data-lucide="link"></i> Page Slug (URL) <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(required)</span></label>
+        <label class="label" for="pageSlug"><i data-lucide="link"></i> <?= __('pages.page_slug') ?> <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(<?= __('common.required') ?>)</span></label>
         <input
           id="pageSlug"
           class="input"
           type="text"
           name="slug"
-          placeholder="e.g. about"
+          placeholder="about"
           required
           style="font-family: var(--font-mono); font-size: 0.9rem;"
         >
-        <p class="field-hint"><i data-lucide="info"></i> Unique path where this page will be served: <code>/<span id="pageSlugPreview">about</span></code></p>
+        <p class="field-hint"><i data-lucide="info"></i> URL: <code>/<span id="pageSlugPreview">about</span></code></p>
       </div>
     <?php endif; ?>
 
     <div class="field mb-3">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <label class="label mb-0" for="pageContent"><i data-lucide="align-left"></i> Content</label>
+        <label class="label mb-0" for="pageContent"><i data-lucide="align-left"></i> <?= __('pages.page_content') ?></label>
         <div class="text-muted" style="font-size: 0.82rem; display: flex; gap: 0.85rem;">
-          <span><i data-lucide="file-text" style="width:14px;height:14px;display:inline;"></i> <strong id="wordCount">0</strong> words</span>
-          <span>Markdown Supported</span>
+          <span><i data-lucide="file-text" style="width:14px;height:14px;display:inline;"></i> <strong id="wordCount">0</strong> <?= __('posts.words') ?></span>
+          <span>Markdown</span>
         </div>
       </div>
       <textarea
@@ -66,20 +69,20 @@
         class="textarea"
         name="content"
         rows="16"
-        placeholder="Write the page body in Markdown..."
+        placeholder="<?= __('pages.page_content') ?>..."
         required
       ><?= htmlspecialchars((string) ($page['content'] ?? '')) ?></textarea>
     </div>
 
     <div class="flex flex-wrap gap-1 mt-4">
       <button type="submit" class="button button-primary">
-        <i data-lucide="save"></i> Save Page
+        <i data-lucide="save"></i> <?= __('pages.save_page') ?>
       </button>
       <button type="button" class="button button-light" id="btnInsertMedia">
-        <i data-lucide="image"></i> Insert Media
+        <i data-lucide="image"></i> <?= __('posts.insert_media') ?>
       </button>
       <a href="/admin/pages" class="button button-light">
-        <i data-lucide="x"></i> Cancel
+        <i data-lucide="x"></i> <?= __('common.close') ?>
       </a>
     </div>
   </form>
@@ -89,18 +92,18 @@
 <dialog id="mediaModal" style="border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; max-width: 640px; width: 90vw; background: var(--white); box-shadow: var(--shadow-lg);">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
     <h3 style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-      <i data-lucide="image"></i> <span>Media Library</span>
+      <i data-lucide="image"></i> <span><?= __('media.title') ?></span>
     </h3>
     <button type="button" id="closeMediaModalBtn" class="button button-sm button-light" style="padding: 0.25rem 0.5rem;">✕</button>
   </div>
   <div id="mediaModalList" style="max-height: 360px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; padding: 0.25rem;">
-    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1rem;">Loading media...</div>
+    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1rem;"><?= __('common.loading') ?></div>
   </div>
   <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.75rem;">
     <a href="/admin/media" target="_blank" rel="noopener" class="button button-sm button-light">
-      <i data-lucide="upload"></i> Upload More
+      <i data-lucide="upload"></i> <?= __('media.upload_title') ?>
     </a>
-    <button type="button" id="cancelMediaModalBtn" class="button button-sm button-light">Close</button>
+    <button type="button" id="cancelMediaModalBtn" class="button button-sm button-light"><?= __('common.close') ?></button>
   </div>
 </dialog>
 
@@ -112,13 +115,21 @@
 document.addEventListener('DOMContentLoaded', function () {
   const textarea = document.getElementById('pageContent');
   const counter = document.getElementById('wordCount');
+  const pageForm = document.getElementById('pageForm');
   if (!textarea || typeof EasyMDE === 'undefined') return;
+
+  const autosaveKey = 'habrin_page_<?= $pageId ?>';
 
   const editor = new EasyMDE({
     element: textarea,
     spellChecker: false,
     forceSync: true,
     status: false,
+    autosave: {
+      enabled: true,
+      uniqueId: autosaveKey,
+      delay: 2000
+    },
     toolbar: [
       "bold", "italic", "heading", "|",
       "quote", "unordered-list", "ordered-list", "|",
@@ -126,9 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
         name: "insertMedia",
         action: function() { openMediaModal(); },
         className: "fa fa-picture-o",
-        title: "Insert Media from Library"
+        title: "<?= __('posts.insert_media') ?>"
       }, "code", "table", "|",
-      "preview", "fullscreen"
+      "preview", "side-by-side", "fullscreen"
     ]
   });
 
@@ -140,6 +151,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   editor.codemirror.on('change', updateCount);
   updateCount();
+
+  if (pageForm) {
+    pageForm.addEventListener('submit', function () {
+      if (editor && typeof editor.clearAutosavedValue === 'function') {
+        editor.clearAutosavedValue();
+      }
+      try {
+        localStorage.removeItem('smde_' + autosaveKey);
+      } catch (e) {}
+    });
+  }
 
   // Slug generator if on create page
   const titleInput = document.getElementById('pageTitle');
@@ -200,12 +222,12 @@ document.addEventListener('DOMContentLoaded', function () {
   if (cancelBtn) cancelBtn.addEventListener('click', closeMediaModal);
 
   function loadMedia() {
-    listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">Loading media files...</div>';
+    listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;"><?= __('common.loading') ?></div>';
     fetch('/admin/media/json')
       .then(res => res.json())
       .then(data => {
         if (!data.items || data.items.length === 0) {
-          listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">No media items found. Upload images in the Media Library.</div>';
+          listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;"><?= __('media.empty_library') ?></div>';
           return;
         }
 
@@ -224,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
           card.innerHTML = `
             ${previewHtml}
             <div style="font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 0.5rem;" title="${item.name}">${item.name}</div>
-            <button type="button" class="button button-sm button-primary button-block" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Insert</button>
+            <button type="button" class="button button-sm button-primary button-block" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"><?= __('posts.insert_media') ?></button>
           `;
 
           const insertBtn = card.querySelector('button');

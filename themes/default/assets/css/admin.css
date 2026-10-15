@@ -443,3 +443,172 @@
 @media (prefers-reduced-motion: reduce) {
   .admin-sidebar, .widget, .post-card, .toast { transition: none; }
 }
+
+/* ============================================================
+   RTL Direction Support (Arabic)
+   ============================================================ */
+[dir="rtl"] {
+  text-align: right;
+  font-family: 'Segoe UI', Tahoma, Arial, 'Amiri', 'Tajawal', sans-serif;
+}
+
+[dir="rtl"] .admin-sidebar {
+  border-right: none;
+  border-left: 1px solid rgba(229, 225, 216, 0.12);
+}
+
+[dir="rtl"] .nav-section-title {
+  padding-left: 0;
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .admin-sidebar-nav .badge {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+  text-align: right;
+}
+
+[dir="rtl"] .table th:last-child,
+[dir="rtl"] .table td:last-child {
+  text-align: left;
+}
+
+[dir="rtl"] .input,
+[dir="rtl"] .textarea,
+[dir="rtl"] select {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .input[type="url"],
+[dir="rtl"] .input[type="email"],
+[dir="rtl"] .input[name="slug"] {
+  direction: ltr;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  [dir="rtl"] .admin-sidebar {
+    left: auto;
+    right: 0;
+    transform: translateX(105%);
+    box-shadow: -8px 0 24px rgba(32, 36, 33, 0.25);
+  }
+  [dir="rtl"] .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Language selector pills */
+.lang-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: var(--bg-soft);
+  padding: 0.18rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.lang-pill {
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  line-height: 1.2;
+}
+.lang-pill:hover {
+  color: var(--ink);
+  background: rgba(49, 92, 82, 0.08);
+}
+.lang-pill.is-active {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* EasyMDE Responsive & Habrin Styling */
+.EasyMDEContainer {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.EasyMDEContainer .editor-toolbar {
+  border-color: var(--border);
+  background: var(--bg-soft);
+  opacity: 1;
+  padding: 6px 8px;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.EasyMDEContainer .editor-toolbar button {
+  border-radius: 4px;
+  color: var(--text);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+.EasyMDEContainer .editor-toolbar button:hover,
+.EasyMDEContainer .editor-toolbar button.active {
+  background: var(--white);
+  border-color: var(--border);
+  color: var(--primary);
+}
+.EasyMDEContainer .CodeMirror {
+  border-color: var(--border);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  min-height: 380px;
+}
+.EasyMDEContainer .CodeMirror-focused {
+  border-color: var(--primary);
+}
+.EasyMDEContainer .editor-preview {
+  background: var(--white);
+  padding: 1.5rem;
+  color: var(--ink);
+}
+
+/* EasyMDE RTL adjustments */
+[dir="rtl"] .EasyMDEContainer .editor-toolbar {
+  direction: ltr;
+}
+[dir="rtl"] .EasyMDEContainer .CodeMirror {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-arabic), var(--font-mono);
+}
+[dir="rtl"] .EasyMDEContainer .editor-preview {
+  direction: rtl;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .EasyMDEContainer .editor-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 4px;
+  }
+  .EasyMDEContainer .editor-toolbar button {
+    flex-shrink: 0;
+    min-width: 32px;
+    height: 32px;
+  }
+  .EasyMDEContainer .CodeMirror {
+    min-height: 280px;
+  }
+}
+
+

@@ -46,9 +46,12 @@ final class View
         // Shared data
         self::$engine->addData(self::$shared);
         self::$engine->addData([
-            'config' => $config,
-            'flash' => Session::getFlash(),
-            'csp_nonce' => $config['csp_nonce'] ?? null,
+            'config'       => $config,
+            'flash'        => Session::getFlash(),
+            'csp_nonce'    => $config['csp_nonce'] ?? null,
+            'current_lang' => I18n::getLocale(),
+            'current_dir'  => I18n::getDirection(),
+            'is_rtl'       => I18n::isRtl(),
         ]);
 
         // Habrin view extensions
@@ -72,6 +75,22 @@ final class View
                 });
                 $engine->registerFunction('is_admin', function () {
                     return \Core\Auth::check();
+                });
+                // I18n view helpers
+                $engine->registerFunction('__', function (string $key, array $replace = []) {
+                    return I18n::trans($key, $replace);
+                });
+                $engine->registerFunction('trans', function (string $key, array $replace = []) {
+                    return I18n::trans($key, $replace);
+                });
+                $engine->registerFunction('lang', function () {
+                    return I18n::getLocale();
+                });
+                $engine->registerFunction('dir', function () {
+                    return I18n::getDirection();
+                });
+                $engine->registerFunction('is_rtl', function () {
+                    return I18n::isRtl();
                 });
                 // Return CSP nonce value for template use
                 $engine->registerFunction('nonce', function () {

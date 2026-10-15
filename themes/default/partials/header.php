@@ -27,15 +27,22 @@
         $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
         $isActive = fn($url) => $currentPath === $url ? 'active' : '';
         ?>
-        <a href="/" class="nav-link <?= $isActive('/') ?>"><i data-lucide="home"></i> Home</a>
+        <a href="/" class="nav-link <?= $isActive('/') ?>"><i data-lucide="home"></i> <?= __('nav.home') ?></a>
         <?php foreach ($menuItems ?? [] as $item): ?>
           <a href="<?= $this->e($item['url']) ?>" class="nav-link <?= $isActive($item['url']) ?>">
             <?= $this->e($item['label']) ?>
           </a>
         <?php endforeach; ?>
         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
-          <a href="/admin/dashboard" class="nav-link admin-link"><i data-lucide="layout-dashboard"></i> Admin</a>
+          <a href="/admin/dashboard" class="nav-link admin-link"><i data-lucide="layout-dashboard"></i> <?= __('nav.dashboard') ?></a>
         <?php endif; ?>
+
+        <div class="lang-selector" style="margin-left: 0.5rem; display: inline-flex;">
+          <a href="/admin/lang/en" class="lang-pill <?= current_lang() === 'en' ? 'is-active' : '' ?>">EN</a>
+          <a href="/admin/lang/ar" class="lang-pill <?= current_lang() === 'ar' ? 'is-active' : '' ?>">العربية</a>
+          <a href="/admin/lang/fr" class="lang-pill <?= current_lang() === 'fr' ? 'is-active' : '' ?>">FR</a>
+          <a href="/admin/lang/es" class="lang-pill <?= current_lang() === 'es' ? 'is-active' : '' ?>">ES</a>
+        </div>
       </nav>
     </div>
   </div>

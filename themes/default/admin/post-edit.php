@@ -1,22 +1,22 @@
-<?php $this->layout('layouts/admin', ['title' => 'Edit Post']) ?>
+<?php $this->layout('layouts/admin', ['title' => __('posts.edit_title')]) ?>
 
 <section>
   <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
     <div>
-      <h2 class="mb-1"><i data-lucide="edit-3"></i> Edit Article</h2>
+      <h2 class="mb-1"><i data-lucide="edit-3"></i> <?= __('posts.edit_title') ?></h2>
       <p class="text-muted" style="margin: 0; font-size: 0.9rem;">
-        Article #<?= (int) $id ?> · Created <?= date('M j, Y', (int) $post['created_at']) ?>
+        #<?= (int) $id ?> · <?= date('M j, Y', (int) $post['created_at']) ?>
         <?php if (!empty($post['updated_at']) && $post['updated_at'] !== $post['created_at']): ?>
-          · Updated <?= date('M j, Y', (int) $post['updated_at']) ?>
+          · <?= date('M j, Y', (int) $post['updated_at']) ?>
         <?php endif; ?>
       </p>
     </div>
     <div class="flex gap-1">
       <a href="/admin" class="button button-light">
-        <i data-lucide="arrow-left"></i> All Articles
+        <i data-lucide="arrow-left"></i> <?= __('posts.title') ?>
       </a>
       <a href="/post/<?= htmlspecialchars($post['slug'] ?? '') ?>" class="button button-light" target="_blank" rel="noopener">
-        <i data-lucide="eye"></i> Preview
+        <i data-lucide="eye"></i> <?= __('common.preview') ?>
       </a>
     </div>
   </div>
@@ -31,7 +31,7 @@
         <div class="card mb-4" style="padding: 1.75rem;">
           <div class="field">
             <label class="label" for="postTitle" style="font-size: 1.1rem; font-weight: 700;">
-              Article Title <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(required)</span>
+              <?= __('posts.article_title') ?> <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(<?= __('common.required') ?>)</span>
             </label>
             <input
               id="postTitle"
@@ -47,10 +47,10 @@
 
           <div class="field mb-0">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-              <label class="label mb-0" for="content">Content</label>
+              <label class="label mb-0" for="content"><?= __('posts.content') ?></label>
               <div class="text-muted" style="font-size: 0.82rem; display: flex; gap: 0.85rem;">
-                <span><i data-lucide="file-text" style="width:14px;height:14px;display:inline;"></i> <strong id="wordCount">0</strong> words</span>
-                <span>Markdown Supported</span>
+                <span><i data-lucide="file-text" style="width:14px;height:14px;display:inline;"></i> <strong id="wordCount">0</strong> <?= __('posts.words') ?></span>
+                <span>Markdown</span>
               </div>
             </div>
             <textarea
@@ -65,36 +65,35 @@
       </div>
 
       <!-- Right Publishing Sidebar -->
-      <div style="width: 320px; max-width: 100%;">
+      <div id="postEditorSidebar" class="post-editor-sidebar" style="width: 320px; max-width: 100%;">
         <div class="card mb-3" style="padding: 1.5rem;">
           <h3 class="mb-3" style="font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
             <i data-lucide="send" style="color: var(--primary);"></i>
-            <span>Publishing Settings</span>
+            <span><?= __('posts.publishing_options') ?></span>
           </h3>
 
           <div class="field">
-            <label class="label" for="postStatus">Status</label>
+            <label class="label" for="postStatus"><?= __('common.status') ?></label>
             <?php $currentStatus = $old['status'] ?? $post['status'] ?? 'published'; ?>
             <select id="postStatus" class="input" name="status">
               <option value="published" <?= $currentStatus === 'published' ? 'selected' : '' ?>>
-                🟢 Published (Public)
+                <?= __('posts.status_published') ?>
               </option>
               <option value="draft" <?= $currentStatus === 'draft' ? 'selected' : '' ?>>
-                🟡 Draft (Private)
+                <?= __('posts.status_draft') ?>
               </option>
             </select>
-            <div class="help">Drafts can be previewed by logged-in administrators.</div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem;">
             <button type="submit" class="button button-primary button-block button-lg">
-              <i data-lucide="save"></i> Update Article
+              <i data-lucide="save"></i> <?= __('posts.edit_title') ?>
             </button>
             <a href="/post/<?= htmlspecialchars((string) ($post['slug'] ?? '')) ?>" class="button button-light button-block" target="_blank" rel="noopener">
-              <i data-lucide="external-link"></i> View Live Article
+              <i data-lucide="external-link"></i> <?= __('common.preview') ?>
             </a>
             <button type="button" class="button button-light button-block" id="btnInsertMedia">
-              <i data-lucide="image"></i> Insert Media
+              <i data-lucide="image"></i> <?= __('posts.insert_media') ?>
             </button>
           </div>
         </div>
@@ -103,11 +102,11 @@
         <div class="card mb-3" style="padding: 1.5rem;">
           <h3 class="mb-3" style="font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
             <i data-lucide="sliders" style="color: var(--primary);"></i>
-            <span>Article Metadata</span>
+            <span><?= __('posts.publishing_options') ?></span>
           </h3>
 
           <div class="field">
-            <label class="label" for="postSlug">URL Slug</label>
+            <label class="label" for="postSlug"><?= __('posts.url_slug') ?></label>
             <input
               id="postSlug"
               class="input"
@@ -119,11 +118,10 @@
             <div class="help mt-1" style="font-size: 0.78rem; word-break: break-all;">
               URL: <code style="font-size: 0.78rem; color: var(--primary);">/post/<span id="slugPreview"><?= htmlspecialchars((string) ($old['slug'] ?? $post['slug'] ?? '')) ?></span></code>
             </div>
-            <div class="help text-muted" style="font-size: 0.78rem;">Keep unchanged to preserve existing inbound links.</div>
           </div>
 
           <div class="field">
-            <label class="label" for="postTags">Tags</label>
+            <label class="label" for="postTags"><?= __('posts.tags') ?></label>
             <?php
               $tagsVal = isset($old['tags'])
                 ? (string) $old['tags']
@@ -134,31 +132,31 @@
               class="input"
               type="text"
               name="tags"
-              placeholder="tech, tutorial, tips"
+              placeholder="tech, tutorial"
               value="<?= htmlspecialchars($tagsVal, ENT_QUOTES, 'UTF-8') ?>"
             >
-            <div class="help">Comma-separated tags for categorization.</div>
+            <div class="help"><?= __('posts.tags_hint') ?></div>
           </div>
 
           <div class="field mb-0">
-            <label class="label" for="postExcerpt">Summary / Excerpt</label>
+            <label class="label" for="postExcerpt"><?= __('posts.excerpt') ?></label>
             <textarea
               id="postExcerpt"
               class="textarea"
               name="excerpt"
               rows="3"
-              placeholder="Brief summary for listings and SEO..."
+              placeholder="<?= __('posts.excerpt') ?>..."
             ><?= htmlspecialchars((string) ($old['excerpt'] ?? $post['excerpt'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
-            <div class="help">Used as post preview snippet and meta description.</div>
+            <div class="help"><?= __('posts.excerpt_hint') ?></div>
           </div>
         </div>
 
         <!-- Move to Trash Card -->
         <div class="card" style="padding: 1.25rem; border-color: rgba(239, 68, 68, 0.25);">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
-            <span class="text-muted" style="font-size: 0.85rem;">Trash this article:</span>
-            <button type="submit" form="deletePostForm" class="button button-sm button-danger" onclick="return confirm('Move this post to trash?')">
-              <i data-lucide="trash-2"></i> Move to Trash
+            <span class="text-muted" style="font-size: 0.85rem;"><?= __('posts.move_to_trash') ?>:</span>
+            <button type="submit" form="deletePostForm" class="button button-sm button-danger" onclick="return confirm('<?= __('common.confirm_delete') ?>')">
+              <i data-lucide="trash-2"></i> <?= __('posts.move_to_trash') ?>
             </button>
           </div>
         </div>
@@ -176,18 +174,18 @@
 <dialog id="mediaModal" style="border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; max-width: 640px; width: 90vw; background: var(--white); box-shadow: var(--shadow-lg);">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
     <h3 style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-      <i data-lucide="image"></i> <span>Media Library</span>
+      <i data-lucide="image"></i> <span><?= __('media.title') ?></span>
     </h3>
     <button type="button" id="closeMediaModalBtn" class="button button-sm button-light" style="padding: 0.25rem 0.5rem;">✕</button>
   </div>
   <div id="mediaModalList" style="max-height: 360px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; padding: 0.25rem;">
-    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1rem;">Loading media...</div>
+    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1rem;"><?= __('common.loading') ?></div>
   </div>
   <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.75rem;">
     <a href="/admin/media" target="_blank" rel="noopener" class="button button-sm button-light">
-      <i data-lucide="upload"></i> Upload More
+      <i data-lucide="upload"></i> <?= __('media.upload_title') ?>
     </a>
-    <button type="button" id="cancelMediaModalBtn" class="button button-sm button-light">Close</button>
+    <button type="button" id="cancelMediaModalBtn" class="button button-sm button-light"><?= __('common.close') ?></button>
   </div>
 </dialog>
 
@@ -199,13 +197,22 @@
 document.addEventListener('DOMContentLoaded', function () {
   const textarea = document.getElementById('content');
   const counter = document.getElementById('wordCount');
+  const postForm = document.getElementById('postForm');
   if (!textarea || typeof EasyMDE === 'undefined') return;
+
+  const postId = <?= (int) $id ?>;
+  const autosaveKey = 'habrin_draft_post_' + postId;
 
   const editor = new EasyMDE({
     element: textarea,
     spellChecker: false,
     forceSync: true,
     status: false,
+    autosave: {
+      enabled: true,
+      uniqueId: autosaveKey,
+      delay: 2000
+    },
     toolbar: [
       "bold", "italic", "heading", "|",
       "quote", "unordered-list", "ordered-list", "|",
@@ -213,9 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
         name: "insertMedia",
         action: function() { openMediaModal(); },
         className: "fa fa-picture-o",
-        title: "Insert Media from Library"
+        title: "<?= __('posts.insert_media') ?>"
       }, "code", "table", "|",
-      "preview", "fullscreen"
+      "preview", "side-by-side", "fullscreen"
     ]
   });
 
@@ -227,6 +234,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   editor.codemirror.on('change', updateCount);
   updateCount();
+
+  // On form submit, clear autosave
+  if (postForm) {
+    postForm.addEventListener('submit', function () {
+      if (editor && typeof editor.clearAutosavedValue === 'function') {
+        editor.clearAutosavedValue();
+      }
+      try {
+        localStorage.removeItem('smde_' + autosaveKey);
+      } catch (e) {}
+    });
+  }
 
   // Media Modal handling
   const modal = document.getElementById('mediaModal');
@@ -259,12 +278,12 @@ document.addEventListener('DOMContentLoaded', function () {
   if (cancelBtn) cancelBtn.addEventListener('click', closeMediaModal);
 
   function loadMedia() {
-    listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">Loading media files...</div>';
+    listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;"><?= __('common.loading') ?></div>';
     fetch('/admin/media/json')
       .then(res => res.json())
       .then(data => {
         if (!data.items || data.items.length === 0) {
-          listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;">No media items found. Upload images in the Media Library.</div>';
+          listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 1.5rem;"><?= __('media.empty_library') ?></div>';
           return;
         }
 
@@ -283,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
           card.innerHTML = `
             ${previewHtml}
             <div style="font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 0.5rem;" title="${item.name}">${item.name}</div>
-            <button type="button" class="button button-sm button-primary button-block" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Insert</button>
+            <button type="button" class="button button-sm button-primary button-block" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"><?= __('posts.insert_media') ?></button>
           `;
 
           const insertBtn = card.querySelector('button');

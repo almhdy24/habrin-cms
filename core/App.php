@@ -42,6 +42,7 @@ final class App
         Hooks::do_action('beforeRun');
         self::sendSecurityHeaders();
         Session::start();
+        I18n::init();
         Hooks::do_action('afterSessionStart');
         Hooks::do_action('afterBootstrap');
         Hooks::do_action('afterConfigLoaded');

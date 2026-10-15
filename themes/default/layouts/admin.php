@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= htmlspecialchars((string) ($current_lang ?? 'en'), ENT_QUOTES, 'UTF-8') ?>" dir="<?= htmlspecialchars((string) ($current_dir ?? 'ltr'), ENT_QUOTES, 'UTF-8') ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,57 +43,61 @@
       $isSectionActive = fn(array $routes) => in_array($currentPath, $routes, true) ? 'is-active' : '';
       ?>
 
-      <div class="nav-section-title">Content</div>
+      <div class="nav-section-title"><?= __('nav.content') ?></div>
 
       <a href="/admin/dashboard" class="<?= $isActive('/admin/dashboard') ?>" <?= $currentPath === '/admin/dashboard' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
+        <i data-lucide="layout-dashboard"></i> <span><?= __('nav.dashboard') ?></span>
       </a>
 
       <a href="/admin" class="<?= $isSectionActive(['/admin', '/admin/add']) ?>" <?= $currentPath === '/admin' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="file-text"></i> <span>Posts</span>
+        <i data-lucide="file-text"></i> <span><?= __('nav.posts') ?></span>
         <?php if (!empty($draftCount)): ?>
           <span class="badge badge-warning" title="<?= (int) $draftCount ?> drafts"><?= (int) $draftCount ?></span>
         <?php endif; ?>
       </a>
 
       <a href="/admin/pages" class="<?= $isActive('/admin/pages') ?>" <?= $currentPath === '/admin/pages' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="file"></i> <span>Pages</span>
+        <i data-lucide="file"></i> <span><?= __('nav.pages') ?></span>
       </a>
 
       <a href="/admin/media" class="<?= $isActive('/admin/media') ?>" <?= $currentPath === '/admin/media' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="image"></i> <span>Media Library</span>
+        <i data-lucide="image"></i> <span><?= __('nav.media') ?></span>
       </a>
 
-      <div class="nav-section-title">Structure</div>
+      <div class="nav-section-title"><?= __('nav.structure') ?></div>
 
       <a href="/admin/menu" class="<?= $isActive('/admin/menu') ?>" <?= $currentPath === '/admin/menu' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="menu"></i> <span>Navigation</span>
+        <i data-lucide="menu"></i> <span><?= __('nav.menu') ?></span>
       </a>
 
       <a href="/admin/themes" class="<?= $isActive('/admin/themes') ?>" <?= $currentPath === '/admin/themes' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="palette"></i> <span>Themes</span>
+        <i data-lucide="palette"></i> <span><?= __('nav.themes') ?></span>
       </a>
 
       <a href="/admin/plugins" class="<?= $isActive('/admin/plugins') ?>" <?= $currentPath === '/admin/plugins' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="puzzle"></i> <span>Plugins</span>
+        <i data-lucide="puzzle"></i> <span><?= __('nav.plugins') ?></span>
       </a>
 
-      <div class="nav-section-title">Maintenance</div>
+      <div class="nav-section-title"><?= __('nav.maintenance') ?></div>
 
       <a href="/admin/backup" class="<?= $isActive('/admin/backup') ?>" <?= $currentPath === '/admin/backup' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="archive"></i> <span>Backups</span>
+        <i data-lucide="archive"></i> <span><?= __('nav.backups') ?></span>
       </a>
 
       <a href="/admin/settings" class="<?= $isActive('/admin/settings') ?>" <?= $currentPath === '/admin/settings' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="settings"></i> <span>Settings</span>
+        <i data-lucide="settings"></i> <span><?= __('nav.settings') ?></span>
       </a>
 
       <a href="/admin/system" class="<?= $isActive('/admin/system') ?>" <?= $currentPath === '/admin/system' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="cpu"></i> <span>System</span>
+        <i data-lucide="cpu"></i> <span><?= __('nav.system') ?></span>
+      </a>
+
+      <a href="/admin/help" class="<?= $isActive('/admin/help') ?>" <?= $currentPath === '/admin/help' ? 'aria-current="page"' : '' ?>>
+        <i data-lucide="help-circle"></i> <span><?= __('nav.help') ?></span>
       </a>
 
       <a href="/admin/trash" class="<?= $isActive('/admin/trash') ?>" <?= $currentPath === '/admin/trash' ? 'aria-current="page"' : '' ?>>
-        <i data-lucide="trash-2"></i> <span>Trash</span>
+        <i data-lucide="trash-2"></i> <span><?= __('nav.trash') ?></span>
         <?php if (!empty($trashCount)): ?>
           <span class="badge badge-danger" aria-label="<?= (int) $trashCount ?> items in trash"><?= (int) $trashCount ?></span>
         <?php endif; ?>
@@ -101,8 +105,8 @@
     </nav>
 
     <div class="admin-sidebar-footer">
-      <a href="/" target="_blank" rel="noopener"><i data-lucide="external-link"></i> <span>Visit Site</span></a>
-      <a href="/admin/logout" class="logout-link"><i data-lucide="log-out"></i> <span>Sign Out</span></a>
+      <a href="/" target="_blank" rel="noopener"><i data-lucide="external-link"></i> <span><?= __('common.view_site') ?></span></a>
+      <a href="/admin/logout" class="logout-link"><i data-lucide="log-out"></i> <span><?= __('common.sign_out') ?></span></a>
     </div>
   </aside>
 
@@ -115,18 +119,26 @@
         <div class="header-breadcrumb">
           <span class="text-muted">Habrin</span>
           <span class="text-muted">/</span>
-          <h1><span><?= htmlspecialchars($title ?? 'Dashboard', ENT_QUOTES, 'UTF-8') ?></span></h1>
+          <h1><span><?= htmlspecialchars($title ?? __('nav.dashboard'), ENT_QUOTES, 'UTF-8') ?></span></h1>
         </div>
       </div>
 
       <div class="header-actions">
+        <!-- Language Switcher -->
+        <div class="lang-selector">
+          <a href="/admin/lang/en" class="lang-pill <?= ($current_lang ?? 'en') === 'en' ? 'is-active' : '' ?>" title="English">🇬🇧 EN</a>
+          <a href="/admin/lang/ar" class="lang-pill <?= ($current_lang ?? 'en') === 'ar' ? 'is-active' : '' ?>" title="العربية">🇸🇦 ع</a>
+          <a href="/admin/lang/fr" class="lang-pill <?= ($current_lang ?? 'en') === 'fr' ? 'is-active' : '' ?>" title="Français">🇫🇷 FR</a>
+          <a href="/admin/lang/es" class="lang-pill <?= ($current_lang ?? 'en') === 'es' ? 'is-active' : '' ?>" title="Español">🇪🇸 ES</a>
+        </div>
+
         <?php if ($currentPath !== '/admin/add'): ?>
           <a href="/admin/add" class="button button-sm button-primary">
-            <i data-lucide="plus-circle"></i> <span class="hide-mobile">New Post</span>
+            <i data-lucide="plus-circle"></i> <span class="hide-mobile"><?= __('dashboard.write_new') ?></span>
           </a>
         <?php endif; ?>
-        <a href="/" target="_blank" rel="noopener" class="button button-sm button-light" title="View live site">
-          <i data-lucide="external-link"></i> <span class="hide-mobile">View Site</span>
+        <a href="/" target="_blank" rel="noopener" class="button button-sm button-light" title="<?= __('common.view_site') ?>">
+          <i data-lucide="external-link"></i> <span class="hide-mobile"><?= __('common.view_site') ?></span>
         </a>
       </div>
     </header>

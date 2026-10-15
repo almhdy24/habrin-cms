@@ -130,3 +130,30 @@ function paginate(array $items, int $perPage = 5, int $currentPage = 1): array
         'currentPage' => $currentPage,
     ];
 }
+
+// ---------- Internationalization & Localization ----------
+function __(string $key, array $replace = [], ?string $fallback = null): string
+{
+    return Core\I18n::trans($key, $replace, null, $fallback);
+}
+
+function trans(string $key, array $replace = [], ?string $fallback = null): string
+{
+    return Core\I18n::trans($key, $replace, null, $fallback);
+}
+
+function current_lang(): string
+{
+    return Core\I18n::getLocale();
+}
+
+function current_dir(): string
+{
+    return Core\I18n::getDirection();
+}
+
+function is_rtl(): bool
+{
+    return Core\I18n::isRtl();
+}
+

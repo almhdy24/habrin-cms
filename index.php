@@ -11,17 +11,18 @@ declare(strict_types=1);
  * License: MIT
  */
 
-use Core\App;
+defined('BASE_PATH') || define('BASE_PATH', __DIR__);
 
-$minPhp = App::MIN_PHP_VERSION;
-if (version_compare(PHP_VERSION, $minPhp, '<')) {
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
     http_response_code(500);
-    echo "Pico JSON CMS requires PHP {$minPhp} or higher. Current version: " . PHP_VERSION;
+    echo 'Pico JSON CMS requires PHP 8.1.0 or higher. Current version: ' . PHP_VERSION;
     exit(1);
 }
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/functions.php';
+
+use Core\App;
 
 try {
     App::run();

@@ -16,7 +16,7 @@ final class App
 
     public static function path(string ...$segments): string
     {
-        $base = rtrim(BASE_PATH, DIRECTORY_SEPARATOR);
+        $base = defined('BASE_PATH') ? rtrim(BASE_PATH, DIRECTORY_SEPARATOR) : dirname(__DIR__);
         $parts = array_filter($segments, static fn ($part) => $part !== '');
 
         if ($parts === []) {
@@ -345,7 +345,7 @@ final class App
             }
 
             // In production, prevent startup to avoid silent failures
-            throw new \\RuntimeException("Startup permission errors: " . implode('; ', $errors));
+            throw new \RuntimeException("Startup permission errors: " . implode('; ', $errors));
         }
     }
 }

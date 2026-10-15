@@ -1,6 +1,18 @@
+# Prevent directory indexing
+Options -Indexes
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
+
+    # Block access to sensitive directories
+    RewriteRule ^(content|logs|backups|core)/ - [F,L]
+
+    # Block access to sensitive root files and hidden files
+    RewriteRule ^(\.env|composer\.(json|lock)|phpunit\.xml|package\.json|CORE_FREEZE\.md) - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
+
+    # Route remaining requests to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]

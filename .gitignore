@@ -4,32 +4,40 @@
 
 # Ignore all generated CMS content
 /content/*
-
-# Keep the content directory
 !/content/.gitkeep
+!/content/.htaccess
 
-# Runtime post shards
-/content/posts/
-/content/posts/*.json
-
-# Runtime indexes
-/content/indexes/
-/content/indexes/*.json
-
-# Runtime settings and metadata
-/content/*.json
-
-# Plugin runtime settings
-/content/plugin-settings/
-
-# Installation marker
+# Runtime secrets and install markers
+/content/.admin.php
 /content/.installed
 
+# Temporary files and locks
+*.tmp
+*.tmp.*
+*.lock
+
+# Runtime logs
+/logs/*
+!/logs/.gitkeep
+!/logs/.htaccess
+
+# Backups
+/backups/*
+!/backups/.gitkeep
+!/backups/.htaccess
+
+# User media uploads
+/assets/uploads/*
+!/assets/uploads/.gitkeep
+!/assets/uploads/.htaccess
+
 # ============================================================
-# Dependencies
+# Dependencies & Tests
 # ============================================================
 
 /vendor/
+.phpunit.result.cache
+.phpunit.cache/
 
 # ============================================================
 # Environment / Secrets
@@ -46,3 +54,5 @@
 Thumbs.db
 *.swp
 *.swo
+.vscode/
+.idea/

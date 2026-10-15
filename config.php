@@ -14,6 +14,4 @@ return [
     'base_url' => '',
     'theme' => 'default',
     'debug' => false,
-    'admin_user' => 'admin',
-    'admin_password' => 'secret123',
 ];

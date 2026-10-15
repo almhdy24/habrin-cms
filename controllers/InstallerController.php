@@ -121,6 +121,11 @@ final class InstallerController extends Controller
             $this->fail('Password must be at least 8 characters.');
         }
 
+        $weakPasswords = ['secret123', 'admin123', 'password', '12345678', 'adminadmin', 'picoadmin'];
+        if (in_array(strtolower($pass), $weakPasswords, true)) {
+            $this->fail('Please choose a more secure password.');
+        }
+
         /* ---------- Persist ---------- */
 
         try {
@@ -143,7 +148,7 @@ final class InstallerController extends Controller
 
             file_put_contents(
                 $this->adminFile,
-                "<?php\nreturn " . var_export([
+                "<?php\n// Pico CMS Admin Credentials - DO NOT EXPOSE\ndefined('BASE_PATH') || exit;\nreturn " . var_export([
                     'user' => $user,
                     'pass' => password_hash($pass, PASSWORD_DEFAULT),
                 ], true) . ";\n",

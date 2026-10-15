@@ -26,14 +26,20 @@ final class PluginLoader
             if (is_dir($fullPath)) {
                 $manifestFile = $fullPath . '/plugin.json';
                 if (is_file($manifestFile)) {
-                    $manifest = json_decode(file_get_contents($manifestFile), true);
-                    if (is_array($manifest) && isset($manifest['name'], $manifest['entry'])) {
-                        $entryFile = $fullPath . '/' . $manifest['entry'];
-                        if (is_file($entryFile)) {
-                            $plugins[$manifest['name']] = [
-                                'file' => $entryFile,
-                                'manifest' => $manifest,
-                            ];
+                    $manifest = json_decode((string) file_get_contents($manifestFile), true);
+                    if (is_array($manifest) && isset($manifest['name'], $manifest['entry']) && is_string($manifest['entry'])) {
+                        $entry = trim($manifest['entry']);
+                        // Reject directory traversal sequences
+                        if (!str_contains($entry, '..') && !str_starts_with($entry, '/') && !str_starts_with($entry, '\\')) {
+                            $entryFile = $fullPath . DIRECTORY_SEPARATOR . $entry;
+                            $realEntry = realpath($entryFile);
+                            $realDir = realpath($fullPath);
+                            if ($realEntry !== false && $realDir !== false && str_starts_with($realEntry, $realDir . DIRECTORY_SEPARATOR) && is_file($realEntry)) {
+                                $plugins[$manifest['name']] = [
+                                    'file' => $realEntry,
+                                    'manifest' => $manifest,
+                                ];
+                            }
                         }
                     }
                 }

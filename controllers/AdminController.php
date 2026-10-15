@@ -91,16 +91,15 @@ final class AdminController extends Controller
         $username = trim((string) $this->input('username', ''));
         $password = (string) $this->input('password', '');
 
-        // Load admin credentials from content/.admin.php if present, else fallback to config
+        // Load admin credentials strictly from content/.admin.php
         $adminPath = App::path('content', '.admin.php');
         if (file_exists($adminPath)) {
             $adminCfg = require $adminPath;
-            $adminUser = $adminCfg['user'] ?? (App::$config['admin_user'] ?? 'admin');
-            $adminPassHash = $adminCfg['pass'] ?? (App::$config['admin_password'] ?? '');
+            $adminUser = is_array($adminCfg) ? (string) ($adminCfg['user'] ?? '') : '';
+            $adminPassHash = is_array($adminCfg) ? (string) ($adminCfg['pass'] ?? '') : '';
         } else {
-            $adminUser = App::$config['admin_user'] ?? 'admin';
-            // If config stores a plaintext password, hash it for comparison
-            $adminPassHash = password_hash((string) (App::$config['admin_password'] ?? ''), PASSWORD_DEFAULT);
+            $adminUser = '';
+            $adminPassHash = '';
         }
 
         $valid = false;
@@ -274,9 +273,12 @@ final class AdminController extends Controller
 
     public function delete(?int $id): void
     {
-        if ($this->isPost()) {
-            $this->validateCsrf();
+        if (!$this->isPost()) {
+            $this->flash('error', 'Method not allowed. Use POST.');
+            $this->redirect('/admin');
         }
+
+        $this->validateCsrf();
 
         if ($post = $this->posts->find($id)) {
             $post['deleted_at'] = time();
@@ -301,6 +303,13 @@ final class AdminController extends Controller
 
     public function restore(?int $id): void
     {
+        if (!$this->isPost()) {
+            $this->flash('error', 'Method not allowed. Use POST.');
+            $this->redirect('/admin/trash');
+        }
+
+        $this->validateCsrf();
+
         if ($post = $this->posts->find($id)) {
             $post['deleted_at'] = null;
             $this->posts->savePost($id, $post);
@@ -315,9 +324,12 @@ final class AdminController extends Controller
 
     public function destroy(?int $id): void
     {
-        if ($this->isPost()) {
-            $this->validateCsrf();
+        if (!$this->isPost()) {
+            $this->flash('error', 'Method not allowed. Use POST.');
+            $this->redirect('/admin/trash');
         }
+
+        $this->validateCsrf();
 
         $this->posts->deletePost($id);
         Audit::log(Session::get('user') ?? 'system', 'post.destroy', ['id' => $id]);
@@ -327,9 +339,12 @@ final class AdminController extends Controller
 
     public function emptyTrash(): void
     {
-        if ($this->isPost()) {
-            $this->validateCsrf();
+        if (!$this->isPost()) {
+            $this->flash('error', 'Method not allowed. Use POST.');
+            $this->redirect('/admin/trash');
         }
+
+        $this->validateCsrf();
 
         $trashed = $this->posts->trashed();
         $count = count($trashed);
@@ -353,9 +368,16 @@ final class AdminController extends Controller
     {
         if ($this->isPost()) {
             $this->validateCsrf();
-            $settings = array_map(function($value) {
-                return htmlspecialchars(trim((string) $value), ENT_QUOTES, 'UTF-8');
-            }, $_POST);
+
+            $data = $_POST;
+            unset($data['csrf_token']);
+
+            $settings = [];
+            foreach ($data as $key => $value) {
+                if (is_scalar($value)) {
+                    $settings[(string) $key] = htmlspecialchars(trim((string) $value), ENT_QUOTES, 'UTF-8');
+                }
+            }
 
             $this->settings->setMany($settings);
             Session::remove('_old');

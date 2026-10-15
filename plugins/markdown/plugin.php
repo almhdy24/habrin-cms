@@ -20,7 +20,7 @@ Hooks::add_filter('post_content', function (string $content, array $post): strin
     if ($converter === null) {
 
         $environment = new Environment([
-            'html_input' => 'allow',
+            'html_input' => 'strip',
             'allow_unsafe_links' => false,
         ]);
 

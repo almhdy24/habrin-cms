@@ -48,6 +48,14 @@ final class App
         self::loadPluginStatus();
         self::loadPlugins();
         Hooks::do_action('afterPluginsLoaded');
+
+        // Safe fallback if markdown or another content renderer is not enabled
+        if (!Hooks::has_filter('post_content')) {
+            Hooks::add_filter('post_content', static function (string $content): string {
+                return nl2br(htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+            }, 100);
+        }
+
         self::guardInstaller();
         self::loadSettings();
         self::loadMenu();
@@ -130,8 +138,6 @@ final class App
             'base_url' => '',
             'theme' => 'default',
             'debug' => false,
-            'admin_user' => 'admin',
-            'admin_password' => 'secret123',
         ];
 
         $config = require $configPath;
@@ -309,9 +315,12 @@ final class App
             header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
         }
 
-        // Basic Content Security Policy - conservative
-        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;";
-        header('Content-Security-Policy: ' . $csp);
+        // Content Security Policy - configurable and extensible via filter
+        $defaultCsp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com;";
+        $csp = Hooks::apply_filters('security_csp_header', $defaultCsp);
+        if (is_string($csp) && $csp !== '') {
+            header('Content-Security-Policy: ' . $csp);
+        }
     }
 
     /**

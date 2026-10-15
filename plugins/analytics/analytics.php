@@ -43,24 +43,29 @@ Hooks::add_action('body_end', function () {
     $enabled = (bool) ($settings['enable_analytics'] ?? true);
     $adminTracking = (bool) ($settings['enable_admin_tracking'] ?? false);
 
-    // Check if tracking should be injected
     if (empty($trackingId) || !$enabled) {
         return;
     }
 
-    // Skip admin pages unless admin tracking is enabled
-    if (strpos($_SERVER['REQUEST_URI'], '/admin') === 0 && !$adminTracking) {
+    if (str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/admin') && !$adminTracking) {
         return;
     }
 
+    $trackingId = trim((string) ($settings['tracking_id'] ?? ''));
+    if (!preg_match('/^[A-Za-z0-9-]+$/', $trackingId)) {
+        return;
+    }
+
+    $safeTrackingId = htmlspecialchars($trackingId, ENT_QUOTES, 'UTF-8');
+
     echo <<<HTML
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={$trackingId}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={$safeTrackingId}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', '{$trackingId}');
+  gtag('config', '{$safeTrackingId}');
 </script>
 HTML;
 });

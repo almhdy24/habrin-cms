@@ -30,22 +30,28 @@ final class HomeController extends Controller
     }
 
     /**
-     * Handle theme preview via URL parameter
+     * Handle theme preview via URL parameter (restricted to authenticated admin)
      */
     private function handleThemePreview(): void
     {
         if (isset($_GET['theme_preview'])) {
-            $theme = trim($_GET['theme_preview']);
-            $themeDir = App::path('themes', $theme);
+            if (!\Core\Auth::check()) {
+                return;
+            }
 
-            // Validate theme exists
-            if (is_dir($themeDir) && file_exists($themeDir . '/theme.json')) {
+            $theme = trim((string) $_GET['theme_preview']);
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $theme)) {
+                return;
+            }
+
+            $themesModel = new \Models\ThemesModel();
+            if ($themesModel->isValid($theme)) {
                 // Temporarily override for this request
                 App::$config['theme'] = $theme;
                 // Clear view cache to reload templates
                 View::clearCache();
                 // Log preview
-                App::log("Theme preview: {$theme}", 'info');
+                App::log("Theme preview by admin: {$theme}", 'info');
             }
         }
     }

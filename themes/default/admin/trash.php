@@ -40,11 +40,14 @@
               </td>
               <td>
                 <div class="flex flex-wrap gap-1">
-                  <a href="/admin/restore/<?= (int) $id ?>" class="button button-sm button-success" onclick="return confirm('Restore this post?')">
-                    <i data-lucide="refresh-cw"></i> Restore
-                  </a>
+                  <form method="POST" action="/admin/restore/<?= (int) $id ?>" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+                    <button type="submit" class="button button-sm button-success" onclick="return confirm('Restore this post?')">
+                      <i data-lucide="refresh-cw"></i> Restore
+                    </button>
+                  </form>
                   <form method="POST" action="/admin/destroy/<?= (int) $id ?>" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                     <button type="submit" class="button button-sm button-danger" onclick="return confirm('Permanently delete this post?')">
                       <i data-lucide="trash"></i> Delete
                     </button>
@@ -60,7 +63,7 @@
 
     <div class="mt-4">
       <form method="POST" action="/admin/emptyTrash" style="display:inline;" onsubmit="return confirm('Empty all trash? This cannot be undone.')">
-        <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
         <button type="submit" class="button button-danger">
           <i data-lucide="trash-2"></i> Empty Trash
         </button>

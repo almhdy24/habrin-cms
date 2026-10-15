@@ -31,11 +31,26 @@
       </div>
     </div>
 
+    <!-- STATUS & PUBLISHING -->
+    <div class="field">
+      <label class="label" for="status"><i data-lucide="check-circle"></i> Publication Status</label>
+      <select id="status" class="input" name="status" style="max-width:220px;">
+        <option value="published" <?= ($old['status'] ?? 'published') === 'published' ? 'selected' : '' ?>>Published (Live)</option>
+        <option value="draft" <?= ($old['status'] ?? '') === 'draft' ? 'selected' : '' ?>>Draft (Unpublished)</option>
+      </select>
+      <div class="help">Drafts are saved safely but not shown to public visitors.</div>
+    </div>
+
     <!-- ACTIONS -->
-    <div class="flex flex-wrap gap-1 mt-4" style="padding-top:1rem;border-top:1px solid var(--border);">
-      <button type="submit" class="button button-primary"><i data-lucide="save"></i> Publish Post</button>
-      <button type="reset" class="button button-light"><i data-lucide="rotate-ccw"></i> Reset</button>
-      <a href="/admin" class="button button-light"><i data-lucide="x"></i> Cancel</a>
+    <div class="flex flex-wrap items-center justify-between gap-2 mt-4" style="padding-top:1rem;border-top:1px solid var(--border);">
+      <div class="flex flex-wrap gap-1">
+        <button type="submit" class="button button-primary"><i data-lucide="save"></i> Save Post</button>
+        <button type="reset" class="button button-light"><i data-lucide="rotate-ccw"></i> Reset</button>
+        <a href="/admin" class="button button-light"><i data-lucide="x"></i> Cancel</a>
+      </div>
+      <a href="/admin/media" target="_blank" rel="noopener" class="button button-light">
+        <i data-lucide="image"></i> Open Media Library
+      </a>
     </div>
 
   </form>

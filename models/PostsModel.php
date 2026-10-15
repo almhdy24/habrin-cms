@@ -66,6 +66,7 @@ class PostsModel
         $this->metadata = [
             'total' => 0,
             'published' => 0,
+            'drafts' => 0,
             'trashed' => 0,
             'shards' => 0,
             'last_id' => 0,
@@ -92,6 +93,27 @@ class PostsModel
     public function trashedCount(): int
     {
         return $this->metadata['trashed'] ?? 0;
+    }
+
+    public function draftsCount(): int
+    {
+        return $this->metadata['drafts'] ?? 0;
+    }
+
+    public function isTrashed(array $post): bool
+    {
+        $val = $post['deleted_at'] ?? null;
+        return !($val === null || $val === 0 || $val === '' || $val === 'null' || $val === 'NULL' || $val === false);
+    }
+
+    public function isDraft(array $post): bool
+    {
+        return !$this->isTrashed($post) && ($post['status'] ?? 'published') === 'draft';
+    }
+
+    public function isPublished(array $post): bool
+    {
+        return !$this->isTrashed($post) && ($post['status'] ?? 'published') === 'published';
     }
 
     /**
@@ -134,12 +156,6 @@ class PostsModel
     private function getSlugBucket(string $slug): int
     {
         return crc32($slug) % $this->slugBuckets;
-    }
-
-    private function isPublished(array $post): bool
-    {
-        $val = $post['deleted_at'] ?? null;
-        return $val === null || $val === 0 || $val === '' || $val === 'null' || $val === 'NULL' || $val === false;
     }
 
     // --------------------------------------------------------------------
@@ -385,7 +401,7 @@ class PostsModel
     /**
      * Find post by slug (hashed bucket)
      */
-    public function findBySlug(string $slug): ?array
+    public function findBySlug(string $slug, bool $includeDrafts = false): ?array
     {
         $bucket = $this->getSlugBucket($slug);
         $bucketData = $this->readSlugBucket($bucket);
@@ -395,8 +411,11 @@ class PostsModel
         $shard = $entry['shard'];
         $id = $entry['id'];
         $shardData = $this->readShard($shard);
-        if (isset($shardData[$id]) && $this->isPublished($shardData[$id])) {
-            return $shardData[$id] + ['id' => (int) $id];
+        if (isset($shardData[$id])) {
+            $post = $shardData[$id];
+            if ($this->isPublished($post) || ($includeDrafts && $this->isDraft($post))) {
+                return $post + ['id' => (int) $id];
+            }
         }
         return null;
     }
@@ -421,12 +440,75 @@ class PostsModel
         for ($s = 0; $s < $this->metadata['shards']; $s++) {
             $shardData = $this->readShard($s);
             foreach ($shardData as $id => $post) {
-                if (!$this->isPublished($post)) {
+                if ($this->isTrashed($post)) {
                     $result[(string) $id] = $post;
                 }
             }
         }
         return $result;
+    }
+
+    /**
+     * Get all drafts
+     */
+    public function drafts(): array
+    {
+        $result = [];
+        for ($s = 0; $s < $this->metadata['shards']; $s++) {
+            $shardData = $this->readShard($s);
+            foreach ($shardData as $id => $post) {
+                if ($this->isDraft($post)) {
+                    $result[(string) $id] = $post;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Search posts by title, slug, or content
+     */
+    public function search(string $query, int $page = 1, int $perPage = 10, bool $publishedOnly = true): array
+    {
+        $q = mb_strtolower(trim($query), 'UTF-8');
+        if ($q === '') {
+            return $this->published($page, $perPage);
+        }
+
+        $matches = [];
+        for ($s = 0; $s < $this->metadata['shards']; $s++) {
+            $shardData = $this->readShard($s);
+            foreach ($shardData as $id => $post) {
+                if ($this->isTrashed($post)) {
+                    continue;
+                }
+                if ($publishedOnly && !$this->isPublished($post)) {
+                    continue;
+                }
+
+                $title = mb_strtolower((string) ($post['title'] ?? ''), 'UTF-8');
+                $content = mb_strtolower((string) ($post['content'] ?? ''), 'UTF-8');
+                $slug = mb_strtolower((string) ($post['slug'] ?? ''), 'UTF-8');
+
+                if (str_contains($title, $q) || str_contains($slug, $q) || str_contains($content, $q)) {
+                    $matches[] = $post + ['id' => (int) $id];
+                }
+            }
+        }
+
+        usort($matches, fn($a, $b) => ($b['created_at'] ?? 0) <=> ($a['created_at'] ?? 0));
+
+        $total = count($matches);
+        $totalPages = max(1, (int) ceil($total / $perPage));
+        $page = max(1, min($page, $totalPages));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($matches, $offset, $perPage),
+            'total' => $total,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+        ];
     }
 
     /**
@@ -481,7 +563,7 @@ class PostsModel
             unset($bucketData[$oldSlug]);
             $this->writeSlugBucket($bucket, $bucketData);
         }
-        if ($newSlug && $this->isPublished($post)) {
+        if ($newSlug && ($this->isPublished($post) || $this->isDraft($post))) {
             $bucket = $this->getSlugBucket($newSlug);
             $bucketData = $this->readSlugBucket($bucket);
             $bucketData[$newSlug] = ['shard' => $shard, 'id' => (string) $id];
@@ -489,31 +571,29 @@ class PostsModel
         }
 
         // Update metadata
-        $isPublished = $this->isPublished($post);
-        if ($oldPost === null) {
+        $oldState = $oldPost ? ($this->isTrashed($oldPost) ? 'trashed' : ($this->isDraft($oldPost) ? 'draft' : 'published')) : null;
+        $newState = $this->isTrashed($post) ? 'trashed' : ($this->isDraft($post) ? 'draft' : 'published');
+
+        if ($oldState === null) {
             // New post
             $this->metadata['total']++;
-            if ($isPublished) {
-                $this->metadata['published']++;
+            $key = $newState === 'draft' ? 'drafts' : ($newState === 'trashed' ? 'trashed' : 'published');
+            $this->metadata[$key] = ($this->metadata[$key] ?? 0) + 1;
+            if ($newState === 'published') {
                 $this->insertIntoPageIndex($id, $shard, $post['created_at'] ?? time());
-            } else {
-                $this->metadata['trashed']++;
             }
-            if ($id > $this->metadata['last_id']) $this->metadata['last_id'] = $id;
-        } else {
-            // Existing post – update counts and page index if status changed
-            if ($isPublished && !$wasPublished) {
-                // Was trashed, now published – add to page index
-                $this->metadata['published']++;
-                $this->metadata['trashed']--;
+            if ($id > ($this->metadata['last_id'] ?? 0)) $this->metadata['last_id'] = $id;
+        } elseif ($oldState !== $newState) {
+            $oldKey = $oldState === 'draft' ? 'drafts' : ($oldState === 'trashed' ? 'trashed' : 'published');
+            $newKey = $newState === 'draft' ? 'drafts' : ($newState === 'trashed' ? 'trashed' : 'published');
+            $this->metadata[$oldKey] = max(0, ($this->metadata[$oldKey] ?? 0) - 1);
+            $this->metadata[$newKey] = ($this->metadata[$newKey] ?? 0) + 1;
+
+            if ($newState === 'published') {
                 $this->insertIntoPageIndex($id, $shard, $post['created_at'] ?? time());
-            } elseif (!$isPublished && $wasPublished) {
-                // Was published, now trashed – remove from page index
-                $this->metadata['published']--;
-                $this->metadata['trashed']++;
+            } elseif ($oldState === 'published') {
                 $this->removeFromPageIndex($id);
             }
-            // If status unchanged, no page index change needed
         }
 
         if ($shard >= $this->metadata['shards']) {
@@ -535,7 +615,7 @@ class PostsModel
         if (!isset($shardData[(string) $id])) return false;
 
         $post = $shardData[(string) $id];
-        $wasPublished = $this->isPublished($post);
+        $state = $this->isTrashed($post) ? 'trashed' : ($this->isDraft($post) ? 'draft' : 'published');
 
         unset($shardData[(string) $id]);
         if (!$this->writeShard($shard, $shardData)) return false;
@@ -548,13 +628,13 @@ class PostsModel
             $this->writeSlugBucket($bucket, $bucketData);
         }
 
-        $this->metadata['total']--;
-        if ($wasPublished) {
-            $this->metadata['published']--;
+        $this->metadata['total'] = max(0, ($this->metadata['total'] ?? 0) - 1);
+        $stateKey = $state === 'draft' ? 'drafts' : ($state === 'trashed' ? 'trashed' : 'published');
+        $this->metadata[$stateKey] = max(0, ($this->metadata[$stateKey] ?? 0) - 1);
+        if ($state === 'published') {
             $this->removeFromPageIndex($id);
-        } else {
-            $this->metadata['trashed']--;
         }
+
         $this->saveMetadata();
 
         return true;

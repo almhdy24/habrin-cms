@@ -44,6 +44,7 @@ final class AdminController extends Controller
 
         View::share([
             'trashCount' => $this->posts->trashedCount(),
+            'draftCount' => $this->posts->draftsCount(),
         ]);
     }
 
@@ -165,7 +166,9 @@ final class AdminController extends Controller
         $this->posts->clearCache();
 
         $this->view('admin/dashboard', [
+            'posts'      => $this->posts->all(),
             'postsCount' => $this->posts->publishedCount(),
+            'draftCount' => $this->posts->draftsCount(),
             'trashCount' => $this->posts->trashedCount(),
             'settings'   => $this->settings->all(),
             'flash'      => $this->getFlash(),
@@ -182,24 +185,46 @@ final class AdminController extends Controller
         $this->posts->clearCache();
 
         $page = max(1, (int) ($_GET['page'] ?? 1));
-        $perPage = 5;
+        $perPage = 10;
+        $query = trim((string) ($_GET['q'] ?? ''));
+        $statusFilter = trim((string) ($_GET['status'] ?? ''));
 
-        $result = $this->posts->publishedPaginated($page, $perPage);
+        if ($query !== '') {
+            $result = $this->posts->search($query, $page, $perPage, false);
+        } elseif ($statusFilter === 'draft') {
+            $drafts = $this->posts->drafts();
+            $total = count($drafts);
+            $totalPages = max(1, (int) ceil($total / $perPage));
+            $page = max(1, min($page, $totalPages));
+            $offset = ($page - 1) * $perPage;
+            $items = array_slice($drafts, $offset, $perPage, true);
+            $result = [
+                'items' => $items,
+                'total' => $total,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+            ];
+        } else {
+            $result = $this->posts->publishedPaginated($page, $perPage);
+        }
 
         $publishedCount = $this->posts->publishedCount();
+        $draftsCount = $this->posts->draftsCount();
         $trashedCount = $this->posts->trashedCount();
-        $totalCount = $publishedCount + $trashedCount;
+        $totalCount = $publishedCount + $draftsCount + $trashedCount;
 
         $this->view('admin/posts', [
-            'posts'       => $result['items'],
-            'currentPage' => $result['currentPage'],
-            'totalPages'  => $result['totalPages'],
-            'basePath'    => '/admin',
-            'flash'       => $this->getFlash(),
-            'csrf_token'  => Session::csrfToken(),
-            // Debug info (compatible with view)
-            'debugAllCount' => $totalCount,
+            'posts'               => $result['items'],
+            'currentPage'         => $result['currentPage'],
+            'totalPages'          => $result['totalPages'],
+            'basePath'            => '/admin',
+            'flash'               => $this->getFlash(),
+            'csrf_token'          => Session::csrfToken(),
+            'searchQuery'         => $query,
+            'statusFilter'        => $statusFilter,
+            'debugAllCount'       => $totalCount,
             'debugPublishedCount' => $publishedCount,
+            'draftsCount'         => $draftsCount,
         ]);
     }
 
@@ -217,6 +242,7 @@ final class AdminController extends Controller
         $this->validateCsrf();
 
         [$title, $content] = $this->validatePost();
+        $status = $this->input('status', 'published') === 'draft' ? 'draft' : 'published';
 
         $id = $this->posts->nextId();
         $slug = $this->posts->generateSlug($title);
@@ -225,13 +251,14 @@ final class AdminController extends Controller
             'title'      => $title,
             'slug'       => $slug,
             'content'    => $content,
+            'status'     => $status,
             'created_at' => time(),
             'updated_at' => time(),
             'deleted_at' => null,
         ]);
 
         // Audit
-        Audit::log(Session::get('user') ?? 'system', 'post.create', ['id' => $id, 'title' => $title]);
+        Audit::log(Session::get('user') ?? 'system', 'post.create', ['id' => $id, 'title' => $title, 'status' => $status]);
 
         $this->flash('success', 'Post created successfully.');
         $this->redirect('/admin');
@@ -248,15 +275,17 @@ final class AdminController extends Controller
             $this->validateCsrf();
 
             [$title, $content] = $this->validatePost();
+            $status = $this->input('status', $post['status'] ?? 'published') === 'draft' ? 'draft' : 'published';
 
             $post['title']      = $title;
             $post['content']    = $content;
+            $post['status']     = $status;
             $post['slug']       = $this->posts->generateSlug($title, $id);
             $post['updated_at'] = time();
 
             $this->posts->savePost($id, $post);
 
-            Audit::log(Session::get('user') ?? 'system', 'post.update', ['id' => $id, 'title' => $title]);
+            Audit::log(Session::get('user') ?? 'system', 'post.update', ['id' => $id, 'title' => $title, 'status' => $status]);
 
             $this->flash('success', 'Post updated successfully.');
             $this->redirect('/admin');

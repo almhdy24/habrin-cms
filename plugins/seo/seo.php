@@ -62,16 +62,21 @@ Hooks::add_action('head', function () {
         echo '<meta name="author" content="' . htmlspecialchars($author) . '">' . "\n";
     }
 
-    if ($enableOg) {
-        $baseUrl = rtrim(App::$config['base_url'] ?? '', '/');
-        if (empty($baseUrl)) {
-            $baseUrl = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-        }
-        $url = $baseUrl . $_SERVER['REQUEST_URI'];
+    $baseUrl = rtrim(App::$config['base_url'] ?? '', '/');
+    if (empty($baseUrl)) {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? '') === '443') ? 'https' : 'http';
+        $host = preg_replace('/[^a-zA-Z0-9.:-]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+        $baseUrl = $scheme . '://' . $host;
+    }
+    $reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+    $canonicalUrl = $baseUrl . $reqPath;
 
+    echo '<link rel="canonical" href="' . htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8') . '">' . "\n";
+
+    if ($enableOg) {
         echo '<meta property="og:title" content="' . htmlspecialchars($title) . '">' . "\n";
         echo '<meta property="og:type" content="website">' . "\n";
-        echo '<meta property="og:url" content="' . htmlspecialchars($url) . '">' . "\n";
+        echo '<meta property="og:url" content="' . htmlspecialchars($canonicalUrl) . '">' . "\n";
 
         $post = View::getShared('current_post') ?? null;
         if ($post) {

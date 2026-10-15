@@ -100,6 +100,21 @@ class SitemapHandler
             echo '  </url>' . "\n";
         }
 
+        if ($page === 1) {
+            try {
+                $pagesModel = new \Models\PagesModel();
+                foreach ($pagesModel->getAll() as $pageSlug => $pageData) {
+                    $pageUrl = self::baseUrl() . '/' . rawurlencode((string) $pageSlug);
+                    $pageLastmod = date('Y-m-d', (int) ($pageData['updated_at'] ?? $pageData['created_at'] ?? time()));
+                    echo '  <url>' . "\n";
+                    echo '    <loc>' . self::xmlEscape($pageUrl) . '</loc>' . "\n";
+                    echo '    <lastmod>' . $pageLastmod . '</lastmod>' . "\n";
+                    echo '    <priority>0.7</priority>' . "\n";
+                    echo '  </url>' . "\n";
+                }
+            } catch (\Throwable) {}
+        }
+
         foreach ($result['items'] as $post) {
             $url = self::baseUrl() . '/post/' . rawurlencode($post['slug']);
             $lastmod = date('Y-m-d', (int) ($post['updated_at'] ?? $post['created_at'] ?? time()));

@@ -55,8 +55,8 @@ final class Router
             return;
         }
 
-        // Admin: Static pages & menu
-        if (($segments[0] ?? '') === 'admin' && isset($segments[1]) && in_array($segments[1], ['pages', 'menu', 'plugins', 'themes'])) {
+        // Admin: Static pages, menu, plugins, themes, media, backup
+        if (($segments[0] ?? '') === 'admin' && isset($segments[1]) && in_array($segments[1], ['pages', 'menu', 'plugins', 'themes', 'media', 'backup'], true)) {
             $controllerClass = 'Controllers\\Admin' . ucfirst($segments[1]) . 'Controller';
             $methodName = $segments[2] ?? 'index';
             $params = array_slice($segments, 3);

@@ -60,8 +60,13 @@ final class HomeController extends Controller
     {
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $perPage = 5;
+        $searchQuery = trim((string) ($_GET['q'] ?? ''));
 
-        $result = $this->posts->published($page, $perPage);
+        if ($searchQuery !== '') {
+            $result = $this->posts->search($searchQuery, $page, $perPage, true);
+        } else {
+            $result = $this->posts->published($page, $perPage);
+        }
 
         // Calculate range
         $total = $result['total'];
@@ -69,7 +74,7 @@ final class HomeController extends Controller
         $totalPages = $result['totalPages'];
         $items = $result['items'];
 
-        $start = ($currentPage - 1) * $perPage + 1;
+        $start = $total > 0 ? ($currentPage - 1) * $perPage + 1 : 0;
         $end = min($start + $perPage - 1, $total);
 
         $this->view('pages/home', [
@@ -79,13 +84,15 @@ final class HomeController extends Controller
             'totalPosts'  => $total,
             'start'       => $start,
             'end'         => $end,
+            'searchQuery' => $searchQuery,
             'settings'    => $this->settings->all(),
         ]);
     }
 
     public function viewPost(string $slug): void
     {
-        $post = $this->posts->findBySlug($slug);
+        $isAdmin = \Core\Auth::check();
+        $post = $this->posts->findBySlug($slug, $isAdmin);
 
         if (!$post) {
             http_response_code(404);
@@ -93,8 +100,11 @@ final class HomeController extends Controller
             return;
         }
 
+        View::share(['current_post' => $post]);
+
         $this->view('pages/single', [
             'post'     => $post,
+            'isDraft'  => ($post['status'] ?? 'published') === 'draft',
             'settings' => $this->settings->all(),
         ]);
     }

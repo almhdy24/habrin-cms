@@ -48,11 +48,17 @@
           <span class="badge" aria-label="<?= (int) $trashCount ?> items in trash"><?= (int) $trashCount ?></span>
         <?php endif; ?>
       </a>
+      <a href="/admin/media" class="<?= $isActive('/admin/media') ?>" <?= $currentPath === '/admin/media' ? 'aria-current="page"' : '' ?>>
+        <i data-lucide="image"></i> <span>Media</span>
+      </a>
       <a href="/admin/plugins" class="<?= $isActive('/admin/plugins') ?>" <?= $currentPath === '/admin/plugins' ? 'aria-current="page"' : '' ?>>
         <i data-lucide="puzzle"></i> <span>Plugins</span>
       </a>
       <a href="/admin/themes" class="<?= $isActive('/admin/themes') ?>" <?= $currentPath === '/admin/themes' ? 'aria-current="page"' : '' ?>>
         <i data-lucide="palette"></i> <span>Themes</span>
+      </a>
+      <a href="/admin/backup" class="<?= $isActive('/admin/backup') ?>" <?= $currentPath === '/admin/backup' ? 'aria-current="page"' : '' ?>>
+        <i data-lucide="archive"></i> <span>Backups</span>
       </a>
       <a href="/admin/settings" class="<?= $isActive('/admin/settings') ?>" <?= $currentPath === '/admin/settings' ? 'aria-current="page"' : '' ?>>
         <i data-lucide="settings"></i> <span>Settings</span>

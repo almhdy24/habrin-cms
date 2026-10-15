@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#0C1017"/>
+
+  <!-- Nav Header -->
+  <rect width="600" height="52" fill="#151B23"/>
+  <line x1="0" y1="52" x2="600" y2="52" stroke="#2B323B" stroke-width="1"/>
+  <text x="36" y="32" font-family="monospace" font-size="15" font-weight="700" fill="#E6EDF3">&lt;<tspan fill="#58A6FF">Dark</tspan>/&gt;</text>
+  <text x="440" y="32" font-family="monospace" font-size="11" fill="#848D97">entries</text>
+  <text x="500" y="32" font-family="monospace" font-size="11" fill="#848D97">about</text>
+  <rect x="548" y="15" width="22" height="22" rx="4" fill="#1C232E" stroke="#2B323B"/>
+
+  <!-- Cards Grid -->
+  <g transform="translate(36, 76)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="254" height="144" rx="8" fill="#151B23" stroke="#2B323B" stroke-width="1"/>
+    <text x="16" y="24" font-family="monospace" font-size="9" fill="#848D97">[2026-10-15]</text>
+    <rect x="90" y="14" width="28" height="14" rx="3" fill="rgba(63, 185, 80, 0.15)"/>
+    <text x="96" y="24" font-family="monospace" font-size="9" font-weight="600" fill="#3FB950">3m</text>
+    <text x="16" y="52" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="700" fill="#E6EDF3">Deploying with PHP 8.1</text>
+    <rect x="16" y="66" width="220" height="5" rx="2" fill="#2B323B"/>
+    <rect x="16" y="76" width="180" height="5" rx="2" fill="#2B323B"/>
+    <line x1="16" y1="106" x2="238" y2="106" stroke="#2B323B" stroke-width="1"/>
+    <text x="16" y="125" font-family="monospace" font-size="10" fill="#58A6FF">read_post() →</text>
+
+    <!-- Card 2 -->
+    <rect x="274" y="0" width="254" height="144" rx="8" fill="#151B23" stroke="#2B323B" stroke-width="1"/>
+    <text x="290" y="24" font-family="monospace" font-size="9" fill="#848D97">[2026-10-12]</text>
+    <rect x="364" y="14" width="28" height="14" rx="3" fill="rgba(63, 185, 80, 0.15)"/>
+    <text x="370" y="24" font-family="monospace" font-size="9" font-weight="600" fill="#3FB950">5m</text>
+    <text x="290" y="52" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="700" fill="#E6EDF3">Zero Database Scaling</text>
+    <rect x="290" y="66" width="220" height="5" rx="2" fill="#2B323B"/>
+    <rect x="290" y="76" width="160" height="5" rx="2" fill="#2B323B"/>
+    <line x1="290" y1="106" x2="512" y2="106" stroke="#2B323B" stroke-width="1"/>
+    <text x="290" y="125" font-family="monospace" font-size="10" fill="#58A6FF">read_post() →</text>
+
+    <!-- Terminal Code Box -->
+    <rect x="0" y="164" width="528" height="135" rx="8" fill="#0B0E14" stroke="#2B323B" stroke-width="1"/>
+    <circle cx="20" cy="184" r="4" fill="#F85149"/>
+    <circle cx="34" cy="184" r="4" fill="#D29922"/>
+    <circle cx="48" cy="184" r="4" fill="#3FB950"/>
+    <text x="16" y="218" font-family="monospace" font-size="11" fill="#79C0FF">$ curl -s https://habrin.org/api/status</text>
+    <text x="16" y="240" font-family="monospace" font-size="11" fill="#848D97">{"system": "ready", "cms": "Habrin", "storage": "json"}</text>
+    <text x="16" y="268" font-family="monospace" font-size="11" fill="#3FB950">&gt; Process finished with exit code 0</text>
+  </g>
+</svg>

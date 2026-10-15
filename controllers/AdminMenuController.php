@@ -63,9 +63,10 @@ class AdminMenuController extends Controller
         ]);
     }
 
-    public function edit(int $id): void
+    public function edit(int|string $id): void
     {
-        $items = $this->menu->all();
+        $id = (int) $id;
+        $items = $this->menu->getItems();
         if (!isset($items[$id])) {
             Session::flash('error', 'Item not found.');
             $this->redirect('/admin/menu');
@@ -101,8 +102,9 @@ class AdminMenuController extends Controller
         ]);
     }
 
-    public function delete(int $id): void
+    public function delete(int|string $id): void
     {
+        $id = (int) $id;
         if ($this->isPost()) {
             $this->validateCsrf();
             $this->menu->deleteItem($id);
@@ -110,7 +112,7 @@ class AdminMenuController extends Controller
             $this->redirect('/admin/menu');
         }
         // Show confirmation if GET
-        $items = $this->menu->all();
+        $items = $this->menu->getItems();
         if (!isset($items[$id])) {
             Session::flash('error', 'Item not found.');
             $this->redirect('/admin/menu');
@@ -120,6 +122,30 @@ class AdminMenuController extends Controller
             'id' => $id,
             'csrf_token' => Session::csrfToken(),
         ]);
+    }
+
+    public function moveUp(int|string $id): void
+    {
+        $id = (int) $id;
+        if ($this->isPost()) {
+            $this->validateCsrf();
+            if ($this->menu->moveUp($id)) {
+                Session::flash('success', 'Menu item moved up.');
+            }
+        }
+        $this->redirect('/admin/menu');
+    }
+
+    public function moveDown(int|string $id): void
+    {
+        $id = (int) $id;
+        if ($this->isPost()) {
+            $this->validateCsrf();
+            if ($this->menu->moveDown($id)) {
+                Session::flash('success', 'Menu item moved down.');
+            }
+        }
+        $this->redirect('/admin/menu');
     }
 
     private function validateCsrf(): void

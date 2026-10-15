@@ -19,6 +19,14 @@
     <?= $this->filter('post_content', $post['content'], $post) ?>
   </div>
 
+  <?php if (!empty($post['tags']) && is_array($post['tags'])): ?>
+    <div class="editorial-tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; font-family: sans-serif;">
+      <?php foreach ($post['tags'] as $tag): ?>
+        <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; background: #e2e8f0; padding: 0.2rem 0.5rem; font-weight: 600;">#<?= $this->e($tag) ?></span>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+
   <footer class="article-footer">
     <div class="footer-signoff">
       <span class="signoff-mark">&#9632;</span>

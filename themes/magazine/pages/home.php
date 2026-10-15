@@ -33,9 +33,13 @@
       </div>
       <div class="lead-lead">
         <?php
-        $leadRendered = $this->filter('post_content', $leadStory['content'], $leadStory);
-        $leadPlain = trim(strip_tags($leadRendered));
-        echo htmlspecialchars(mb_substr($leadPlain, 0, 320)) . (mb_strlen($leadPlain) > 320 ? '…' : '');
+        if (!empty($leadStory['excerpt'])) {
+            echo htmlspecialchars($leadStory['excerpt']);
+        } else {
+            $leadRendered = $this->filter('post_content', $leadStory['content'], $leadStory);
+            $leadPlain = trim(strip_tags($leadRendered));
+            echo htmlspecialchars(mb_substr($leadPlain, 0, 320)) . (mb_strlen($leadPlain) > 320 ? '…' : '');
+        }
         ?>
       </div>
       <div class="lead-action">
@@ -64,9 +68,13 @@
             </h3>
             <p class="grid-excerpt">
               <?php
-              $rendered = $this->filter('post_content', $post['content'], $post);
-              $plain = trim(strip_tags($rendered));
-              echo htmlspecialchars(mb_substr($plain, 0, 150)) . (mb_strlen($plain) > 150 ? '…' : '');
+              if (!empty($post['excerpt'])) {
+                  echo htmlspecialchars($post['excerpt']);
+              } else {
+                  $rendered = $this->filter('post_content', $post['content'], $post);
+                  $plain = trim(strip_tags($rendered));
+                  echo htmlspecialchars(mb_substr($plain, 0, 150)) . (mb_strlen($plain) > 150 ? '…' : '');
+              }
               ?>
             </p>
             <a href="/post/<?= $this->e($post['slug']) ?>" class="grid-link">Read Story &rarr;</a>

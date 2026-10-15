@@ -74,7 +74,7 @@
 
           <div class="field">
             <label class="label" for="postStatus">Status</label>
-            <?php $currentStatus = $post['status'] ?? 'published'; ?>
+            <?php $currentStatus = $old['status'] ?? $post['status'] ?? 'published'; ?>
             <select id="postStatus" class="input" name="status">
               <option value="published" <?= $currentStatus === 'published' ? 'selected' : '' ?>>
                 🟢 Published (Public)
@@ -86,19 +86,70 @@
             <div class="help">Drafts can be previewed by logged-in administrators.</div>
           </div>
 
-          <div class="field">
-            <label class="label" for="postSlug">URL Slug</label>
-            <input id="postSlug" class="input" type="text" name="slug" value="<?= htmlspecialchars((string) ($post['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" readonly style="background: var(--bg-soft); color: var(--text-light); font-family: var(--font-mono); font-size: 0.85rem;">
-            <div class="help">Generated automatically from the article title.</div>
-          </div>
-
           <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem;">
             <button type="submit" class="button button-primary button-block button-lg">
               <i data-lucide="save"></i> Update Article
             </button>
+            <a href="/post/<?= htmlspecialchars((string) ($post['slug'] ?? '')) ?>" class="button button-light button-block" target="_blank" rel="noopener">
+              <i data-lucide="external-link"></i> View Live Article
+            </a>
             <button type="button" class="button button-light button-block" id="btnInsertMedia">
               <i data-lucide="image"></i> Insert Media
             </button>
+          </div>
+        </div>
+
+        <!-- Article Metadata Card -->
+        <div class="card mb-3" style="padding: 1.5rem;">
+          <h3 class="mb-3" style="font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <i data-lucide="sliders" style="color: var(--primary);"></i>
+            <span>Article Metadata</span>
+          </h3>
+
+          <div class="field">
+            <label class="label" for="postSlug">URL Slug</label>
+            <input
+              id="postSlug"
+              class="input"
+              type="text"
+              name="slug"
+              value="<?= htmlspecialchars((string) ($old['slug'] ?? $post['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+              style="font-family: var(--font-mono); font-size: 0.85rem;"
+            >
+            <div class="help mt-1" style="font-size: 0.78rem; word-break: break-all;">
+              URL: <code style="font-size: 0.78rem; color: var(--primary);">/post/<span id="slugPreview"><?= htmlspecialchars((string) ($old['slug'] ?? $post['slug'] ?? '')) ?></span></code>
+            </div>
+            <div class="help text-muted" style="font-size: 0.78rem;">Keep unchanged to preserve existing inbound links.</div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="postTags">Tags</label>
+            <?php
+              $tagsVal = isset($old['tags'])
+                ? (string) $old['tags']
+                : (is_array($post['tags'] ?? null) ? implode(', ', $post['tags']) : (string) ($post['tags'] ?? ''));
+            ?>
+            <input
+              id="postTags"
+              class="input"
+              type="text"
+              name="tags"
+              placeholder="tech, tutorial, tips"
+              value="<?= htmlspecialchars($tagsVal, ENT_QUOTES, 'UTF-8') ?>"
+            >
+            <div class="help">Comma-separated tags for categorization.</div>
+          </div>
+
+          <div class="field mb-0">
+            <label class="label" for="postExcerpt">Summary / Excerpt</label>
+            <textarea
+              id="postExcerpt"
+              class="textarea"
+              name="excerpt"
+              rows="3"
+              placeholder="Brief summary for listings and SEO..."
+            ><?= htmlspecialchars((string) ($old['excerpt'] ?? $post['excerpt'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
+            <div class="help">Used as post preview snippet and meta description.</div>
           </div>
         </div>
 
@@ -251,6 +302,20 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch(err => {
         listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--danger); padding: 1.5rem;">Failed to load media items.</div>';
       });
+  }
+
+  // Slug preview handler
+  const slugInput = document.getElementById('postSlug');
+  const slugPreview = document.getElementById('slugPreview');
+
+  if (slugInput && slugPreview) {
+    slugInput.addEventListener('input', function () {
+      const cleaned = slugInput.value.toLowerCase().trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      slugPreview.textContent = cleaned || 'your-slug';
+    });
   }
 });
 </script>

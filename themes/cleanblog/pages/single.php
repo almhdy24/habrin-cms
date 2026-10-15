@@ -22,6 +22,14 @@ $readTime = max(1, (int) ceil($wordCount / 200));
     <?= $this->filter('post_content', $post['content'], $post) ?>
   </div>
 
+  <?php if (!empty($post['tags']) && is_array($post['tags'])): ?>
+    <div class="article-tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem;">
+      <?php foreach ($post['tags'] as $tag): ?>
+        <span style="font-size: 0.82rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 999px;">#<?= $this->e($tag) ?></span>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+
   <footer class="article-footer">
     <hr class="divider">
     <div class="footer-actions">

@@ -24,6 +24,16 @@
     <?= $this->filter('post_content', $post['content'], $post) ?>
   </div>
 
+  <?php if (!empty($post['tags']) && is_array($post['tags'])): ?>
+    <div class="flex flex-wrap gap-1 mt-4">
+      <?php foreach ($post['tags'] as $tag): ?>
+        <span class="badge" style="background: var(--bg-soft); color: var(--text-muted); font-size: 0.8rem; padding: 0.25rem 0.55rem; border-radius: 4px; border: 1px solid var(--border);">
+          #<?= htmlspecialchars($tag) ?>
+        </span>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
+
   <div class="mt-4">
     <a href="/" class="button button-light">
       <i data-lucide="home"></i> Home

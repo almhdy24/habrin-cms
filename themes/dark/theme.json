@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A sleek, minimal dark theme optimized for low-light reading and modern aesthetics. Perfect for night owls and developers.",
   "author": "Habrin Team",
-  "screenshot": "",
+  "screenshot": "screenshot.svg",
   "requires": {
     "php": ">=8.1",
     "cms": ">=0.9.0"

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#F9F7F2"/>
+
+  <!-- Dateline -->
+  <text x="36" y="24" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="1" fill="#595959">THURSDAY, OCTOBER 15, 2026</text>
+  <text x="300" y="24" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="1" fill="#595959" text-anchor="middle">DAILY INDEPENDENT EDITION</text>
+  <text x="564" y="24" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="1" fill="#595959" text-anchor="end">HABRIN CMS</text>
+  <line x1="36" y1="32" x2="564" y2="32" stroke="#DCD7CE" stroke-width="1"/>
+
+  <!-- Masthead -->
+  <text x="300" y="68" font-family="'Playfair Display', Georgia, serif" font-size="28" font-weight="900" letter-spacing="1" fill="#1A1A1A" text-anchor="middle">THE HABRIN CHRONICLE</text>
+  <text x="300" y="84" font-family="Georgia, serif" font-size="10" font-style="italic" fill="#595959" text-anchor="middle">Independent Journalism &amp; Thoughtful Commentary</text>
+
+  <!-- Double Rule -->
+  <line x1="36" y1="94" x2="564" y2="94" stroke="#1A1A1A" stroke-width="1.5"/>
+  <line x1="36" y1="97" x2="564" y2="97" stroke="#1A1A1A" stroke-width="0.75"/>
+
+  <!-- Nav Bar -->
+  <text x="300" y="112" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" letter-spacing="1.5" fill="#1A1A1A" text-anchor="middle">FRONT PAGE   •   DISPATCHES   •   OPINION   •   EDITORIAL DESK</text>
+  <line x1="36" y1="120" x2="564" y2="120" stroke="#1A1A1A" stroke-width="1"/>
+
+  <!-- Lead Story Card -->
+  <rect x="36" y="132" width="528" height="150" fill="#FFFFFF" stroke="#DCD7CE" stroke-width="1"/>
+  <rect x="54" y="146" width="94" height="15" fill="#991B1B"/>
+  <text x="60" y="157" font-family="-apple-system, sans-serif" font-size="7.5" font-weight="800" letter-spacing="1" fill="#FFFFFF">LEADING DISPATCH</text>
+  <text x="54" y="186" font-family="'Playfair Display', Georgia, serif" font-size="20" font-weight="800" fill="#1A1A1A">The New Wave of Independent Web Publishing</text>
+  <text x="54" y="202" font-family="-apple-system, sans-serif" font-size="9" fill="#595959">October 15, 2026 • By Chronicle Editorial Bureau</text>
+  <rect x="54" y="218" width="490" height="6" fill="#E8E4DB"/>
+  <rect x="54" y="230" width="460" height="6" fill="#E8E4DB"/>
+  <rect x="54" y="242" width="380" height="6" fill="#E8E4DB"/>
+  <text x="54" y="268" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="#991B1B">CONTINUE READING FULL STORY →</text>
+
+  <!-- Secondary Grid -->
+  <g transform="translate(36, 296)">
+    <line x1="0" y1="0" x2="250" y2="0" stroke="#1A1A1A" stroke-width="1.5"/>
+    <text x="0" y="18" font-family="'Playfair Display', Georgia, serif" font-size="13" font-weight="700" fill="#1A1A1A">Global Speed Benchmarks</text>
+    <rect x="0" y="26" width="240" height="5" fill="#E8E4DB"/>
+    <rect x="0" y="36" width="200" height="5" fill="#E8E4DB"/>
+    <text x="0" y="58" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" fill="#991B1B">READ STORY →</text>
+
+    <line x1="278" y1="0" x2="528" y2="0" stroke="#1A1A1A" stroke-width="1.5"/>
+    <text x="278" y="18" font-family="'Playfair Display', Georgia, serif" font-size="13" font-weight="700" fill="#1A1A1A">Writing for Digital Audiences</text>
+    <rect x="278" y="26" width="240" height="5" fill="#E8E4DB"/>
+    <rect x="278" y="36" width="180" height="5" fill="#E8E4DB"/>
+    <text x="278" y="58" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" fill="#991B1B">READ STORY →</text>
+  </g>
+</svg>

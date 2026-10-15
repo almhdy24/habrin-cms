@@ -136,4 +136,51 @@ final class EndToEndPublishingWorkflowTest extends TestCase
         // Test directory traversal prevention
         $this->assertFalse($media->delete('../../config.php'));
     }
+
+    public function testCustomSlugExcerptAndTagsWorkflow(): void
+    {
+        $postId = $this->posts->nextId();
+        $this->createdPostIds[] = $postId;
+
+        $title = 'Article with Custom Metadata ' . uniqid();
+        $customSlug = 'custom-vanity-url-' . uniqid();
+        $excerpt = 'This is a custom SEO excerpt summarizing the entire article.';
+        $tags = ['engineering', 'php8', 'cms'];
+
+        // Save post with custom slug, excerpt, and tags
+        $saved = $this->posts->savePost($postId, [
+            'id' => $postId,
+            'title' => $title,
+            'slug' => $customSlug,
+            'excerpt' => $excerpt,
+            'tags' => $tags,
+            'content' => 'Main content body here.',
+            'status' => 'published',
+            'created_at' => time(),
+            'updated_at' => time(),
+            'deleted_at' => null,
+        ]);
+        $this->assertTrue($saved);
+
+        // Fetch and assert
+        $post = $this->posts->find($postId);
+        $this->assertNotNull($post);
+        $this->assertSame($customSlug, $post['slug']);
+        $this->assertSame($excerpt, $post['excerpt']);
+        $this->assertSame($tags, $post['tags']);
+
+        // Verify lookup by custom slug
+        $postBySlug = $this->posts->findBySlug($customSlug);
+        $this->assertNotNull($postBySlug);
+        $this->assertSame($postId, $postBySlug['id']);
+
+        // Update post without changing slug, verify slug is preserved
+        $post['title'] = 'Updated Title Without Changing Slug';
+        $post['updated_at'] = time();
+        $this->posts->savePost($postId, $post);
+
+        $postAfterUpdate = $this->posts->find($postId);
+        $this->assertSame($customSlug, $postAfterUpdate['slug']);
+        $this->assertSame('Updated Title Without Changing Slug', $postAfterUpdate['title']);
+    }
 }

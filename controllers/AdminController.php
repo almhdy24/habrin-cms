@@ -243,13 +243,25 @@ final class AdminController extends Controller
 
         [$title, $content] = $this->validatePost();
         $status = $this->input('status', 'published') === 'draft' ? 'draft' : 'published';
+        $customSlug = trim((string) $this->input('slug', ''));
+        $excerpt = trim((string) $this->input('excerpt', ''));
+        $tagsInput = trim((string) $this->input('tags', ''));
+        $tags = array_values(array_filter(array_map('trim', explode(',', $tagsInput))));
 
         $id = $this->posts->nextId();
-        $slug = $this->posts->generateSlug($title);
+        if ($customSlug !== '') {
+            $slugCandidate = strtolower(trim(preg_replace('/[^a-z0-9-]+/i', '-', $customSlug), '-'));
+            $slug = $slugCandidate !== '' ? $this->posts->generateSlug($slugCandidate) : $this->posts->generateSlug($title);
+        } else {
+            $slug = $this->posts->generateSlug($title);
+        }
 
         $this->posts->savePost($id, [
+            'id'         => $id,
             'title'      => $title,
             'slug'       => $slug,
+            'excerpt'    => $excerpt,
+            'tags'       => $tags,
             'content'    => $content,
             'status'     => $status,
             'created_at' => time(),
@@ -276,11 +288,27 @@ final class AdminController extends Controller
 
             [$title, $content] = $this->validatePost();
             $status = $this->input('status', $post['status'] ?? 'published') === 'draft' ? 'draft' : 'published';
+            $customSlug = trim((string) $this->input('slug', ''));
+            $excerpt = trim((string) $this->input('excerpt', ''));
+            $tagsInput = trim((string) $this->input('tags', ''));
+            $tags = array_values(array_filter(array_map('trim', explode(',', $tagsInput))));
 
             $post['title']      = $title;
             $post['content']    = $content;
             $post['status']     = $status;
-            $post['slug']       = $this->posts->generateSlug($title, $id);
+            $post['excerpt']    = $excerpt;
+            $post['tags']       = $tags;
+
+            // Handle slug: if user specified a new custom slug, generate/validate it; otherwise keep existing slug
+            if ($customSlug !== '') {
+                $slugCandidate = strtolower(trim(preg_replace('/[^a-z0-9-]+/i', '-', $customSlug), '-'));
+                if ($slugCandidate !== '' && $slugCandidate !== ($post['slug'] ?? '')) {
+                    $post['slug'] = $this->posts->generateSlug($slugCandidate, $id);
+                }
+            } elseif (empty($post['slug'])) {
+                $post['slug'] = $this->posts->generateSlug($title, $id);
+            }
+
             $post['updated_at'] = time();
 
             $this->posts->savePost($id, $post);
@@ -418,11 +446,68 @@ final class AdminController extends Controller
         }
 
         $this->view('admin/settings', [
-            'settings' => $this->settings->all(),
-            'flash'    => $this->getFlash(),
+            'settings'   => $this->settings->all(),
+            'admin_user' => Session::get('user', 'admin'),
+            'flash'      => $this->getFlash(),
             'csrf_token' => Session::csrfToken(),
-            'old' => Session::get('_old', []),
+            'old'        => Session::get('_old', []),
         ]);
+    }
+
+    public function security(): void
+    {
+        if ($this->isPost()) {
+            $this->validateCsrf();
+
+            $currentPass = (string) $this->input('current_password', '');
+            $newUsername = trim((string) $this->input('username', ''));
+            $newPassword = (string) $this->input('new_password', '');
+            $confirmPassword = (string) $this->input('confirm_password', '');
+
+            $adminPath = App::path('content', '.admin.php');
+            if (!file_exists($adminPath)) {
+                $this->flash('error', 'Administrator configuration file not found.');
+                $this->redirect('/admin/settings');
+            }
+
+            $adminCfg = require $adminPath;
+            $savedUser = is_array($adminCfg) ? (string) ($adminCfg['user'] ?? '') : '';
+            $savedHash = is_array($adminCfg) ? (string) ($adminCfg['pass'] ?? '') : '';
+
+            if (!password_verify($currentPass, $savedHash)) {
+                $this->flash('error', 'Incorrect current password. Verification failed.');
+                $this->redirect('/admin/settings');
+            }
+
+            if ($newUsername === '') {
+                $newUsername = $savedUser;
+            }
+
+            if ($newPassword !== '') {
+                if (strlen($newPassword) < 8) {
+                    $this->flash('error', 'New password must be at least 8 characters long.');
+                    $this->redirect('/admin/settings');
+                }
+                if ($newPassword !== $confirmPassword) {
+                    $this->flash('error', 'New password and confirmation do not match.');
+                    $this->redirect('/admin/settings');
+                }
+                $finalHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            } else {
+                $finalHash = $savedHash;
+            }
+
+            $export = "<?php\n\nreturn [\n    'user' => " . var_export($newUsername, true) . ",\n    'pass' => " . var_export($finalHash, true) . ",\n];\n";
+            file_put_contents($adminPath, $export, LOCK_EX);
+
+            Session::set('user', $newUsername);
+            Audit::log($newUsername, 'auth.credentials_updated', []);
+
+            $this->flash('success', 'Administrator security credentials updated successfully.');
+            $this->redirect('/admin/settings');
+        }
+
+        $this->redirect('/admin/settings');
     }
 
     public function system(): void

@@ -32,9 +32,13 @@
 
           <div class="card-summary">
             <?php
-            $rendered = $this->filter('post_content', $post['content'], $post);
-            $plain = trim(strip_tags($rendered));
-            echo htmlspecialchars(mb_substr($plain, 0, 180)) . (mb_strlen($plain) > 180 ? '…' : '');
+            if (!empty($post['excerpt'])) {
+                echo htmlspecialchars($post['excerpt']);
+            } else {
+                $rendered = $this->filter('post_content', $post['content'], $post);
+                $plain = trim(strip_tags($rendered));
+                echo htmlspecialchars(mb_substr($plain, 0, 180)) . (mb_strlen($plain) > 180 ? '…' : '');
+            }
             ?>
           </div>
 

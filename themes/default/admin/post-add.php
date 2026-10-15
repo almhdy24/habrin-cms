@@ -89,6 +89,54 @@
             </a>
           </div>
         </div>
+
+        <div class="card mb-4" style="padding: 1.5rem;">
+          <h3 class="mb-3" style="font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <i data-lucide="sliders" style="color: var(--primary);"></i>
+            <span>Article Metadata</span>
+          </h3>
+
+          <div class="field">
+            <label class="label" for="postSlug">Custom Slug</label>
+            <input
+              id="postSlug"
+              class="input"
+              type="text"
+              name="slug"
+              placeholder="auto-generated-from-title"
+              value="<?= htmlspecialchars((string) ($old['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+              style="font-family: var(--font-mono); font-size: 0.85rem;"
+            >
+            <div class="help mt-1" style="font-size: 0.78rem; word-break: break-all;">
+              URL: <code style="font-size: 0.78rem; color: var(--primary);">/post/<span id="slugPreview"><?= htmlspecialchars((string) ($old['slug'] ?? 'your-slug'), ENT_QUOTES, 'UTF-8') ?></span></code>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="postTags">Tags</label>
+            <input
+              id="postTags"
+              class="input"
+              type="text"
+              name="tags"
+              placeholder="tech, tutorial, news"
+              value="<?= htmlspecialchars((string) ($old['tags'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+            >
+            <div class="help">Comma-separated tags for categorization.</div>
+          </div>
+
+          <div class="field mb-0">
+            <label class="label" for="postExcerpt">Summary / Excerpt</label>
+            <textarea
+              id="postExcerpt"
+              class="textarea"
+              name="excerpt"
+              rows="3"
+              placeholder="Brief summary for listings and SEO..."
+            ><?= htmlspecialchars((string) ($old['excerpt'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
+            <div class="help">Used as post preview snippet and meta description.</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -225,6 +273,37 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch(err => {
         listContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--danger); padding: 1.5rem;">Failed to load media items.</div>';
       });
+  }
+
+  // Slug auto-generation & preview
+  const titleInput = document.getElementById('postTitle');
+  const slugInput = document.getElementById('postSlug');
+  const slugPreview = document.getElementById('slugPreview');
+
+  function toSlug(str) {
+    return str.toString().toLowerCase().trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  if (slugInput && slugPreview) {
+    let userEditedSlug = Boolean(slugInput.value.trim());
+
+    slugInput.addEventListener('input', function () {
+      userEditedSlug = Boolean(slugInput.value.trim());
+      slugPreview.textContent = userEditedSlug ? toSlug(slugInput.value) : 'your-slug';
+    });
+
+    if (titleInput) {
+      titleInput.addEventListener('input', function () {
+        if (!userEditedSlug) {
+          const generated = toSlug(titleInput.value);
+          slugInput.value = generated;
+          slugPreview.textContent = generated || 'your-slug';
+        }
+      });
+    }
   }
 });
 </script>

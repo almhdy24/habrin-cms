@@ -122,6 +122,82 @@
     </div>
   </form>
 
+  <!-- Administrator Security Card -->
+  <form method="POST" action="/admin/security" class="card mt-4">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+
+    <h3 style="font-size: 1.15rem; color: var(--ink); margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+      <i data-lucide="shield" style="color: var(--primary);"></i> Administrator Account &amp; Security
+    </h3>
+    <p class="text-muted" style="font-size: 0.88rem; margin-bottom: 1.25rem;">
+      Update your administrator username or password. You must provide your current password to authorize any changes.
+    </p>
+
+    <div class="field">
+      <label class="label" for="secCurrentPass"><i data-lucide="key"></i> Current Password <span class="text-muted" style="font-weight: 400;">(required)</span></label>
+      <input
+        id="secCurrentPass"
+        class="input"
+        type="password"
+        name="current_password"
+        placeholder="Enter your current password"
+        required
+        autocomplete="current-password"
+      >
+      <p class="field-hint"><i data-lucide="lock"></i> Verification required for all credential modifications.</p>
+    </div>
+
+    <div class="field">
+      <label class="label" for="secUsername"><i data-lucide="user"></i> Admin Username</label>
+      <input
+        id="secUsername"
+        class="input"
+        type="text"
+        name="username"
+        value="<?= htmlspecialchars((string) ($admin_user ?? 'admin'), ENT_QUOTES, 'UTF-8') ?>"
+        placeholder="admin"
+        autocomplete="username"
+      >
+      <p class="field-hint"><i data-lucide="info"></i> The login username for accessing the Habrin administration panel.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+      <div class="field">
+        <label class="label" for="secNewPass"><i data-lucide="lock"></i> New Password</label>
+        <input
+          id="secNewPass"
+          class="input"
+          type="password"
+          name="new_password"
+          placeholder="Leave blank to keep unchanged"
+          minlength="8"
+          autocomplete="new-password"
+        >
+        <p class="field-hint"><i data-lucide="info"></i> Minimum 8 characters. Leave empty if only changing username.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="secConfirmPass"><i data-lucide="check-circle"></i> Confirm New Password</label>
+        <input
+          id="secConfirmPass"
+          class="input"
+          type="password"
+          name="confirm_password"
+          placeholder="Repeat new password"
+          minlength="8"
+          autocomplete="new-password"
+        >
+        <p class="field-hint"><i data-lucide="info"></i> Must match the new password above.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-1 mt-4">
+      <button type="submit" class="button button-primary">
+        <i data-lucide="shield-check"></i> Update Security Credentials
+      </button>
+    </div>
+  </form>
+
   <?php $this->hook('admin_settings_after') ?>
 
 </section>

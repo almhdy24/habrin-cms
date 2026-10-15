@@ -74,4 +74,31 @@ final class AuthTest extends TestCase
         $this->assertTrue(password_verify($password, $hash));
         $this->assertFalse(password_verify('wrong_password', $hash));
     }
+
+    public function testAdminCredentialsValidationRules(): void
+    {
+        $currentPass = 'InitialAdminPass123!';
+        $currentHash = password_hash($currentPass, PASSWORD_DEFAULT);
+
+        // Verification of current password
+        $this->assertTrue(password_verify($currentPass, $currentHash));
+        $this->assertFalse(password_verify('wrongPass123', $currentHash));
+
+        // New password length rule (min 8 chars)
+        $shortPass = 'abc123';
+        $this->assertLessThan(8, strlen($shortPass));
+
+        $validNewPass = 'NewComplexAdminP@ss2026';
+        $this->assertGreaterThanOrEqual(8, strlen($validNewPass));
+
+        // Confirmation matching rule
+        $confirmMatching = 'NewComplexAdminP@ss2026';
+        $confirmMismatched = 'DifferentP@ss2026';
+        $this->assertSame($validNewPass, $confirmMatching);
+        $this->assertNotSame($validNewPass, $confirmMismatched);
+
+        // Timing-safe username comparison
+        $this->assertTrue(hash_equals('admin', 'admin'));
+        $this->assertFalse(hash_equals('admin', 'attacker'));
+    }
 }

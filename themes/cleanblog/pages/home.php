@@ -33,9 +33,13 @@
 
         <div class="story-summary">
           <?php
-          $rendered = $this->filter('post_content', $post['content'], $post);
-          $plain = trim(strip_tags($rendered));
-          echo htmlspecialchars(mb_substr($plain, 0, 220)) . (mb_strlen($plain) > 220 ? '…' : '');
+          if (!empty($post['excerpt'])) {
+              echo htmlspecialchars($post['excerpt']);
+          } else {
+              $rendered = $this->filter('post_content', $post['content'], $post);
+              $plain = trim(strip_tags($rendered));
+              echo htmlspecialchars(mb_substr($plain, 0, 220)) . (mb_strlen($plain) > 220 ? '…' : '');
+          }
           ?>
         </div>
 

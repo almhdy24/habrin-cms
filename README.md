@@ -1,8 +1,8 @@
-# Pico JSON CMS
+# Habrin CMS
 
-A lightweight, secure, and fast flat-file CMS built with PHP 8.1+.
+A modern, lightweight, fast, and mobile-friendly flat-file CMS built with PHP 8.1+.
 
-Store content in structured JSON, write in Markdown, upload media securely, and publish instantly with a responsive admin panel — without database configuration, Node.js, or complex infrastructure.
+Store content in structured JSON, write in Markdown, manage media effortlessly, and publish instantly with a polished, touch-first admin panel — without databases, Node.js, or complex infrastructure.
 
 [![Release](https://img.shields.io/github/v/release/almhdy24/pico-json-cms?label=release)](https://github.com/almhdy24/pico-json-cms/releases)
 [![PHP](https://img.shields.io/badge/php-8.1%2B-blue)](https://www.php.net/)
@@ -11,17 +11,35 @@ Store content in structured JSON, write in Markdown, upload media securely, and 
 
 ---
 
-## 🎯 Highlights
+## 🎨 Highlights & Design System
 
-- **Zero Database Required**: Pure flat-file persistence with atomic writes and sharded JSON storage.
-- **Security-First Architecture**: Strictly verified CSRF tokens, session fixation defense, login lockout backoff, SVG sanitization, MIME verification, and path traversal prevention.
-- **Web-Based Installer**: Guided initial setup with strong password enforcement and automatic installation locking.
-- **Media Library**: Drag-and-drop file uploads with extension whitelist, MIME inspection, XSS-safe SVG handling, and instant Markdown copy snippets.
-- **Backup & Safe Restore**: Native ZIP / JSON exports with automatic pre-restore safety snapshots and zip path traversal validation.
-- **Drafts & Publishing Workflow**: Seamless draft vs. published state management with private admin preview banners.
-- **Full-Text Search**: Fast, incremental search across post titles, content, and slugs.
-- **Extensible Hook System**: WordPress-style actions and filters for plugins and customizable themes.
-- **Themes & Layouts**: Server-rendered Plates templates with fallback inheritance.
+- **Zero Database Required**: Pure flat-file persistence with atomic writes, sharded JSON storage, and slug indexing.
+- **Mobile-First Responsive Admin**:
+  - Full-screen collapsible drawer sidebar with hamburger toggle on phones and tablets.
+  - Sticky mobile header for quick dashboard access and status awareness.
+  - High-contrast, touch-friendly UI components (all interactive controls $\ge$ 44px).
+  - Modern typography, layered SVG brand mark, and dark slate dashboard styling.
+- **Editorial Experience**:
+  - 2-column post editor (editor canvas on left, publishing metadata & status on right).
+  - Live word and character counter.
+  - Drafts vs. Published states with dedicated status badges and authenticated draft preview banners.
+  - Fast full-text search across titles, slugs, and body.
+- **Interactive Media Library**:
+  - Drag-and-drop file uploads with instant non-blocking toast notifications (`window.habrinToast`).
+  - One-click Markdown embed snippet copy.
+  - Strict MIME type verification, extension whitelist, and automated SVG XSS sanitization.
+- **Safe Backups & Snapshots**:
+  - One-click ZIP / JSON archives with path traversal verification.
+  - Automated pre-restore safety snapshots before any archive is applied.
+- **Security-First Architecture**:
+  - Cryptographically secure CSRF protection on all state-changing actions.
+  - Session fixation protection, secure cookie flags (`HttpOnly`, `SameSite=Lax`, HTTPS `Secure`).
+  - Progressive login backoff throttling with 5-minute lockout after 5 failed attempts.
+  - Direct execution prevention with distributed `.htaccess` protections.
+- **Plates Template Engine**:
+  - Server-rendered templates with clean inheritance, fallback resolution, and customizable themes (`default`, `cleanblog`, `dark`, `magazine`).
+- **Unified Hooks Architecture**:
+  - WordPress-style action and filter hooks (`Hooks::add_action`, `Hooks::add_filter`) with plugin error isolation.
 
 ---
 
@@ -30,20 +48,20 @@ Store content in structured JSON, write in Markdown, upload media securely, and 
 ### 1. Requirements
 
 - PHP 8.1.0 or higher
-- PHP extensions: `json`, `mbstring`, `fileinfo`, `zip` (optional for zip backups)
-- Apache / Nginx with URL rewriting enabled (`mod_rewrite` for Apache)
+- PHP extensions: `json`, `mbstring`, `fileinfo`, `zip` (optional, for ZIP backups)
+- Web server: Apache (with `mod_rewrite`), Nginx, Caddy, or PHP built-in server
 
 ### 2. Installation
 
 Clone the repository and install Composer dependencies:
 
 ```bash
-git clone https://github.com/almhdy24/pico-json-cms.git
-cd pico-json-cms
+git clone https://github.com/almhdy24/pico-json-cms.git habrin-cms
+cd habrin-cms
 composer install --no-dev --optimize-autoloader
 ```
 
-Ensure web-server write permissions on storage directories:
+Set server write permissions on the data and runtime directories:
 
 ```bash
 chmod -R 775 content logs backups assets/uploads
@@ -51,7 +69,7 @@ chmod -R 775 content logs backups assets/uploads
 
 ### 3. Run the Web Installer
 
-Start the built-in development server (or point your virtual host to the directory):
+Start the built-in development server (or configure your virtual host to serve the directory):
 
 ```bash
 php -S localhost:8000
@@ -63,18 +81,22 @@ Navigate to:
 http://localhost:8000/installer
 ```
 
-The installer verifies environment compatibility, initializes core configuration, and prompts you to configure your primary administrator account with a strong password. Once finished, it creates `content/.installed` to permanently lock installer endpoints.
+The 3-step installer will:
+1. Verify system requirements, PHP version, and directory permissions.
+2. Initialize site settings and menu configuration.
+3. Prompt you to securely create your primary administrator account with a strong password.
+4. Permanently seal installer access by generating `content/.installed`.
 
 ---
 
 ## 🔒 Security Hardening
 
-Pico JSON CMS incorporates defense-in-depth protections:
+Habrin CMS is built with defense-in-depth principles:
 
-1. **No Default Credentials**:
+1. **No Insecure Default Credentials**:
    - The installer mandates a custom administrator password and rejects predictable defaults.
    - Passwords are encrypted with `PASSWORD_BCRYPT`.
-   - Admin credentials are stored outside the web root or strictly protected in `content/.admin.php` with direct execution prevention (`defined('BASE_PATH') || exit;`).
+   - Admin credentials are stored protected in `content/.admin.php` with direct execution prevention (`defined('BASE_PATH') || exit;`).
 
 2. **Session Security & Login Throttling**:
    - Cookie parameters: `HttpOnly`, `SameSite=Lax`, and dynamic `Secure` over HTTPS.
@@ -102,9 +124,9 @@ Pico JSON CMS incorporates defense-in-depth protections:
 
 ---
 
-## 🛠️ Testing & Verification
+## 🛠️ Testing & Quality Assurance
 
-Run the automated test suite:
+Run the automated test suite with PHPUnit:
 
 ```bash
 php vendor/bin/phpunit
@@ -121,24 +143,29 @@ Test coverage includes:
 
 ---
 
-## 📁 Project Layout
+## 📁 Directory Structure
 
 ```text
-pico-json-cms/
-├── assets/             # Static CSS, JS, and uploads
-│   └── uploads/        # User media uploads (protected against script execution)
+habrin-cms/
+├── assets/             # Static CSS, JS, logo SVG, and uploads
+│   ├── images/         # Official Habrin brand marks and SVGs
+│   └── uploads/        # Uploaded media (execution disabled via .htaccess)
 ├── backups/            # System backup archives (access denied)
 ├── content/            # JSON data storage, shards, and indexes (access denied)
-│   ├── indexes/        # Incremental slug and pagination indexes
+│   ├── indexes/        # Slug and pagination indexes
 │   └── posts/          # Sharded post JSON files
 ├── controllers/        # Application MVC controllers
 ├── core/               # Frozen core architecture (App, Router, Auth, Session, Hooks)
 ├── docs/               # Technical guides, deployment, and API references
 ├── logs/               # Application runtime and audit logs (access denied)
 ├── models/             # Business logic and JSON persistence models
-├── plugins/            # Plugin modules (Markdown, SEO, Sitemap, Analytics)
+├── plugins/            # Extensibility modules (Markdown, SEO, Sitemap, Analytics)
 ├── tests/              # PHPUnit regression and integration test suite
 ├── themes/             # Frontend themes and admin layouts
+│   ├── cleanblog/      # Minimalist typography theme
+│   ├── dark/           # High-contrast dark theme
+│   ├── default/        # Habrin flagship theme & admin design system
+│   └── magazine/       # Multi-column editorial theme
 ├── config.php          # Main site configuration
 ├── index.php           # Public web entry point
 └── composer.json       # Project dependencies and autoloading definitions
@@ -148,9 +175,9 @@ pico-json-cms/
 
 ## 📖 Documentation
 
-- [Deployment Guide](docs/DEPLOY.md)
 - [Complete User Guide](docs/guide.md)
-- [Admin Manual](docs/admin.md)
+- [Admin Manual & Mobile Usage](docs/admin.md)
+- [Deployment Guide](docs/DEPLOY.md)
 - [Frequently Asked Questions](docs/faq.md)
 - [Upgrade Guide](UPGRADE.md)
 - [Core Freeze Contract](CORE_FREEZE.md)
@@ -159,5 +186,5 @@ pico-json-cms/
 
 ## 📄 License
 
-This software is open-source under the [MIT License](LICENSE).
-Created and maintained by [Elmahdi Abdallh](https://github.com/almhdy24).
+This software is open-source under the [MIT License](LICENSE).  
+Created and maintained by [Elmahdi Abdallh](https://github.com/almhdy24) and the Habrin CMS contributors.

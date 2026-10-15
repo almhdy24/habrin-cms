@@ -15,7 +15,7 @@
     <h3>General</h3>
     <div class="field">
       <label class="label"><i data-lucide="type"></i> Site Title</label>
-      <input class="input" type="text" name="site_title" value="<?= htmlspecialchars($old['site_title'] ?? $settings['site_title'] ?? '') ?>" placeholder="My Pico CMS">
+      <input class="input" type="text" name="site_title" value="<?= htmlspecialchars($old['site_title'] ?? $settings['site_title'] ?? '') ?>" placeholder="Habrin CMS">
     </div>
 
     <div class="field">
@@ -25,7 +25,7 @@
 
     <div class="field">
       <label class="label"><i data-lucide="search"></i> SEO Keywords</label>
-      <input class="input" type="text" name="site_keywords" value="<?= htmlspecialchars($old['site_keywords'] ?? $settings['site_keywords'] ?? '') ?>" placeholder="blog, cms, php">
+      <input class="input" type="text" name="site_keywords" value="<?= htmlspecialchars($old['site_keywords'] ?? $settings['site_keywords'] ?? '') ?>" placeholder="habrin, blog, cms, php">
     </div>
 
     <hr>
@@ -33,7 +33,7 @@
     <h3>Hero Section</h3>
     <div class="field">
       <label class="label"><i data-lucide="heading"></i> Hero Heading</label>
-      <input class="input" type="text" name="hero_heading" value="<?= htmlspecialchars($old['hero_heading'] ?? $settings['hero_heading'] ?? '') ?>" placeholder="Welcome to Pico CMS">
+      <input class="input" type="text" name="hero_heading" value="<?= htmlspecialchars($old['hero_heading'] ?? $settings['hero_heading'] ?? '') ?>" placeholder="Welcome to Habrin CMS">
     </div>
 
     <div class="field">

@@ -3,12 +3,22 @@
     <div class="header-inner">
       <div class="header-brand">
         <a href="/" class="brand-link">
-          <i data-lucide="pen-tool" class="brand-icon"></i>
-          <span class="brand-name"><?= $this->e($settings['site_title'] ?? 'Pico CMS') ?></span>
+          <svg viewBox="0 0 40 40" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="habrinNavGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#4f46e5" />
+              </linearGradient>
+            </defs>
+            <rect width="40" height="40" rx="9" fill="url(#habrinNavGrad)" />
+            <path d="M12 10V30M28 10V30M12 20H28" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+          </svg>
+          <span class="brand-name"><?= $this->e($settings['site_title'] ?? 'Habrin CMS') ?></span>
         </a>
       </div>
 
-      <button class="navbar-burger" aria-label="Toggle menu" type="button">
+      <button class="navbar-burger" aria-label="Toggle navigation menu" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
       </button>
 

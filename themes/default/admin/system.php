@@ -7,7 +7,7 @@
   <div class="card mb-4">
     <h3 class="mb-2">CMS</h3>
     <ul style="list-style: none; padding: 0;">
-      <li><strong>Name:</strong> <?= htmlspecialchars($system['cms']['name'] ?? 'Pico JSON CMS') ?></li>
+      <li><strong>Name:</strong> <?= htmlspecialchars($system['cms']['name'] ?? 'Habrin CMS') ?></li>
       <li><strong>Version:</strong> <?= htmlspecialchars($system['cms']['version'] ?? '') ?></li>
       <li><strong>Storage:</strong> <?= htmlspecialchars($system['cms']['storage'] ?? 'Flat-file JSON (sharded)') ?></li>
     </ul>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pico JSON CMS - Markdown Plugin
+ * Habrin CMS - Markdown Plugin
  */
 
 declare(strict_types=1);

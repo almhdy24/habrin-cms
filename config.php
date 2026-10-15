@@ -1,17 +1,14 @@
 <?php
 
 /**
- * Pico JSON CMS - Main Configuration
- *
- * Author: Elmahdi
- * GitHub: https://github.com/almhdy24/pico-json-cms
+ * Habrin CMS - Main Configuration
  *
  * License: MIT
  */
 
 return [
-    'app_name' => 'Pico JSON CMS',
-    'base_url' => '',
-    'theme' => 'default',
-    'debug' => false,
+  'app_name' => 'Habrin CMS',
+  'base_url' => '',
+  'theme' => 'default',
+  'debug' => false
 ];

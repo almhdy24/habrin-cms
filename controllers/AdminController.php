@@ -1,6 +1,6 @@
 <?php
 /**
- * Pico JSON CMS — Admin Controller
+ * Habrin CMS — Admin Controller
  *
  * Fully compatible with sharded JSON storage.
  * - No all() calls – uses metadata counts and paginated indexes.
@@ -429,7 +429,7 @@ final class AdminController extends Controller
     {
         $system = [
             'cms' => [
-                'name'    => 'Pico JSON CMS',
+                'name'    => 'Habrin CMS',
                 'version' => App::CORE_VERSION,
                 'storage' => 'Flat-file JSON (sharded)',
             ],

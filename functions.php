@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Pico JSON CMS — Global Functions
+ * Habrin CMS — Global Functions
  */
 
 use Core\Hooks;

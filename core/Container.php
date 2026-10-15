@@ -6,7 +6,7 @@ namespace Core;
 
 /**
  * ------------------------------------------------------
- * Pico JSON CMS — Service Container (CORE)
+ * Habrin CMS — Service Container (CORE)
  * ------------------------------------------------------
  *
  * Minimal dependency container.

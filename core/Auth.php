@@ -6,7 +6,7 @@ namespace Core;
 
 /**
  * ------------------------------------------------------
- * Pico JSON CMS — Authentication (CORE)
+ * Habrin CMS — Authentication (CORE)
  * ------------------------------------------------------
  *
  * CORE VERSION: 1.0.0

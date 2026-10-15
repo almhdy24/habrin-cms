@@ -36,7 +36,7 @@ $paragraphs = [
     'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
     'Duis aute irure dolor in reprehenderit in voluptate.',
     'Excepteur sint occaecat cupidatat non proident.',
-    'This is a performance test post for Pico JSON CMS.'
+    'This is a performance test post for Habrin CMS.'
 ];
 
 $baseTime = time() - ($total * 2);

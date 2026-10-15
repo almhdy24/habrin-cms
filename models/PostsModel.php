@@ -236,21 +236,21 @@ class PostsModel
             $entries = $this->readPageChunk($chunkIndex);
             if (empty($entries)) {
                 // If this chunk is empty, append here
-                $entries[] = [$id, $shard];
+                $entries[] = $entry;
                 $this->writePageChunk($chunkIndex, $entries);
                 $found = true;
                 break;
             }
 
             // Check if this entry belongs here (newer than the first entry, or older than the last)
-            $firstCreated = $entries[0][2] ?? 0;
-            $lastCreated = $entries[count($entries) - 1][2] ?? 0;
+            $firstCreated = (int) ($entries[0][2] ?? 0);
+            $lastCreated = (int) ($entries[count($entries) - 1][2] ?? 0);
 
             if ($createdAt >= $firstCreated) {
                 // Insert at the beginning of this chunk (or after entries with same created_at)
                 $pos = 0;
-                while ($pos < count($entries) && $entries[$pos][2] > $createdAt) $pos++;
-                array_splice($entries, $pos, 0, [[$id, $shard]]);
+                while ($pos < count($entries) && (($entries[$pos][2] ?? 0) > $createdAt)) $pos++;
+                array_splice($entries, $pos, 0, [$entry]);
                 $this->writePageChunk($chunkIndex, $entries);
                 $found = true;
                 break;
@@ -261,8 +261,8 @@ class PostsModel
             } else {
                 // It belongs somewhere inside this chunk
                 $pos = 0;
-                while ($pos < count($entries) && $entries[$pos][2] > $createdAt) $pos++;
-                array_splice($entries, $pos, 0, [[$id, $shard]]);
+                while ($pos < count($entries) && (($entries[$pos][2] ?? 0) > $createdAt)) $pos++;
+                array_splice($entries, $pos, 0, [$entry]);
                 $this->writePageChunk($chunkIndex, $entries);
                 $found = true;
                 break;
@@ -271,7 +271,7 @@ class PostsModel
 
         // If we reached the end without finding a place, append to a new chunk
         if (!$found) {
-            $entries = [[$id, $shard]];
+            $entries = [$entry];
             $this->writePageChunk($chunkIndex, $entries);
         }
 
@@ -332,13 +332,13 @@ class PostsModel
         }
 
         // Sort by created_at DESC (third element)
-        usort($allEntries, fn($a, $b) => $b[2] <=> $a[2]);
+        usort($allEntries, fn($a, $b) => ((int) ($b[2] ?? 0)) <=> ((int) ($a[2] ?? 0)));
 
         // Redistribute into chunks
         $chunks = array_chunk($allEntries, $this->pageChunkSize);
         foreach ($chunks as $idx => $chunk) {
-            // Keep only (id, shard) pairs
-            $data = array_map(fn($e) => [$e[0], $e[1]], $chunk);
+            // Keep (id, shard, created_at) entries
+            $data = array_map(fn($e) => [$e[0], $e[1], (int) ($e[2] ?? 0)], $chunk);
             $this->writePageChunk($idx, $data);
         }
 

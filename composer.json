@@ -1,6 +1,6 @@
 {
-    "name": "pico-json-cms/pico-json-cms",
-    "description": "A lightweight, secure, and fast flat-file JSON and Markdown CMS in PHP.",
+    "name": "habrin/habrin",
+    "description": "Habrin CMS — A modern, lightweight, secure, and mobile-friendly flat-file CMS in PHP.",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -10,6 +10,7 @@
         }
     ],
     "keywords": [
+        "habrin",
         "cms",
         "flat-file",
         "json",

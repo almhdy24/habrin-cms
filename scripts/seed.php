@@ -17,7 +17,7 @@ use Models\PostsModel;
 $count = isset($argv[1]) ? max(1, (int) $argv[1]) : 1000;
 
 echo "========================================\n";
-echo " Pico JSON CMS — Bulk Seeder\n";
+echo " Habrin CMS — Bulk Seeder\n";
 echo "========================================\n";
 echo "Generating {$count} posts...\n\n";
 
@@ -39,9 +39,9 @@ $paragraphs = [
     'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    'This is a performance test post for Pico JSON CMS. The purpose is to benchmark the JSON storage system.',
+    'This is a performance test post for Habrin CMS. The purpose is to benchmark the JSON storage system.',
     'The system should handle thousands of posts efficiently with atomic writes and slug indexing.',
-    'Pico JSON CMS uses flat-file JSON storage, making it ideal for small to medium websites.',
+    'Habrin CMS uses flat-file JSON storage, making it ideal for small to medium websites.',
     'With proper indexing, lookups remain fast even with large datasets.'
 ];
 

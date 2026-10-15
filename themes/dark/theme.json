@@ -2,7 +2,7 @@
   "name": "Dark",
   "version": "1.0.0",
   "description": "A sleek, minimal dark theme optimized for low-light reading and modern aesthetics. Perfect for night owls and developers.",
-  "author": "Pico JSON CMS",
+  "author": "Habrin Team",
   "screenshot": "",
   "requires": {
     "php": ">=8.1",

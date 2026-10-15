@@ -15,7 +15,7 @@ final class Session
         }
 
         if (!headers_sent()) {
-            session_name('pico_json_cms');
+            session_name('habrin_session');
             session_set_cookie_params([
                 'lifetime' => 0,
                 'path' => '/',

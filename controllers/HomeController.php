@@ -1,6 +1,6 @@
 <?php
 /**
- * Pico JSON CMS — Home Controller
+ * Habrin CMS — Home Controller
  */
 
 declare(strict_types=1);

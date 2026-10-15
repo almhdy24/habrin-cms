@@ -1,67 +1,106 @@
-<?php $this->layout('layouts/admin', ['title' => 'Add Post']) ?>
+<?php $this->layout('layouts/admin', ['title' => 'New Post']) ?>
 
 <section>
-  <div class="flex flex-wrap items-center justify-between gap-1 mb-4">
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
     <div>
-      <h2 class="mb-0"><i data-lucide="file-plus"></i> Add New Post</h2>
-      <p class="text-muted" style="margin-top:0.25rem;font-size:0.9rem;">Create a new blog post.</p>
+      <h2 class="mb-1"><i data-lucide="file-plus"></i> Write New Article</h2>
+      <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Author content using Markdown or HTML syntax.</p>
     </div>
     <a href="/admin" class="button button-light">
-      <i data-lucide="arrow-left"></i> Back to Posts
+      <i data-lucide="arrow-left"></i> All Articles
     </a>
   </div>
 
-  <form method="POST" action="/admin/add" class="card" id="postForm" style="padding:1.5rem;">
-    <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+  <form method="POST" action="/admin/add" id="postForm">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars((string) ($csrf_token ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
-    <!-- TITLE -->
-    <div class="field">
-      <label class="label" for="title"><i data-lucide="type"></i> Title <span class="text-muted">(required)</span></label>
-      <input id="title" class="input" type="text" name="title" placeholder="Enter a descriptive title" value="<?= htmlspecialchars($old['title'] ?? '') ?>" required autofocus>
-      <div class="help"><i data-lucide="info"></i> This will be used as the post headline.</div>
-    </div>
+    <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;">
 
-    <!-- CONTENT -->
-    <div class="field">
-      <label class="label" for="content"><i data-lucide="align-left"></i> Content <span class="text-muted">(required)</span></label>
-      <textarea id="content" class="textarea simple-editor" name="content" rows="15" placeholder="Write your post content here... (Markdown supported)" required><?= htmlspecialchars($old['content'] ?? '') ?></textarea>
-      <div class="help" style="display:flex;gap:1rem;flex-wrap:wrap;">
-        <span><i data-lucide="info"></i> Supports <a href="https://commonmark.org/help/" target="_blank" rel="noopener">Markdown</a></span>
-        <span><i data-lucide="type"></i> <span id="wordCount">0</span> words</span>
+      <!-- Main Editor Column -->
+      <div style="flex: 1; min-width: min(100%, 540px);">
+        <div class="card mb-4" style="padding: 1.75rem;">
+          <div class="field">
+            <label class="label" for="postTitle" style="font-size: 1.1rem; font-weight: 700;">
+              Article Title <span class="text-muted" style="font-size: 0.85rem; font-weight: 400;">(required)</span>
+            </label>
+            <input
+              id="postTitle"
+              class="input"
+              type="text"
+              name="title"
+              placeholder="e.g. Getting Started with Flat-File Architecture"
+              value="<?= htmlspecialchars((string) ($old['title'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+              required
+              autofocus
+              style="font-size: 1.25rem; font-weight: 700; padding: 0.85rem 1rem;"
+            >
+          </div>
+
+          <div class="field mb-0">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <label class="label mb-0" for="content">Content</label>
+              <div class="text-muted" style="font-size: 0.82rem; display: flex; gap: 0.85rem;">
+                <span><i data-lucide="file-text" style="width:14px;height:14px;display:inline;"></i> <strong id="wordCount">0</strong> words</span>
+                <span>Markdown Supported</span>
+              </div>
+            </div>
+            <textarea
+              id="content"
+              class="textarea simple-editor"
+              name="content"
+              rows="16"
+              placeholder="Write your article in Markdown here..."
+              required
+            ><?= htmlspecialchars((string) ($old['content'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- STATUS & PUBLISHING -->
-    <div class="field">
-      <label class="label" for="status"><i data-lucide="check-circle"></i> Publication Status</label>
-      <select id="status" class="input" name="status" style="max-width:220px;">
-        <option value="published" <?= ($old['status'] ?? 'published') === 'published' ? 'selected' : '' ?>>Published (Live)</option>
-        <option value="draft" <?= ($old['status'] ?? '') === 'draft' ? 'selected' : '' ?>>Draft (Unpublished)</option>
-      </select>
-      <div class="help">Drafts are saved safely but not shown to public visitors.</div>
-    </div>
+      <!-- Right Publishing Sidebar -->
+      <div style="width: 320px; max-width: 100%;">
+        <div class="card mb-4" style="padding: 1.5rem;">
+          <h3 class="mb-3" style="font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <i data-lucide="send" style="color: var(--primary);"></i>
+            <span>Publishing Options</span>
+          </h3>
 
-    <!-- ACTIONS -->
-    <div class="flex flex-wrap items-center justify-between gap-2 mt-4" style="padding-top:1rem;border-top:1px solid var(--border);">
-      <div class="flex flex-wrap gap-1">
-        <button type="submit" class="button button-primary"><i data-lucide="save"></i> Save Post</button>
-        <button type="reset" class="button button-light"><i data-lucide="rotate-ccw"></i> Reset</button>
-        <a href="/admin" class="button button-light"><i data-lucide="x"></i> Cancel</a>
+          <div class="field">
+            <label class="label" for="postStatus">Status</label>
+            <select id="postStatus" class="input" name="status">
+              <option value="published" <?= ($old['status'] ?? 'published') === 'published' ? 'selected' : '' ?>>
+                🟢 Published (Public)
+              </option>
+              <option value="draft" <?= ($old['status'] ?? '') === 'draft' ? 'selected' : '' ?>>
+                🟡 Draft (Private)
+              </option>
+            </select>
+            <div class="help">Drafts are hidden from public visitors but visible to logged-in admins.</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem;">
+            <button type="submit" class="button button-primary button-block button-lg">
+              <i data-lucide="check"></i> Publish Article
+            </button>
+            <a href="/admin/media" target="_blank" rel="noopener" class="button button-light button-block">
+              <i data-lucide="image"></i> Media Library
+            </a>
+            <a href="/admin" class="button button-light button-block text-muted">
+              Cancel
+            </a>
+          </div>
+        </div>
       </div>
-      <a href="/admin/media" target="_blank" rel="noopener" class="button button-light">
-        <i data-lucide="image"></i> Open Media Library
-      </a>
-    </div>
 
+    </div>
   </form>
 </section>
 
-<!-- EasyMDE -->
+<!-- EasyMDE Editor Integration -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const textarea = document.getElementById('content');
   const counter = document.getElementById('wordCount');
   if (!textarea || typeof EasyMDE === 'undefined') return;
@@ -71,19 +110,18 @@ document.addEventListener('DOMContentLoaded', function() {
     spellChecker: false,
     forceSync: true,
     status: false,
-    autofocus: true,
     toolbar: [
       "bold", "italic", "heading", "|",
-      "unordered-list", "ordered-list", "|",
-      "link", "image", "|",
+      "quote", "unordered-list", "ordered-list", "|",
+      "link", "image", "code", "table", "|",
       "preview", "fullscreen"
     ]
   });
 
   const updateCount = () => {
     const text = editor.value().trim();
-    const words = text ? text.split(/\s+/).length : 0;
-    counter.textContent = words;
+    const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+    if (counter) counter.textContent = words;
   };
 
   editor.codemirror.on('change', updateCount);

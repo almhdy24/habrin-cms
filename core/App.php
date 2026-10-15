@@ -134,7 +134,7 @@ final class App
         }
 
         $defaults = [
-            'app_name' => 'Pico JSON CMS',
+            'app_name' => 'Habrin CMS',
             'base_url' => '',
             'theme' => 'default',
             'debug' => false,
@@ -165,10 +165,7 @@ final class App
 
         $content = "<?php\n\n";
         $content .= "/**\n";
-        $content .= " * Pico JSON CMS - Main Configuration\n";
-        $content .= " *\n";
-        $content .= " * Author: Elmahdi\n";
-        $content .= " * GitHub: https://github.com/almhdy24/pico-json-cms\n";
+        $content .= " * Habrin CMS - Main Configuration\n";
         $content .= " *\n";
         $content .= " * License: MIT\n";
         $content .= " */\n\n";

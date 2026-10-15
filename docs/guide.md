@@ -2,7 +2,7 @@
 
 ## Overview
 
-Pico JSON CMS is a fast, flat-file content management system designed for simplicity, security, and developer control. It requires no relational database, storing all data in sharded JSON structures and rendering content with lightweight Plates PHP templates.
+Habrin CMS is a fast, flat-file content management system designed for simplicity, security, and developer control. It requires no relational database, storing all data in sharded JSON structures and rendering content with lightweight Plates PHP templates.
 
 ---
 
@@ -18,8 +18,8 @@ Pico JSON CMS is a fast, flat-file content management system designed for simpli
 Clone the repository and install Composer packages:
 
 ```bash
-git clone https://github.com/almhdy24/pico-json-cms.git
-cd pico-json-cms
+git clone https://github.com/almhdy24/pico-json-cms.git habrin-cms
+cd habrin-cms
 composer install --no-dev
 ```
 

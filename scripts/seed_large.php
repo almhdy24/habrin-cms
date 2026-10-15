@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Pico JSON CMS — Large Dataset Seeder
+ * Habrin CMS — Large Dataset Seeder
  *
  * Generates a large JSON object without loading all posts
  * into PHP memory at once.
@@ -29,7 +29,7 @@ $indexFile = App::path('content', 'posts.index.json');
 $tempFile = $postsFile . '.seed.tmp';
 
 echo "========================================\n";
-echo " Pico JSON CMS — Large Dataset Seeder\n";
+echo " Habrin CMS — Large Dataset Seeder\n";
 echo "========================================\n";
 echo "Total posts: " . number_format($total) . "\n";
 echo "Progress: every " . number_format($progressEvery) . " posts\n\n";
@@ -49,9 +49,9 @@ $paragraphs = [
     'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    'This is a performance test post for Pico JSON CMS.',
+    'This is a performance test post for Habrin CMS.',
     'The purpose of this post is to benchmark the JSON storage system.',
-    'Pico JSON CMS uses flat-file JSON storage.',
+    'Habrin CMS uses flat-file JSON storage.',
     'This dataset is generated for performance testing.'
 ];
 

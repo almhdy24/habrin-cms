@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $this->e($title ?? ($settings['site_title'] ?? 'Pico CMS')) ?></title>
+  <title><?= $this->e($title ?? ($settings['site_title'] ?? 'Habrin CMS')) ?></title>
 
   <!-- Meta tags for SEO -->
   <meta name="description" content="<?= $this->e($settings['site_description'] ?? '') ?>">

@@ -148,7 +148,7 @@ final class InstallerController extends Controller
 
             file_put_contents(
                 $this->adminFile,
-                "<?php\n// Pico CMS Admin Credentials - DO NOT EXPOSE\ndefined('BASE_PATH') || exit;\nreturn " . var_export([
+                "<?php\n// Habrin CMS Admin Credentials - DO NOT EXPOSE\ndefined('BASE_PATH') || exit;\nreturn " . var_export([
                     'user' => $user,
                     'pass' => password_hash($pass, PASSWORD_DEFAULT),
                 ], true) . ";\n",

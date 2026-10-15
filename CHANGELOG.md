@@ -1,15 +1,20 @@
 Changelog
 
-All notable changes to Pico JSON CMS are documented in this file.
+All notable changes to Habrin CMS are documented in this file.
 
 This project follows the principles of "Keep a Changelog" (https://keepachangelog.com/) and "Semantic Versioning" (https://semver.org/).
 
 [1.0.0] — 2026-10-15
 
-Production-ready release with security hardening, core freeze compliance, publishing workflows, and comprehensive automated testing.
+Official stable release of Habrin CMS: featuring modern product branding, a responsive mobile-first administrative design system, comprehensive security hardening, publishing workflows, and automated test coverage.
 
 Added
 
+- Branding & Identity: Complete transformation into Habrin CMS with custom layered isometric SVG mark, updated package descriptor (`habrin/habrin`), and session management (`habrin_session`).
+- Design System & Mobile UX: Collapsible off-canvas drawer navigation with mobile top bar and hamburger toggle.
+- Design System & Mobile UX: 2-column post editor with live word and character counters, slug preview, and responsive mobile collapse.
+- Design System & Mobile UX: Non-blocking animated toast notification engine (`window.habrinToast`) for instant feedback.
+- Design System & Mobile UX: High-contrast dashboard metrics, categorized sidebar navigation (`Content`, `Structure`, `Maintenance`), and $\ge$ 44px touch targets.
 - Security: Strict CSRF token verification across all administrative state-changing actions.
 - Security: Removed default admin credentials; installer mandates custom strong passwords with default-password rejection.
 - Security: Direct access denial `.htaccess` protection for `content/`, `logs/`, `backups/`, and script execution prevention in `assets/uploads/`.
@@ -323,7 +328,7 @@ Planned areas for the first stable release:
 
 Versioning
 
-Pico JSON CMS uses semantic versioning:
+Habrin CMS uses semantic versioning:
 
 MAJOR.MINOR.PATCH
 

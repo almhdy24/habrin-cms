@@ -1,5 +1,5 @@
 ---
-# Deployment / Permissions script for Pico JSON CMS
+# Deployment / Permissions script for Habrin CMS
 
 This script shows recommended commands to set file ownership and permissions before deploying to production.
 

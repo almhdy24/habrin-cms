@@ -52,7 +52,7 @@ Hooks::add_action('head', function () {
     $settings = View::getShared('settings') ?? [];
     $pluginSettings = PluginSettings::getEffective('seo');
 
-    $title = $pluginSettings['default_title'] ?? $settings['site_title'] ?? 'My Pico CMS';
+    $title = $pluginSettings['default_title'] ?? $settings['site_title'] ?? 'Habrin CMS';
     $desc = $pluginSettings['default_description'] ?? $settings['site_description'] ?? '';
     $author = $pluginSettings['author'] ?? '';
     $enableOg = (bool) ($pluginSettings['enable_og_tags'] ?? true);

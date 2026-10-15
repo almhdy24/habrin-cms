@@ -1,8 +1,8 @@
 {
   "name": "CleanBlog",
   "version": "1.0.0",
-  "description": "A minimalist, fast, and readable theme for Pico JSON CMS. No frills, just content.",
-  "author": "Pico JSON CMS",
+  "description": "A minimalist, fast, and readable theme for Habrin CMS. No frills, just content.",
+  "author": "Habrin Team",
   "screenshot": "",
   "requires": {
     "php": ">=8.1",

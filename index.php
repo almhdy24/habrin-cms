@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Pico JSON CMS - Application Entry Point
- *
- * Author: Elmahdi
- * GitHub: https://github.com/almhdy24/pico-json-cms
+ * Habrin CMS - Application Entry Point
  *
  * License: MIT
  */
@@ -15,7 +12,7 @@ defined('BASE_PATH') || define('BASE_PATH', __DIR__);
 
 if (version_compare(PHP_VERSION, '8.1.0', '<')) {
     http_response_code(500);
-    echo 'Pico JSON CMS requires PHP 8.1.0 or higher. Current version: ' . PHP_VERSION;
+    echo 'Habrin CMS requires PHP 8.1.0 or higher. Current version: ' . PHP_VERSION;
     exit(1);
 }
 
@@ -30,7 +27,7 @@ try {
     http_response_code(500);
 
     if (function_exists('error_log')) {
-        error_log('Pico JSON CMS fatal error: ' . $e->getMessage());
+        error_log('Habrin CMS fatal error: ' . $e->getMessage());
     }
 
     if (App::$config['debug'] ?? false) {

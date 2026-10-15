@@ -13,7 +13,7 @@ use Models\PostsModel;
 $iterations = (int) ($argv[1] ?? 100);
 
 echo "========================================\n";
-echo " Pico JSON CMS — Benchmark\n";
+echo " Habrin CMS — Benchmark\n";
 echo "========================================\n";
 
 $model = new PostsModel();

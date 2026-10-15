@@ -1,131 +1,96 @@
-# Plugins in pico-json-cms
+# Plugins in Habrin CMS
 
-**pico-json-cms** comes with a simple but powerful plugin system that allows you to extend functionality without modifying core files. Plugins are PHP scripts placed in the `plugins/` folder and loaded via `config.php`.
+**Habrin CMS** includes a lightweight and extensible plugin architecture that allows you to extend CMS capabilities without touching core code. Plugins are PHP files located in the `plugins/` directory and managed via `config.php` or the administrative panel.
 
 ---
 
 ## How Plugins Work
 
-1. Each plugin is a PHP file in the `plugins/` folder.
-2. Plugins are loaded automatically on every page load if listed in `config.php`.
-3. Hooks allow your code to interact with the CMS at specific points.
+1. Each plugin resides in its own folder or file inside the `plugins/` directory (e.g. `plugins/markdown/plugin.php`).
+2. Plugins can register settings schemas and hook into actions and filters via the `Core\Hooks` API.
+3. Errors in plugins are isolated and logged without breaking page execution.
 
 ---
 
 ## Available Hooks
 
-| Hook Name        | Description                          | Parameters      |
-|-----------------|--------------------------------------|----------------|
-| `admin_notices`  | Display messages in the admin panel  | None           |
-| `post_content`   | Modify or append content to posts    | `$content`     |
-| `before_post`    | Execute before rendering a post      | `$post` array  |
-| `after_post`     | Execute after rendering a post       | `$post` array  |
+| Hook Name | Type | Description | Parameters |
+|---|---|---|---|
+| `admin_notices` | Action | Display alert messages in the admin panel | None |
+| `post_content` | Filter | Transform or enrich post Markdown/HTML content | `$content, $post` |
+| `before_post` | Action | Trigger logic prior to rendering a post | `$post` array |
+| `after_post` | Action | Trigger logic after rendering a post | `$post` array |
+| `register_routes` | Action | Register custom HTTP routes on the Router | `$router` instance |
 
 ---
 
 ## Step 1: Configure Plugins
 
-Edit `config.php` to define which plugins to load:
+Edit `config.php` or toggle plugins from `/admin/plugins`:
 
 ```php
 <?php
 return [
-    'base_url' => '',        // Your site base URL if needed
-    'theme' => 'default',    // Theme folder name from 'themes/'
-    'plugins' => [
-        'markdown-plugin.php',
-        'syntax-highlighting.php',
-        'pico-notice.php',
-        // Add your own plugins here
-        'my-custom-plugin.php'
-    ]
+    'app_name' => 'Habrin CMS',
+    'theme'    => 'default',
+    'plugins'  => [
+        'markdown',
+        'seo',
+        'sitemap',
+        'analytics',
+    ],
 ];
 ```
 
-> ⚠️ Important: Only plugins listed in the `plugins` array will be loaded. Add plugin filenames exactly as they appear in the `plugins/` folder.
-
 ---
 
-## Step 2: Create a Plugin
+## Step 2: Create a Custom Plugin
 
-1. Create a new PHP file in `plugins/`, for example:
+1. Create a plugin directory or file, for example:
+   ```text
+   plugins/my-plugin/plugin.php
+   ```
 
-```
-plugins/my-custom-plugin.php
-```
-
-2. Add hooks using `do_action()`:
+2. Register your filters and actions using `Core\Hooks`:
 
 ```php
 <?php
-// Example: Append a footer to every post
-do_action('post_content', function($content) {
-    return $content . '<hr><p style="font-size:12px; color:#999;">Custom footer added by my plugin.</p>';
-});
+declare(strict_types=1);
 
-// Example: Show a notice in admin dashboard
-do_action('admin_notices', function() {
-    echo '<div style="background:#d4edda; padding:10px; margin:10px 0; border-left:4px solid #28a745;">
-        My plugin is active
-    </div>';
+use Core\Hooks;
+
+// Append a reading disclaimer to post content
+Hooks::add_filter('post_content', function (string $content, array $post): string {
+    return $content . "\n\n---\n*Published with Habrin CMS.*";
 });
-?>
+```
+
+3. Enable the plugin in `config.php`:
+
+```php
+'plugins' => [
+    'markdown',
+    'my-plugin',
+],
 ```
 
 ---
 
-## Step 3: Plugin Best Practices
-
-- **One plugin = one feature:** Keep your plugins small and modular.  
-- **Descriptive names:** Avoid conflicts by using clear plugin filenames.  
-- **Backup first:** Always backup `config.php` and the `plugins/` folder before adding new plugins.  
-- **Test locally:** Use a local PHP server (`php -S localhost:8000`) to test before deploying.  
-
----
-
-## Step 4: Future Enhancements
-
-- A **plugin installer in the admin panel** is planned, allowing enabling/disabling plugins without editing `config.php`.  
-- Themes will also be manageable via admin panel soon.  
-- This modular approach ensures that your core CMS remains upgrade-safe while allowing flexible customization.
-
----
-
-## Examples of Useful Plugins
-
-### Markdown Support
+## Example: Add an Admin Notice
 
 ```php
 <?php
-do_action('post_content', function($content) {
-    // Convert Markdown to HTML using Parsedown
-    $Parsedown = new Parsedown();
-    return $Parsedown->text($content);
-});
-?>
-```
+use Core\Hooks;
 
-### Syntax Highlighting
-
-```php
-<?php
-do_action('post_content', function($content) {
-    // Wrap <pre> blocks with syntax highlighting classes
-    return preg_replace_callback('/<pre><code>(.*?)<\/code><\/pre>/s', function($matches) {
-        return '<pre class="hljs">' . htmlspecialchars($matches[1]) . '</pre>';
-    }, $content);
+Hooks::add_action('admin_notices', function () {
+    echo '<div class="alert alert-info">Notice: System maintenance scheduled for Sunday at 02:00 UTC.</div>';
 });
-?>
 ```
 
 ---
 
-## Summary
+## Best Practices
 
-1. **Add plugin files** to the `plugins/` folder.  
-2. **List plugins** in `config.php`.  
-3. **Use hooks** (`do_action`) to interact with posts, admin notices, and more.  
-4. **Test & backup** before deploying.  
-5. **Future:** Admin panel plugin installer and theme management will make customization even easier.  
-
-This system makes **pico-json-cms** lightweight, modular, and developer-friendly.
+1. **Error Isolation**: Habrin CMS catches uncaught plugin exceptions and logs them to `logs/app.log`.
+2. **Safe Output**: Always escape dynamic public output using `htmlspecialchars()` or `$this->e()`.
+3. **No Database Dependencies**: If your plugin requires state persistence, store structured JSON in `content/`.

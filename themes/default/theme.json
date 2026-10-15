@@ -1,8 +1,8 @@
 {
-  "name": "Default Theme",
+  "name": "Habrin Default",
   "version": "1.0.0",
-  "description": "The default theme for Pico JSON CMS with a clean, modern design and full responsiveness.",
-  "author": "Pico JSON CMS",
+  "description": "The official modern, responsive theme for Habrin CMS.",
+  "author": "Habrin Team",
   "screenshot": "",
   "requires": {
     "php": ">=8.1",

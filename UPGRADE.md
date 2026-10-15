@@ -1,32 +1,45 @@
 # Upgrade Guide
 
-## From v0.9.x → v1.0.0
+## From Pico JSON CMS (v0.9.x) → Habrin CMS (v1.0.0)
 
-🎉 This is a **major stable release** bringing core freeze compliance, comprehensive security hardening, and publishing enhancements.
+🎉 **Habrin CMS v1.0.0** is a major stable release that establishes a distinct product identity, a responsive mobile-first administrative design system, and full `CORE_FREEZE.md` API stability.
 
 ### What You Must Do
-1. Backup your `content/` and `assets/uploads/` folders before updating.
-2. Update dependencies using `composer install --no-dev`.
-3. Verify that directory `.htaccess` protection files are present in `content/`, `logs/`, `backups/`, and `assets/uploads/`.
-4. Ensure your active theme contains `theme.json` with `"cms": ">=0.9.0"`.
-5. Run the test suite: `php vendor/bin/phpunit`.
+1. **Backup Data**: Export a backup via `/admin/backup` or make a copy of your `content/` and `assets/uploads/` folders before updating.
+2. **Update Dependencies**: Run `composer install --no-dev --optimize-autoloader`. The root composer package is now `habrin/habrin`.
+3. **Verify Security Rules**: Ensure `.htaccess` files are present in `content/`, `logs/`, `backups/`, and `assets/uploads/`.
+4. **Theme Compatibility**: Themes remain 100% compatible. Ensure `theme.json` contains `"cms": ">=0.9.0"`.
+5. **Run Verification**: Run `php vendor/bin/phpunit` to confirm all 37 regression tests pass.
 
 ### What Changed
-- **Core Stability**: `PostsModel::all()` is fully implemented and adheres to `CORE_FREEZE.md`.
+- **Product Identity & Branding**:
+  - Rebranded to **Habrin CMS**.
+  - Default session cookie renamed to `habrin_session`.
+  - SVG brand mark assets added to `assets/images/habrin-logo.svg`.
+- **Mobile-First Design System**:
+  - Full-screen collapsible drawer navigation with hamburger toggle for phones and tablets.
+  - Sticky mobile header for one-tap navigation.
+  - Editorial 2-column post editor with real-time word/character counter and responsive collapse.
+  - Non-blocking toast notification engine (`window.habrinToast`) replacing invasive browser alerts.
+  - Touch target compliance ($\ge$ 44px) across all buttons, inputs, and links.
+- **Core Freeze Compliance**:
+  - `PostsModel::all()` implemented adhering to frozen `Core\Model` contracts.
+  - All frozen APIs (`Core\App`, `Core\Router`, `Core\Auth`, `Core\Session`, `Core\Hooks`, `Core\Model`, `Core\View`) fully preserved.
 - **Security Hardening**:
-  - Removed all default credentials.
-  - Implemented CSRF defense-in-depth across administrative actions.
-  - Markdown input strips dangerous raw HTML and scripts.
-  - Media uploads validate MIME types and sanitize SVGs.
-  - Directory traversal prevented in plugin manifests and theme previews.
-- **New Capabilities**:
-  - Media Library (`/admin/media`)
-  - Backup & Restoration with safety snapshots (`/admin/backup`)
-  - Drafts workflow with preview banners
-  - Search across posts, slugs, and body
+  - Predictable default credentials removed; initial administrator setup enforced via `/installer`.
+  - CSRF defense-in-depth across all administrative actions.
+  - XSS prevention with HTML stripping and safe URI protocols in Markdown.
+  - Media upload MIME verification, extension whitelisting, and SVG sanitization.
+  - Path traversal protection in plugin manifests, theme previews, and ZIP backup extraction.
+- **New Publishing Workflows**:
+  - Media Library (`/admin/media`) with one-click Markdown snippets.
+  - One-click backups with automatic pre-restore safety snapshots (`/admin/backup`).
+  - Drafts workflow with private administrator preview banners.
+  - Fast search across titles, slugs, and body content.
 
 ### What Is Preserved
-- All posts, pages, menu structures, and site settings are 100% backward-compatible.
+- 100% backward-compatibility for existing `content/posts/`, `content/pages.json`, `content/menu.json`, and `content/settings.json`.
+- No database migration or schema conversions required.
 
 ---
 
@@ -52,9 +65,6 @@
 - Settings (`settings.json`)
 - Content data
 
-### Recommendation
-Upgrade to v0.3.0 for improved security.
-
 ---
 
 ## From v0.1.0 → v0.2.0
@@ -75,17 +85,7 @@ Upgrade to v0.3.0 for improved security.
 - Markdown engine changed
 - Admin entry removed
 
-### What Is Preserved
-- Posts (`posts.json`)
-- Settings (`settings.json`)
-- Content data
-
-### Recommendation
-If you are mid-project:
-- Stay on v0.1.0
-- Upgrade when ready to redesign theme
-
 ---
 
 Need help?  
-Open an issue on GitHub.
+Open an issue on GitHub: https://github.com/almhdy24/pico-json-cms/issues

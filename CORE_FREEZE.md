@@ -1,15 +1,15 @@
-# 🔒 Pico JSON CMS — CORE FREEZE POLICY
+# 🔒 Habrin CMS — CORE FREEZE POLICY
 
-**Effective starting from v0.2.0**
+**Effective starting from v0.2.0 (Preserved in Habrin CMS v1.0.0+)**
 
-This document defines the **Core Freeze policy** for Pico JSON CMS.
+This document defines the **Core Freeze policy** for Habrin CMS (formerly Pico JSON CMS).
 Its goal is to provide **API stability**, **upgrade safety**, and **long-term confidence** for users, theme developers, and plugin authors.
 
 ---
 
 ## 🎯 Purpose of Core Freeze
 
-Pico JSON CMS is designed to be:
+Habrin CMS is designed to be:
 
 - Minimal
 - Predictable
@@ -170,7 +170,7 @@ These may change if better abstractions are found.
 
 ## 🧭 Versioning Rules
 
-Pico JSON CMS follows **Semantic Versioning (SemVer)**:
+Habrin CMS follows **Semantic Versioning (SemVer)**:
 
 - **PATCH** (`0.2.x`)  
   → Bug fixes only, no behavior change
@@ -209,5 +209,5 @@ If something must change, it will be:
 
 ---
 
-**Pico JSON CMS**  
+**Habrin CMS**  
 Minimal. Predictable. Built to last. 🚀
